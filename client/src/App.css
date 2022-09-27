@@ -1,0 +1,13 @@
+.moviecard-wrap {
+  width: 300px;
+  height: 400px;
+  background-color: #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-img {
+  width: 300px;
+  height: 250px;
+  background-color: #aaa;
+}
