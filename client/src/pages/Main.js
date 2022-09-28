@@ -10,16 +10,20 @@ function Main() {
     await axios({
       url: url,
       method: "get",
-      params: { searchTitle: "어벤저스", display: 20 },
+      params: { title: "어벤져스", display: 100 },
     })
       .then((response) => {
-        const data = response.data.items;
-        data.map((item) => {
-          movieList.push(item);
-          return setMovieList(movieList);
+        const data = response.data.items.map((item) => {
+          item.director = item.director.slice(0, -1);
+          item.actor = item.actor.slice(0, -1);
+          item.director = item.director.replaceAll(/\|/g, " | ");
+          item.actor = item.actor.replace(/\|/g, " | ");
+          item.title = item.title.replace(/\<b>/g, "");
+          item.title = item.title.replace(/\<\/b>/g, "");
+          return item;
         });
-
-        console.log(movieList);
+        setMovieList(data);
+        console.log(data);
       })
       .catch(() => {
         console.log("에러요");
@@ -32,10 +36,13 @@ function Main() {
   }, []);
 
   return (
-    <>
+    <div className="main-wrap">
       <SearchBox />
-      <MovieCard title={movieList.title} />
-    </>
+      {movieList &&
+        movieList.map((item) => {
+          return <MovieCard data={item} />;
+        })}
+    </div>
   );
 }
 

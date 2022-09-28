@@ -3,7 +3,7 @@ import React from "react";
 function SearchBox(props) {
   const [search, setSearch] = React.useState("");
   return (
-    <div>
+    <div className="searchBox-wrap">
       <input
         type="text"
         value={search}

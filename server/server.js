@@ -7,10 +7,11 @@ const client_secret = "Obdn8ebVlz";
 app.use(cors());
 
 app.get("/search/movie", function (req, res) {
-  const searchTitle = req.query.searchTitle;
+  const searchData = req.query;
+  console.log(searchData);
   const api_url = `https://openapi.naver.com/v1/search/movie?query=${encodeURI(
-    searchTitle
-  )}`;
+    searchData.title
+  )}&display=${searchData.display}`;
   const request = require("request");
   const options = {
     url: api_url,
