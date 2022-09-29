@@ -3,6 +3,8 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Pretendard-Regular";
+  color: inherit;
+  text-decoration: none;
 }
 
 @font-face {
@@ -29,19 +31,52 @@ img {
 .searchBox-wrap {
   width: 100vw;
   height: 200px;
+  background-color: #484848;
+}
+
+.searchBox-wrap form {
+  width: 70%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.search-input {
+  width: 100%;
+  line-height: 40px;
+  font-size: 24px;
+  font-weight: 300;
+  height: 40px;
+  border: none;
+  outline: none;
+  background-color: #484848;
+  color: #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.totalText {
+  width: 100%;
+  line-height: 50px;
+  font-size: 30px;
+  text-align: center;
+  color: #eee;
+  margin: 20px 0 50px 0;
 }
 
 .moviecard-wrap {
-  width: calc(50% - 20px);
+  width: calc(40%);
   max-width: 600px;
   min-width: 380px;
   height: 400px;
-  background-color: #ddd;
+  background-color: #eee;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   margin: 5% 0;
   padding: 20px;
+  border-radius: 10px;
 }
 
 .moviecard-wrap > p {
@@ -52,7 +87,7 @@ img {
   width: 100%;
   height: 40%;
   position: relative;
-  top: -35px;
+  top: -60px;
 }
 
 .movie-imgbox > img {
@@ -68,9 +103,25 @@ img {
   left: 35%;
 }
 
+.movie-title .subtitle {
+  font-size: 14px;
+  font-weight: 100;
+  color: #484848;
+}
+
 .actor {
   width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.moviecard-wrap > a {
+  width: 100px;
+  padding: 10px;
+  padding-left: 0;
+}
+
+.moviecard-wrap > a:hover {
+  font-weight: 800;
 }
