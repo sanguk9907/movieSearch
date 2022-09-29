@@ -4,13 +4,14 @@ import axios from "axios";
 
 function Main() {
   const [movieList, setMovieList] = React.useState([]);
+  const [searchData, setSearchData] = React.useState("");
 
   const searchMovie = async () => {
     const url = "http://localhost:5000/search/movie";
     await axios({
       url: url,
       method: "get",
-      params: { title: "어벤져스", display: 100 },
+      params: { title: searchData, display: 20 },
     })
       .then((response) => {
         const data = response.data.items.map((item) => {
@@ -22,8 +23,8 @@ function Main() {
           item.title = item.title.replace(/\<\/b>/g, "");
           return item;
         });
+        data.total = response.data.total;
         setMovieList(data);
-        console.log(data);
       })
       .catch(() => {
         console.log("에러요");
@@ -33,11 +34,19 @@ function Main() {
 
   React.useEffect(() => {
     searchMovie();
-  }, []);
+  }, [searchData]);
+
+  const searchInputValue = (x) => {
+    setSearchData(x);
+    console.log(searchData);
+  };
 
   return (
     <div className="main-wrap">
-      <SearchBox />
+      <SearchBox searchInputValue={searchInputValue} />
+      <p className="totalText">
+        "{searchData}" 검색 결과 총{movieList.total}개의 영화가 검색되었습니다.
+      </p>
       {movieList &&
         movieList.map((item) => {
           return <MovieCard data={item} />;
