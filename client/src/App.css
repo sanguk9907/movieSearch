@@ -22,6 +22,7 @@ img {
 .main-wrap {
   width: 100%;
   height: 100%;
+  min-height: 100vw;
   background-color: #282828;
   display: flex;
   flex-wrap: wrap;
@@ -38,8 +39,9 @@ img {
   width: 70%;
   height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
   margin: 0 auto;
 }
 
@@ -54,6 +56,20 @@ img {
   background-color: #484848;
   color: #eee;
   border-bottom: 1px solid #eee;
+}
+
+.select-box {
+  width: 100px;
+  margin-right: 100px;
+}
+
+.field {
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.ui.selection.dropdown {
+  min-width: 0;
 }
 
 .totalText {
@@ -85,25 +101,22 @@ img {
 
 .movie-imgbox {
   width: 100%;
-  height: 40%;
-  position: relative;
-  top: -60px;
+  height: 30%;
+  display: flex;
+  align-items: flex-end;
 }
 
 .movie-imgbox > img {
-  width: 30%;
-  position: absolute;
-  bottom: 0;
+  width: 50%;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
 }
 
-.movie-title {
-  position: absolute;
-  bottom: 0;
-  left: 35%;
+.movie-imgbox > .title-box {
+  width: 100%;
+  margin-left: 10px;
 }
 
-.movie-title .subtitle {
+.subtitle {
   font-size: 14px;
   font-weight: 100;
   color: #484848;
@@ -114,6 +127,15 @@ img {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.overview {
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .moviecard-wrap > a {

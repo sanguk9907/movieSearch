@@ -6,27 +6,27 @@ const client_secret = "Obdn8ebVlz";
 
 app.use(cors());
 
-app.get("/search/movie", function (req, res) {
-  const searchData = req.query;
-  console.log(searchData);
-  const api_url = `https://openapi.naver.com/v1/search/movie?query=${encodeURI(
-    searchData.title
-  )}&display=${searchData.display}`;
+app.get("/movie", function (req, res) {
+  const key = "3cf148810eae178af2afb1a072cfe76d";
+  const baseUrl = "https://api.themoviedb.org/3/";
+  const popular = "popular"; //인기있는
+  const latest = "latest"; //최신인데 안됨
+  const topRated = "top_rated"; //최고의 평가
+  const upcoming = "upcoming"; //개봉예정작
+  const nowPlaying = "now_playing"; //상영중
+  const url = `${baseUrl}movie/${popular}?api_key=${key}&language=ko-KR&region=KR`;
+
   const request = require("request");
   const options = {
-    url: api_url,
-    headers: {
-      "X-Naver-Client-Id": client_id,
-      "X-Naver-Client-Secret": client_secret,
-    },
+    url: url,
   };
   request.get(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       res.writeHead(200, { "Content-Type": "text/json;charset=utf-8" });
       res.end(body);
     } else {
-      res.status(response.statusCode).end();
-      console.log("error = " + response.statusCode);
+      res.status(response).end();
+      console.log("error = " + response);
     }
   });
 });
