@@ -71,8 +71,26 @@ function SearchBox({ searchInputValue }) {
             setSearch(cloneSearch);
           }}
         />
-        <Form.Select placeholder="장르선택" options={genre} />
-        <Form.Select placeholder="국가선택" options={country} />
+        <Form.Select
+          placeholder="장르선택"
+          options={genre}
+          onChange={(event, { value }) => {
+            const cloneSearch = { ...search };
+            cloneSearch.genre = value;
+            setSearch(cloneSearch);
+            console.log(search);
+          }}
+        />
+        <Form.Select
+          placeholder="국가선택"
+          options={country}
+          onChange={(event, { value }) => {
+            const cloneSearch = { ...search };
+            cloneSearch.country = value;
+            setSearch(cloneSearch);
+            console.log(search);
+          }}
+        />
       </form>
     </div>
   );
