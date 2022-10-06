@@ -1,5 +1,4 @@
 import React from "react";
-// import SelectOption from "./SelectOption";
 import { Form } from "semantic-ui-react";
 
 const genre = [
@@ -57,7 +56,6 @@ function SearchBox({ searchInputValue }) {
         onSubmit={(e) => {
           e.preventDefault();
           searchInputValue(search);
-          console.log(search);
         }}
       >
         <input

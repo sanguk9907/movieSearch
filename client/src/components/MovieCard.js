@@ -10,7 +10,7 @@ SwiperCore.use([Navigation, Pagination]);
 
 function MovieCard({ movie }) {
   return (
-    <>
+    <div className="movie-wrap">
       <Swiper
         modules={[Navigation, Pagination]}
         spaceBetween={20}
@@ -44,7 +44,7 @@ function MovieCard({ movie }) {
             );
           })}
       </Swiper>
-    </>
+    </div>
   );
 }
 

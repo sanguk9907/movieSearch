@@ -1,3 +1,4 @@
 import Main from "./Main";
+import SearchPage from "./SearchPage";
 
-export { Main };
+export { Main, SearchPage };

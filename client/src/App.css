@@ -19,7 +19,8 @@ img {
   display: block;
 }
 
-.main-wrap {
+.main-wrap,
+.SearchPage-wrap {
   width: 100vw;
   background-color: #181818;
 }
@@ -90,26 +91,25 @@ img {
   margin: 0 auto;
 }
 
-.text-box {
+.main-wrap .text-box {
   width: 80%;
   color: #fff;
   border-bottom: 1px solid #fff;
   margin: 50px auto 20px auto;
 }
 
-.text-box h3 {
+.main-wrap .text-box h3 {
   font-size: 36px;
   margin-bottom: 0;
 }
 
-.text-box p {
+.main-wrap .text-box p {
   font-size: 20px;
   margin-bottom: 10px;
 }
 
 .movie-card {
   width: 100%;
-  padding-left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -125,3 +125,92 @@ img {
 }
 
 /* ============무비카드 끝============ */
+
+/* 검색페이지 */
+.SearchPage-wrap {
+  min-height: 100vh;
+}
+
+.searchBody-warp {
+  width: 100vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.searchBody-warp .movie-wrap {
+  width: 90vw;
+  min-height: 200px;
+  border-top: 2px solid #fff;
+  position: relative;
+  padding-top: 30px;
+  margin-top: 100px;
+  margin: 50px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.searchBody-warp .movie-card {
+  width: 30%;
+  max-width: 220px;
+  margin-bottom: 50px;
+}
+
+.searchBody-warp .movie-card .img-box {
+  width: 100%;
+  padding-bottom: 140%;
+}
+
+.person-warp {
+  width: 90vw;
+  min-height: 200px;
+  border-top: 2px solid #fff;
+  position: relative;
+  padding-top: 30px;
+  margin: 50px auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.searchBody-warp .movie-wrap::before {
+  content: "영화검색결과";
+  display: block;
+  position: absolute;
+  color: #fff;
+  font-size: 20px;
+  top: -30px;
+}
+.searchBody-warp .person-warp::before {
+  content: "인물검색결과";
+  display: block;
+  position: absolute;
+  color: #fff;
+  font-size: 20px;
+  top: -30px;
+}
+
+.searchBody-warp .person-card {
+  width: 48%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.searchBody-warp .img-box {
+  width: 48%;
+  padding-bottom: 70%;
+  margin-bottom: 10px;
+  background-size: cover;
+  background-position: center;
+}
+
+.person-card .text-box {
+  width: 48%;
+  color: #fff;
+  font-size: 18px;
+}
+
+.main-test {
+  width: 100vw;
+  height: 300px;
+  background-color: #ddd;
+}

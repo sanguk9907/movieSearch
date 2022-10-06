@@ -7,6 +7,9 @@ import TopRated from "./TopRated";
 import Upcoming from "./Upcoming";
 import NowPlaying from "./NowPlaying";
 import SearchResultText from "./SearchResultText";
+import SearchBody from "./SearchBody";
+import SearchMovieCard from "./SearchMovieCard";
+import PersonCard from "./PersonCard";
 
 export {
   MovieCard,
@@ -18,4 +21,7 @@ export {
   Upcoming,
   NowPlaying,
   SearchResultText,
+  SearchBody,
+  SearchMovieCard,
+  PersonCard,
 };
