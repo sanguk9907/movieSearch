@@ -197,7 +197,6 @@ img {
 
 .searchBody-warp .img-box {
   width: 48%;
-  padding-bottom: 70%;
   margin-bottom: 10px;
   background-size: cover;
   background-position: center;
@@ -213,4 +212,119 @@ img {
   width: 100vw;
   height: 300px;
   background-color: #ddd;
+}
+
+.detail-wrap {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.detail-wrap .overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.detail-wrap .detail-card {
+  width: 100%;
+  height: 80%;
+  background-color: #181818;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 20px;
+  overflow-y: scroll;
+  z-index: 1000;
+  color: #fff;
+  letter-spacing: 0.7px;
+}
+
+.detail-card .close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.detail-wrap .detail-card .img-box {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.detail-wrap .detail-card .img-box img {
+  width: 30%;
+  margin-right: 15px;
+}
+
+.detail-wrap .detail-card .movie-info {
+  width: 100%;
+  height: 100%;
+  margin-top: 30px;
+}
+
+.detail-card .title h3 {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.detail-card .tag {
+  font-size: 16px;
+  font-weight: 100;
+  color: #d8d8d8;
+}
+
+.detail-card .movie-info .cast {
+  width: 100%;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.detail-card .movie-info .similar > div {
+  display: flex;
+  overflow-x: scroll;
+  text-align: center;
+  scrollbar-color: #ddd #000;
+}
+.detail-card .movie-info .similar > div::-webkit-scrollbar {
+  background-color: #484848;
+}
+.detail-card .movie-info .similar > div::-webkit-scrollbar-thumb {
+  background: #fff;
+}
+
+.detail-card .movie-info .similar > div img {
+  width: 150px;
+  margin-right: 15px;
+}
+
+.detail-card .movie-info .videos {
+  width: 100%;
+  padding-bottom: 56.25%;
+  position: relative;
+  margin: 30px 0;
+}
+
+.detail-card .movie-info .videos iframe {
+  width: 100%;
+  height: 100%;
+  padding: 3%;
+  position: absolute;
 }

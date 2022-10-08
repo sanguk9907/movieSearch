@@ -10,6 +10,7 @@ import SearchResultText from "./SearchResultText";
 import SearchBody from "./SearchBody";
 import SearchMovieCard from "./SearchMovieCard";
 import PersonCard from "./PersonCard";
+import MovieDetail from "./MovieDetail";
 
 export {
   MovieCard,
@@ -24,4 +25,5 @@ export {
   SearchBody,
   SearchMovieCard,
   PersonCard,
+  MovieDetail,
 };

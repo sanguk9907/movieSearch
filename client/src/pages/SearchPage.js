@@ -5,8 +5,6 @@ import { instance } from "../apis";
 function SearchPage() {
   const [search, setSearch] = React.useState({
     searchTitle: "",
-    genre: "",
-    country: "",
   });
   React.useEffect(() => {
     searchMovie();
@@ -37,7 +35,6 @@ function SearchPage() {
               },
             })
             .then((response) => {
-              // console.log(response.data.results);
               setPerson(response.data.results);
             });
         } else {

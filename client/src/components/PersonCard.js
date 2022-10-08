@@ -1,4 +1,5 @@
 import React from "react";
+import MovieDetail from "./MovieDetail";
 
 function PersonCard({ person }) {
   console.log(person);

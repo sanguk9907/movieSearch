@@ -1,5 +1,6 @@
 import React from "react";
 import { Form } from "semantic-ui-react";
+import { useNavigate } from "react-router-dom";
 
 const genre = [
   { key: "", value: "", text: "장르선택" },
@@ -46,9 +47,8 @@ const country = [
 function SearchBox({ searchInputValue }) {
   const [search, setSearch] = React.useState({
     searchTitle: "",
-    genre: "",
-    country: "",
   });
+  const navigation = useNavigate();
 
   return (
     <div className="searchBox-wrap">
@@ -56,6 +56,9 @@ function SearchBox({ searchInputValue }) {
         onSubmit={(e) => {
           e.preventDefault();
           searchInputValue(search);
+          navigation("/search", {
+            code: "good",
+          });
         }}
       >
         <input

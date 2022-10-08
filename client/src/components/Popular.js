@@ -3,9 +3,10 @@ import { instance, requests } from "../apis";
 import MovieCard from "./MovieCard";
 
 function Popular() {
+  // 불러온 영화 정보를 담는 스테이트
   const [movie, setMovie] = React.useState([]);
 
-  //   인기있는 영화 데이터 받아오기
+  // 영화정보 불러오기
   const fetchData = () => {
     instance
       .get(requests.Popular, {
