@@ -20,7 +20,6 @@ function SearchPage() {
           language: "ko",
           region: "ko",
           query: search.searchTitle,
-          include_adult: false,
         },
       })
       .then((response) => {
@@ -31,7 +30,6 @@ function SearchPage() {
                 language: "ko",
                 region: "ko",
                 query: search.searchTitle,
-                include_adult: false,
               },
             })
             .then((response) => {
