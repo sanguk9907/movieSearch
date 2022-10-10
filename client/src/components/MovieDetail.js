@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
-import { instance } from "../apis";
+import { detailData } from "../helper/fetchData";
 
 function MovieDetail({ movieDetail, setMovieDetail }) {
   const posterUrl = `https://image.tmdb.org/t/p/original/${movieDetail.poster_path}`; //포스터 이미지
@@ -11,23 +11,7 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
   const cast = movieDetail.credits.cast; //출연진
   const similar = movieDetail.similar.results; //비슷한 영화
 
-  // 영화 id로 영화 상세정보 불러오기
-  const detailData = (movieId) => {
-    instance
-      .get(`movie/${movieId}`, {
-        params: {
-          append_to_response: "videos,similar,credits",
-          language: "ko",
-          region: "ko",
-        },
-      })
-      .then((response) => {
-        const detailData = response.data;
-        setMovieDetail(detailData);
-        console.log(detailData);
-      });
-  };
-
+  // 비디오 출력
   const iframe = () => {
     if (movieDetail.videos.results.length === 0) {
       return <div>제공된 비디오가 없습니다</div>;
@@ -108,7 +92,7 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
                   <div
                     key={`similar-${index}`}
                     onClick={() => {
-                      detailData(item.id);
+                      detailData(item.id, setMovieDetail);
                     }}
                   >
                     <img

@@ -11,6 +11,9 @@ import SearchBody from "./SearchBody";
 import SearchMovieCard from "./SearchMovieCard";
 import PersonCard from "./PersonCard";
 import MovieDetail from "./MovieDetail";
+import Header from "./Header";
+import MainSlider from "./MainSlider";
+import SlideText from "./SlideText";
 
 export {
   MovieCard,
@@ -26,4 +29,7 @@ export {
   SearchMovieCard,
   PersonCard,
   MovieDetail,
+  Header,
+  MainSlider,
+  SlideText,
 };

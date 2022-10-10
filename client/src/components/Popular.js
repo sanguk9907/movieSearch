@@ -1,26 +1,13 @@
 import React from "react";
-import { instance, requests } from "../apis";
 import MovieCard from "./MovieCard";
+import { requests } from "../apis";
+import { fetchData } from "../helper/fetchData";
 
 function Popular() {
-  // 불러온 영화 정보를 담는 스테이트
   const [movie, setMovie] = React.useState([]);
 
-  // 영화정보 불러오기
-  const fetchData = () => {
-    instance
-      .get(requests.Popular, {
-        params: {
-          language: "ko",
-        },
-      })
-      .then((response) => {
-        setMovie(response.data.results);
-      });
-  };
-
   React.useEffect(() => {
-    fetchData();
+    fetchData(requests.Popular, setMovie);
   }, []);
 
   return (

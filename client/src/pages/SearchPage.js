@@ -1,11 +1,11 @@
 import React from "react";
-import { SearchBody, SearchBox } from "../components";
+import { Header, SearchBody } from "../components";
 import { instance } from "../apis";
+import { StoreContext } from "../App";
 
 function SearchPage() {
-  const [search, setSearch] = React.useState({
-    searchTitle: "",
-  });
+  const { search } = React.useContext(StoreContext);
+
   React.useEffect(() => {
     searchMovie();
   }, [search]);
@@ -19,44 +19,36 @@ function SearchPage() {
         params: {
           language: "ko",
           region: "ko",
-          query: search.searchTitle,
+          query: search.text,
         },
       })
       .then((response) => {
-        if (response.data.results[0] === undefined) {
-          instance
-            .get(`search/person`, {
-              params: {
-                language: "ko",
-                region: "ko",
-                query: search.searchTitle,
-              },
-            })
-            .then((response) => {
-              setPerson(response.data.results);
-            });
-        } else {
-          setMovie(response.data.results);
-        }
+        setMovie(response.data.results);
       })
       .catch(() => {
         console.log("에러");
       });
-  };
-
-  const searchInputValue = (x) => {
-    setSearch(x);
-    console.log(x);
+    instance
+      .get(`search/person`, {
+        params: {
+          language: "ko",
+          region: "ko",
+          query: search.text,
+        },
+      })
+      .then((response) => {
+        setPerson(response.data.results);
+      });
   };
 
   return (
     <div className="SearchPage-wrap">
-      <SearchBox searchInputValue={searchInputValue} />
+      <Header />
       <div className="searchResultText">
-        {search.searchTitle === "" ? (
+        {search.text === "" ? (
           <p>영화, 인물정보를 검색해보세요</p>
         ) : (
-          <p>{`"${search.searchTitle}"의 검색결과`}</p>
+          <p>{`"${search.text}"의 검색결과`}</p>
         )}
       </div>
       <SearchBody movie={movie} person={person} />

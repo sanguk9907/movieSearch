@@ -1,25 +1,13 @@
 import React from "react";
-import { instance, requests } from "../apis";
+import { requests } from "../apis";
+import { fetchData } from "../helper/fetchData";
 import MovieCard from "./MovieCard";
 
 function TopRated() {
   const [movie, setMovie] = React.useState([]);
 
-  //   인기있는 영화 데이터 받아오기
-  const fetchData = () => {
-    instance
-      .get(requests.TopRated, {
-        params: {
-          language: "ko",
-        },
-      })
-      .then((response) => {
-        setMovie(response.data.results);
-      });
-  };
-
   React.useEffect(() => {
-    fetchData();
+    fetchData(requests.TopRated, setMovie);
   }, []);
 
   return (

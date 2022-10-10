@@ -8,30 +8,13 @@ import "swiper/css";
 // 스와이퍼
 import { instance } from "../apis";
 import MovieDetail from "./MovieDetail"; //영화 상세정보 모달
+import { detailData } from "../helper/fetchData";
 
 SwiperCore.use([Navigation, Pagination]);
 
 function MovieCard({ movie }) {
   // 영화 상세정보를 담는 스테이트
   const [movieDetail, setMovieDetail] = React.useState();
-
-  // 영화 id로 영화 상세정보 불러오기
-  const detailData = (movieId) => {
-    instance
-      .get(`movie/${movieId}`, {
-        params: {
-          append_to_response: "videos,similar,credits",
-          language: "ko",
-          region: "ko",
-        },
-      })
-      .then((response) => {
-        const detailData = response.data;
-        setMovieDetail(detailData);
-        console.log(detailData);
-      })
-      .catch();
-  };
 
   return (
     <div className="movie-wrap">
@@ -53,7 +36,7 @@ function MovieCard({ movie }) {
                   <div
                     className="img-box"
                     onClick={() => {
-                      detailData(item.id);
+                      detailData(item.id, setMovieDetail);
                     }}
                     style={{
                       backgroundImage: `url("https://image.tmdb.org/t/p/w500/${item.poster_path}")`,

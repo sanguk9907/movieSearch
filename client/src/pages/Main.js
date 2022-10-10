@@ -5,13 +5,15 @@ import {
   Trending,
   TopRated,
   NowPlaying,
-  SearchBox,
+  Header,
+  MainSlider,
 } from "../components/";
 
 function Main() {
   return (
     <div className="main-wrap">
-      <SearchBox />
+      <MainSlider />
+      <Header />
       <Popular />
       <Upcoming />
       <Trending />
