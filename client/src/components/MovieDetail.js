@@ -14,13 +14,19 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
   // 비디오 출력
   const iframe = () => {
     if (movieDetail.videos.results.length === 0) {
-      return <div>제공된 비디오가 없습니다</div>;
+      return (
+        <div className="noHaveVideo">
+          <h3>아직 제공된 영상이 없습니다</h3>
+        </div>
+      );
     } else {
       return (
-        <iframe
-          src={`https://www.youtube.com/embed/${movieDetail.videos.results[0].key}`}
-          frameBorder="0"
-        ></iframe>
+        <div className="videos">
+          <iframe
+            src={`https://www.youtube.com/embed/${movieDetail.videos.results[0].key}`}
+            frameBorder="0"
+          ></iframe>
+        </div>
       );
     }
   };
@@ -50,59 +56,60 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
         />
 
         {/*포스터이미지*/}
-        <div className="img-box">
-          <img src={posterUrl} alt={movieTitle}></img>
-          <div className="title">
-            <h3>{movieTitle}</h3>
-            <p className="tag">{tagLine}</p>
+        <div className="movie-info">
+          <img className="movie-img" src={posterUrl} alt={movieTitle}></img>
+          <div className="movie-text">
+            <div className="title">
+              <h3>{movieTitle}</h3>
+              <p className="tag">{tagLine}</p>
+            </div>
+            <p className="genres">
+              장르 :
+              {genres.map((item, index) => {
+                item.name = ` ${item.name} `;
+                return <b key={`genres-${index}`}>{item.name}</b>;
+              })}
+            </p>
+
+            <p className="overview">
+              줄거리
+              <br />
+              <b>{overView}</b>
+            </p>
+
+            <div className="cast">
+              출연진
+              <br />
+              {cast.map((item, index) => {
+                item.name = ` ${item.name}, `;
+                return <b key={`cast-${index}`}>{item.name}</b>;
+              })}
+            </div>
           </div>
         </div>
 
-        <div className="movie-info">
-          <p className="genres">
-            장르 :
-            {genres.map((item, index) => {
-              item.name = ` ${item.name} `;
-              return <b key={`genres-${index}`}>{item.name}</b>;
+        {iframe()}
+        {/* 비디오 출력 */}
+
+        <div className="similar">
+          <b>비슷한 영화</b>
+          <div>
+            {similar.map((item, index) => {
+              return (
+                <div
+                  className="similar-card"
+                  key={`similar-${index}`}
+                  onClick={() => {
+                    detailData(item.id, setMovieDetail);
+                  }}
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`}
+                  ></img>
+                  <p>{item.title}</p>
+                </div>
+              );
             })}
-          </p>
-
-          <p className="overview">
-            줄거리
-            <br />
-            <b>{overView}</b>
-          </p>
-
-          <div className="cast">
-            출연진
-            <br />
-            {cast.map((item, index) => {
-              item.name = ` ${item.name}, `;
-              return <b key={`cast-${index}`}>{item.name}</b>;
-            })}
-          </div>
-
-          <div className="videos">{iframe()}</div>
-
-          <div className="similar">
-            <b>비슷한 영화</b>
-            <div>
-              {similar.map((item, index) => {
-                return (
-                  <div
-                    key={`similar-${index}`}
-                    onClick={() => {
-                      detailData(item.id, setMovieDetail);
-                    }}
-                  >
-                    <img
-                      src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`}
-                    ></img>
-                    <p>{item.title}</p>
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </div>
       </div>

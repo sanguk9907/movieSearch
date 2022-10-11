@@ -12,8 +12,8 @@ import {
 function Main() {
   return (
     <div className="main-wrap">
-      <MainSlider />
       <Header />
+      <MainSlider />
       <Popular />
       <Upcoming />
       <Trending />

@@ -26,7 +26,6 @@ function MovieCard({ movie }) {
         pagination={{
           type: "progressbar",
         }}
-        navigation={true}
       >
         {movie &&
           movie.map((item, index) => {
