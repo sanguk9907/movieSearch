@@ -407,17 +407,17 @@ img {
   align-items: flex-end;
 }
 
-.detail-wrap .detail-card .movie-info img {
+.detail-wrap > .detail-card > .movie-info > img {
   width: 30%;
   margin-right: 15px;
 }
 
-.detail-wrap .detail-card .movie-text {
+.detail-wrap > .detail-card .movie-text {
   width: 50%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .detail-card .title h3 {
@@ -486,4 +486,19 @@ img {
   width: 100%;
   height: 100%;
   position: absolute;
+}
+
+.preovier-box {
+  float: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  color: #fff;
+}
+
+.preovier-box .preovier-img {
+  width: 50px;
+  border-radius: 10px;
+  margin-bottom: 5px;
 }

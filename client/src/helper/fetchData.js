@@ -26,9 +26,26 @@ const detailData = (movieId, setMovieDetail) => {
     .then((response) => {
       const detailData = response.data;
       setMovieDetail(detailData);
-      // console.log(detailData);
-    })
-    .catch();
+      console.log(detailData);
+    });
 };
 
-export { fetchData, detailData };
+const movieProvider = (movieId, setProviderData) => {
+  instance
+    .get(`movie/${movieId}/watch/providers`, {
+      params: {
+        language: "ko",
+        region: "ko",
+      },
+    })
+    .then((response) => {
+      const detailData =
+        response.data.results.KR &&
+        response.data.results.KR.flatrate &&
+        response.data.results.KR.flatrate;
+      setProviderData(detailData);
+      console.log(detailData);
+    });
+};
+
+export { fetchData, detailData, movieProvider };

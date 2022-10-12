@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
-import { detailData } from "../helper/fetchData";
+import { detailData, movieProvider } from "../helper/fetchData";
 
 function MovieDetail({ movieDetail, setMovieDetail }) {
   const posterUrl = `https://image.tmdb.org/t/p/original/${movieDetail.poster_path}`; //포스터 이미지
@@ -10,6 +10,8 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
   const overView = movieDetail.overview; // 줄거리
   const cast = movieDetail.credits.cast; //출연진
   const similar = movieDetail.similar.results; //비슷한 영화
+
+  const [providerData, setProviderData] = React.useState();
 
   // 비디오 출력
   const iframe = () => {
@@ -25,6 +27,7 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
           <iframe
             src={`https://www.youtube.com/embed/${movieDetail.videos.results[0].key}`}
             frameBorder="0"
+            title={movieDetail.videos.results[0].name}
           ></iframe>
         </div>
       );
@@ -77,13 +80,61 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
               <b>{overView}</b>
             </p>
 
-            <div className="cast">
+            {/* <div className="cast">
               출연진
               <br />
               {cast.map((item, index) => {
                 item.name = ` ${item.name}, `;
                 return <b key={`cast-${index}`}>{item.name}</b>;
               })}
+            </div> */}
+            <div className="preovier">
+              {!providerData ? (
+                <p className="none">
+                  OTT
+                  <br />
+                  (넷플릭스, 디즈니plus, 왓챠, 웨이브의 정보만 제공됩니다.)
+                </p>
+              ) : (
+                providerData.map((item) => {
+                  if (
+                    item.provider_id !== 356 &&
+                    item.provider_id !== 97 &&
+                    item.provider_id !== 337 &&
+                    item.provider_id !== 8
+                  ) {
+                    return (
+                      <p className="none">
+                        OTT
+                        <br />
+                        (넷플릭스, 디즈니plus, 왓챠, 웨이브의 정보만
+                        제공됩니다.)
+                      </p>
+                    );
+                  }
+                  let ottLink = `https://www.${item.provider_name.replaceAll(
+                    " ",
+                    ""
+                  )}.com/`;
+
+                  console.log(ottLink);
+                  return (
+                    <a
+                      className="preovier-box"
+                      href={ottLink}
+                      alt="item.provider_name"
+                      target="blank"
+                    >
+                      <img
+                        className="preovier-img"
+                        src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                        alt={item.provider_name}
+                      ></img>
+                      <p className="preovier-name">{item.provider_name}</p>
+                    </a>
+                  );
+                })
+              )}
             </div>
           </div>
         </div>
@@ -101,10 +152,12 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
                   key={`similar-${index}`}
                   onClick={() => {
                     detailData(item.id, setMovieDetail);
+                    movieProvider(item.id, setProviderData);
                   }}
                 >
                   <img
                     src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`}
+                    alt="similarMovie"
                   ></img>
                   <p>{item.title}</p>
                 </div>

@@ -8,13 +8,14 @@ import "swiper/css";
 // 스와이퍼
 import { instance } from "../apis";
 import MovieDetail from "./MovieDetail"; //영화 상세정보 모달
-import { detailData } from "../helper/fetchData";
+import { detailData, movieProvider } from "../helper/fetchData";
 
 SwiperCore.use([Navigation, Pagination]);
 
 function MovieCard({ movie }) {
   // 영화 상세정보를 담는 스테이트
   const [movieDetail, setMovieDetail] = React.useState();
+  const [providerData, setProviderData] = React.useState();
 
   return (
     <div className="movie-wrap">
@@ -36,6 +37,7 @@ function MovieCard({ movie }) {
                     className="img-box"
                     onClick={() => {
                       detailData(item.id, setMovieDetail);
+                      movieProvider(item.id, setProviderData);
                     }}
                     style={{
                       backgroundImage: `url("https://image.tmdb.org/t/p/w500/${item.poster_path}")`,
@@ -52,6 +54,7 @@ function MovieCard({ movie }) {
         <MovieDetail
           movieDetail={movieDetail}
           setMovieDetail={setMovieDetail}
+          providerData={providerData}
         />
       )}
     </div>
