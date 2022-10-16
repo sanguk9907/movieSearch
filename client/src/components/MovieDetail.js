@@ -2,7 +2,12 @@ import React from "react";
 import { Icon } from "semantic-ui-react";
 import { detailData, movieProvider } from "../helper/fetchData";
 
-function MovieDetail({ movieDetail, setMovieDetail }) {
+function MovieDetail({
+  movieDetail,
+  setMovieDetail,
+  provider,
+  setProviderData,
+}) {
   const posterUrl = `https://image.tmdb.org/t/p/original/${movieDetail.poster_path}`; //포스터 이미지
   const movieTitle = movieDetail.title; // 영화 제목
   const tagLine = movieDetail.tagline; // 영화 테그
@@ -10,8 +15,6 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
   const overView = movieDetail.overview; // 줄거리
   const cast = movieDetail.credits.cast; //출연진
   const similar = movieDetail.similar.results; //비슷한 영화
-
-  const [providerData, setProviderData] = React.useState();
 
   // 비디오 출력
   const iframe = () => {
@@ -33,6 +36,10 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
       );
     }
   };
+
+  React.useEffect(() => {
+    setProviderData(provider);
+  }, []);
 
   return (
     <div
@@ -75,9 +82,9 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
             </p>
 
             <p className="overview">
-              줄거리
+              <b>줄거리</b>
               <br />
-              <b>{overView}</b>
+              {overView}
             </p>
 
             {/* <div className="cast">
@@ -89,28 +96,21 @@ function MovieDetail({ movieDetail, setMovieDetail }) {
               })}
             </div> */}
             <div className="preovier">
-              {!providerData ? (
+              {!provider ? (
                 <p className="none">
                   OTT
                   <br />
                   (넷플릭스, 디즈니plus, 왓챠, 웨이브의 정보만 제공됩니다.)
                 </p>
               ) : (
-                providerData.map((item) => {
+                provider.map((item) => {
                   if (
                     item.provider_id !== 356 &&
                     item.provider_id !== 97 &&
                     item.provider_id !== 337 &&
                     item.provider_id !== 8
                   ) {
-                    return (
-                      <p className="none">
-                        OTT
-                        <br />
-                        (넷플릭스, 디즈니plus, 왓챠, 웨이브의 정보만
-                        제공됩니다.)
-                      </p>
-                    );
+                    return;
                   }
                   let ottLink = `https://www.${item.provider_name.replaceAll(
                     " ",

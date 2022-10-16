@@ -14,6 +14,7 @@ function Main() {
     <div className="main-wrap">
       <Header />
       <MainSlider />
+      <h2>카테고리별 BEST 20</h2>
       <Popular />
       <Upcoming />
       <Trending />

@@ -10,6 +10,7 @@ const fetchData = (url, setMovie) => {
     })
     .then((response) => {
       setMovie(response.data.results);
+      console.log(response.data);
     });
 };
 
@@ -26,7 +27,7 @@ const detailData = (movieId, setMovieDetail) => {
     .then((response) => {
       const detailData = response.data;
       setMovieDetail(detailData);
-      console.log(detailData);
+      // console.log(detailData);
     });
 };
 
@@ -44,7 +45,7 @@ const movieProvider = (movieId, setProviderData) => {
         response.data.results.KR.flatrate &&
         response.data.results.KR.flatrate;
       setProviderData(detailData);
-      console.log(detailData);
+      // console.log(detailData);
     });
 };
 

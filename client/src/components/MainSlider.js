@@ -14,6 +14,7 @@ import MovieDetail from "./MovieDetail";
 function MainSlider() {
   const [movie, setMovie] = React.useState([]);
   const [showDetail, setShowDetail] = React.useState(false);
+  const [providerData, setProviderData] = React.useState();
   React.useEffect(() => {
     fetchData(requests.Popular, setMovie);
   }, []);
@@ -25,9 +26,6 @@ function MainSlider() {
         autoplay={{
           delay: 5000,
           disableOnInteraction: false,
-        }}
-        pagination={{
-          clickable: true,
         }}
         modules={[Autoplay, Pagination]}
         className="mySwiper"
@@ -52,6 +50,7 @@ function MainSlider() {
                     movieId={item.id}
                     index={index}
                     setShowDetail={setShowDetail}
+                    setProviderData={setProviderData}
                   />
                 </div>
               </SwiperSlide>
@@ -59,7 +58,12 @@ function MainSlider() {
           })}
       </Swiper>
       {showDetail && (
-        <MovieDetail movieDetail={showDetail} setMovieDetail={setShowDetail} />
+        <MovieDetail
+          movieDetail={showDetail}
+          setMovieDetail={setShowDetail}
+          provider={providerData}
+          setProviderData={setProviderData}
+        />
       )}
     </>
   );

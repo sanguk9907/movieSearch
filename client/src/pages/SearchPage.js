@@ -5,13 +5,13 @@ import { StoreContext } from "../App";
 
 function SearchPage() {
   const { search } = React.useContext(StoreContext);
+  const [page, setPage] = React.useState(1);
 
   React.useEffect(() => {
     searchMovie();
   }, [search]);
 
   const [movie, setMovie] = React.useState([]);
-  const [person, setPerson] = React.useState([]);
 
   const searchMovie = () => {
     instance
@@ -20,24 +20,15 @@ function SearchPage() {
           language: "ko",
           region: "ko",
           query: search.text,
+          page: page,
         },
       })
       .then((response) => {
         setMovie(response.data.results);
+        console.log(response.data);
       })
       .catch(() => {
         console.log("에러");
-      });
-    instance
-      .get(`search/person`, {
-        params: {
-          language: "ko",
-          region: "ko",
-          query: search.text,
-        },
-      })
-      .then((response) => {
-        setPerson(response.data.results);
       });
   };
 
@@ -51,7 +42,7 @@ function SearchPage() {
           <p>{`"${search.text}"의 검색결과`}</p>
         )}
       </div>
-      <SearchBody movie={movie} person={person} />
+      <SearchBody movie={movie} />
     </div>
   );
 }

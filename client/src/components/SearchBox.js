@@ -1,7 +1,7 @@
 import React from "react";
 import { StoreContext } from "../App";
 
-function SearchBox() {
+function SearchBox({ clickedSearch, setClickedSearch }) {
   const { setDispatchType } = React.useContext(StoreContext);
   const [inputValue, setInputValue] = React.useState({
     text: "",
@@ -9,7 +9,7 @@ function SearchBox() {
   });
 
   return (
-    <div className="searchBox-wrap">
+    <div className={`searchBox-wrap ${clickedSearch ? "slidedown" : ""}`}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -17,6 +17,7 @@ function SearchBox() {
             text: inputValue.text,
             page: inputValue.page,
           });
+          setClickedSearch(false);
         }}
       >
         <input
@@ -28,7 +29,7 @@ function SearchBox() {
             const cloneInputValue = { ...inputValue };
             cloneInputValue.text = e.target.value;
             setInputValue(cloneInputValue);
-            console.log(inputValue.text);
+            // console.log(inputValue.text);
           }}
         />
       </form>

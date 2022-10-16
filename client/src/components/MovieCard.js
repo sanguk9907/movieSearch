@@ -6,7 +6,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css";
 // 스와이퍼
-import { instance } from "../apis";
 import MovieDetail from "./MovieDetail"; //영화 상세정보 모달
 import { detailData, movieProvider } from "../helper/fetchData";
 
@@ -23,7 +22,12 @@ function MovieCard({ movie }) {
       <Swiper
         modules={[Navigation, Pagination]}
         spaceBetween={20}
-        slidesPerView={5}
+        slidesPerView={1}
+        breakpoints={{
+          420: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1200: { slidesPerView: 5 },
+        }}
         pagination={{
           type: "progressbar",
         }}
@@ -54,7 +58,8 @@ function MovieCard({ movie }) {
         <MovieDetail
           movieDetail={movieDetail}
           setMovieDetail={setMovieDetail}
-          providerData={providerData}
+          provider={providerData}
+          setProviderData={setProviderData}
         />
       )}
     </div>

@@ -8,6 +8,10 @@ function Header() {
   const [clickedSearch, setClickedSearch] = React.useState(false);
   return (
     <>
+      <SearchBox
+        clickedSearch={clickedSearch}
+        setClickedSearch={setClickedSearch}
+      />
       <div className="header-wrap">
         <div
           className="logo-img"
@@ -38,7 +42,6 @@ function Header() {
           </li>
         </ul>
       </div>
-      {clickedSearch && <SearchBox />}
     </>
   );
 }

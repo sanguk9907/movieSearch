@@ -1,7 +1,7 @@
 import React from "react";
-import { detailData } from "../helper/fetchData";
+import { detailData, movieProvider } from "../helper/fetchData";
 
-function SlideText({ movieId, index, setShowDetail }) {
+function SlideText({ movieId, index, setShowDetail, setProviderData }) {
   const [movieDetail, setMovieDetail] = React.useState({});
 
   React.useEffect(() => {
@@ -14,38 +14,38 @@ function SlideText({ movieId, index, setShowDetail }) {
         <div className={`text-box text-${index}`}>
           <div className="title">
             <h3>{movieDetail.title}</h3>
-            <span className="tagline">{movieDetail.tagline}</span>
+            {movieDetail.tagline && (
+              <p className="tagline">{movieDetail.tagline}</p>
+            )}
           </div>
-
-          <p className="overview">
-            줄거리
-            <br />
-            <span>{movieDetail.overview}...</span>
-          </p>
-          <p className="genres">
-            장르
-            <br />
-            <span>
+          <div className="overview">
+            <span>줄거리</span>
+            <p>{movieDetail.overview}...</p>
+          </div>
+          <div className="genres">
+            <span>장르</span>
+            <p>
               {movieDetail.genres &&
                 movieDetail.genres.map((item) => {
                   return ` ${item.name} `;
                 })}
-            </span>
-          </p>
+            </p>
+          </div>
 
           <p className="vote_average">
-            평점 :{" "}
+            평점 : &nbsp;
             {movieDetail.vote_average && movieDetail.vote_average.toFixed(1)}
           </p>
 
-          <div
+          <span
             className="more"
             onClick={() => {
               setShowDetail(movieDetail);
+              movieProvider(movieDetail.id, setProviderData);
             }}
           >
             자세히 보기
-          </div>
+          </span>
         </div>
       </div>
     )

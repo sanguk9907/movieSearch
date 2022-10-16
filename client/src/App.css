@@ -1,15 +1,116 @@
-* {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
   font-family: "Pretendard-Regular";
-  color: inherit;
-  text-decoration: none;
+  line-height: 1.5em;
 }
-
-ul,
-li {
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
   list-style: none;
+}
+b {
+  font-weight: bolder;
 }
 
 @font-face {
@@ -18,10 +119,6 @@ li {
     format("woff");
   font-weight: 400;
   font-style: normal;
-}
-
-img {
-  display: block;
 }
 
 /* 노멀라이징(추가예정) */
@@ -86,7 +183,8 @@ img {
 
 .slide-card {
   width: 100%;
-  padding-bottom: 30%;
+  height: 30vw;
+  min-height: 370px;
   position: relative;
 }
 
@@ -94,7 +192,7 @@ img {
   width: 60%;
   height: 100%;
   background-size: cover;
-  background-position-y: center;
+  background-position: center;
   background-repeat: no-repeat;
   position: absolute;
   left: 0;
@@ -115,26 +213,25 @@ img {
 .slide-text-warp > .text-box {
   width: 50%;
   height: 100%;
-  padding: 50px;
   text-align: left;
   color: #fff;
   position: absolute;
   top: 50%;
-  right: 0;
+  right: 3%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  align-items: flex-start;
+}
+
+.slide-text-warp > .text-box > .title > h3 {
+  font-size: 30px;
 }
 
 .slide-text-warp > .text-box > .title > .tagline {
   font-size: 14px;
   font-weight: 100;
-}
-
-.slide-text-warp > .text-box > .overview > span,
-.slide-text-warp > .text-box > .genres > span {
-  font-size: 16px;
 }
 
 .slide-text-warp > .text-box > .more {
@@ -157,6 +254,8 @@ img {
 .main-wrap,
 .SearchPage-wrap {
   width: 100vw;
+  min-width: 420px;
+  min-height: 100vh;
   background-color: #181818;
   padding: 70px 0;
 }
@@ -170,12 +269,29 @@ img {
   background-color: #b73e3e !important;
 }
 
+.main-wrap h2 {
+  font-size: 36px;
+  font-weight: bolder;
+  color: #fff;
+  text-align: center;
+  padding: 50px 0;
+}
+
 /* ============검색창 시작============== */
 
 .searchBox-wrap {
   width: 100vw;
   height: 50px;
   background-color: #484848;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: 0.5s;
+  z-index: 900;
+}
+
+.searchBox-wrap.slidedown {
+  top: 70px;
 }
 
 .searchBox-wrap form {
@@ -198,7 +314,6 @@ img {
   outline: none;
   background-color: #484848;
   color: #eee;
-  border-bottom: 1px solid #eee;
 }
 
 .field {
@@ -215,7 +330,7 @@ img {
   background-color: #181818;
   color: #fff;
   text-align: center;
-  padding: 50px 0;
+  padding: 100px 0;
   font-size: 30px;
 }
 
@@ -223,7 +338,7 @@ img {
 
 /* ============무비카드 시작============ */
 .movieCard-wrap {
-  width: 80vw;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -264,21 +379,41 @@ img {
 /* ============무비카드 끝============ */
 
 /* 검색페이지 */
-.SearchPage-wrap {
-  min-height: 100vh;
-  padding-top: 70px;
-}
 
 .searchBody-warp {
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+}
+
+.searchBody-warp > ul {
+  width: 90%;
+  color: #fff;
+  display: flex;
+  border-bottom: 2px solid #fff;
+  padding: 10px 0;
+}
+
+.searchBody-warp > ul > li {
+  color: #787878;
+  margin-right: 20px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.searchBody-warp > ul > li.active {
+  color: #fff;
+}
+
+.searchBody-warp > ul > li:hover {
+  color: #fff;
 }
 
 .searchBody-warp .movie-wrap {
-  width: 90vw;
+  width: 90%;
   min-height: 200px;
-  border-top: 2px solid #fff;
   position: relative;
   padding-top: 30px;
   margin-top: 100px;
@@ -302,40 +437,23 @@ img {
 .person-warp {
   width: 90vw;
   min-height: 200px;
-  border-top: 2px solid #fff;
-  position: relative;
   padding-top: 30px;
   margin: 50px auto;
   display: flex;
   justify-content: space-between;
-}
-
-.searchBody-warp .movie-wrap::before {
-  content: "영화검색결과";
-  display: block;
-  position: absolute;
-  color: #fff;
-  font-size: 20px;
-  top: -30px;
-}
-.searchBody-warp .person-warp::before {
-  content: "인물검색결과";
-  display: block;
-  position: absolute;
-  color: #fff;
-  font-size: 20px;
-  top: -30px;
+  flex-wrap: wrap;
 }
 
 .searchBody-warp .person-card {
-  width: 48%;
+  width: 30%;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .searchBody-warp .img-box {
   width: 48%;
-  margin-bottom: 10px;
+  padding-bottom: 66.66%;
   background-size: cover;
   background-position: center;
 }
@@ -377,13 +495,14 @@ img {
 .detail-wrap .detail-card {
   width: 80%;
   max-width: 1200px;
+  min-width: 420px;
   height: 70%;
   background-color: #181818;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  padding: 20px;
+  padding: 50px 20px;
   overflow-y: scroll;
   z-index: 1000;
   color: #fff;
@@ -404,7 +523,6 @@ img {
 .detail-wrap .detail-card .movie-info {
   width: 100%;
   display: flex;
-  align-items: flex-end;
 }
 
 .detail-wrap > .detail-card > .movie-info > img {
@@ -501,4 +619,62 @@ img {
   width: 50px;
   border-radius: 10px;
   margin-bottom: 5px;
+}
+
+@media (max-width: 1200px) {
+  .slide-text-warp .overview {
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-break: keep-all;
+  }
+
+  .slide-text-warp div {
+    font-size: 0.9rem;
+  }
+  .searchBody-warp .person-card {
+    width: 48%;
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-wrap .detail-card .movie-info {
+    flex-direction: column;
+    align-items: center;
+  }
+  .detail-wrap > .detail-card > .movie-info > img {
+    width: 50%;
+  }
+  .detail-wrap > .detail-card .movie-text {
+    width: 100%;
+  }
+  .detail-wrap > .detail-card .movie-text > div,
+  .detail-wrap > .detail-card .movie-text > p {
+    margin-top: 30px;
+  }
+  .slide-text-warp > .text-box .more {
+    padding: 5px 0;
+  }
+
+  .slide-text-warp > .text-box {
+    padding: 0;
+  }
+
+  .searchBody-warp .person-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .detail-wrap > .detail-card > .movie-info > img {
+    width: 100%;
+  }
+  .detail-wrap .detail-card {
+    width: 100%;
+    height: 100%;
+    margin-top: 70px;
+  }
 }

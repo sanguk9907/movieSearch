@@ -1,9 +1,11 @@
 import React from "react";
 import { instance } from "../apis";
+import { movieProvider } from "../helper/fetchData";
 import MovieDetail from "./MovieDetail";
 
 function SearchMovieCard({ movie }) {
   const [movieDetail, setMovieDetail] = React.useState();
+  const [providerData, setProviderData] = React.useState();
 
   const detailData = (movieId) => {
     instance
@@ -31,6 +33,7 @@ function SearchMovieCard({ movie }) {
                 className="img-box"
                 onClick={() => {
                   detailData(item.id);
+                  movieProvider(item.id, setProviderData);
                 }}
                 style={{
                   backgroundImage: `url("https://image.tmdb.org/t/p/w500/${item.poster_path}")`,
@@ -44,6 +47,8 @@ function SearchMovieCard({ movie }) {
         <MovieDetail
           movieDetail={movieDetail}
           setMovieDetail={setMovieDetail}
+          provider={providerData}
+          setProviderData={setProviderData}
         />
       )}
     </div>
