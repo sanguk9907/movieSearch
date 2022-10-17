@@ -15,7 +15,7 @@ function SearchPage() {
 
   const searchMovie = () => {
     instance
-      .get(`search/movie`, {
+      .get(`/search`, {
         params: {
           language: "ko",
           region: "ko",
@@ -25,7 +25,6 @@ function SearchPage() {
       })
       .then((response) => {
         setMovie(response.data.results);
-        console.log(response.data);
       })
       .catch(() => {
         console.log("에러");

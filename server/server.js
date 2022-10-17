@@ -3,27 +3,74 @@ const cors = require("cors");
 const request = require("request");
 const app = express();
 
-// const DB = {
-//   apart: [],
-// };
-
 app.use(cors());
-
-app.get("/API", async function (req, res) {
-  // if (DB.apart.length > 0) {
-  //   res.send(DB.apart);
-  //   return;
-  // }
-  console.log(req.query);
+const key = "3cf148810eae178af2afb1a072cfe76d";
+app.get("/mainPageData", async function (req, res) {
+  const { category } = req.query;
   request(
     {
-      uri: "https://api.themoviedb.org/3/movie/985939?api_key=3cf148810eae178af2afb1a072cfe76d&append_to_response=videos,similar,credits&language=ko&region=ko",
+      uri: `https://api.themoviedb.org/3/${category}?api_key=${key}`,
       method: "get",
-      qs: {},
+      qs: { language: "ko" },
     },
     function (error, response, body) {
       const data = JSON.parse(body);
-      // console.log(data);
+      res.send(data);
+    }
+  );
+});
+
+app.get("/Information", async function (req, res) {
+  const { movieId } = req.query;
+  request(
+    {
+      uri: `https://api.themoviedb.org/3/movie/${movieId}?api_key=${key}`,
+      method: "get",
+      qs: {
+        append_to_response: "videos,similar,credits",
+        language: "ko",
+        region: "ko",
+      },
+    },
+    function (error, response, body) {
+      const data = JSON.parse(body);
+      res.send(data);
+    }
+  );
+});
+
+app.get("/providers", async function (req, res) {
+  const { movieId } = req.query;
+  request(
+    {
+      uri: `https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${key}`,
+      method: "get",
+      qs: {
+        language: "ko",
+        region: "ko",
+      },
+    },
+    function (error, response, body) {
+      const data = JSON.parse(body);
+      res.send(data);
+    }
+  );
+});
+
+app.get("/search", async function (req, res) {
+  const { query } = req.query;
+  request(
+    {
+      uri: `https://api.themoviedb.org/3/search/movie?api_key=${key}`,
+      method: "get",
+      qs: {
+        language: "ko",
+        region: "ko",
+        query: query,
+      },
+    },
+    function (error, response, body) {
+      const data = JSON.parse(body);
       res.send(data);
     }
   );

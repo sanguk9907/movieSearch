@@ -29,7 +29,6 @@ function SearchBox({ clickedSearch, setClickedSearch }) {
             const cloneInputValue = { ...inputValue };
             cloneInputValue.text = e.target.value;
             setInputValue(cloneInputValue);
-            // console.log(inputValue.text);
           }}
         />
       </form>

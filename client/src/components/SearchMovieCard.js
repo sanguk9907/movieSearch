@@ -2,27 +2,11 @@ import React from "react";
 import { instance } from "../apis";
 import { movieProvider } from "../helper/fetchData";
 import MovieDetail from "./MovieDetail";
+import { detailData } from "../helper/fetchData";
 
 function SearchMovieCard({ movie }) {
   const [movieDetail, setMovieDetail] = React.useState();
   const [providerData, setProviderData] = React.useState();
-
-  const detailData = (movieId) => {
-    instance
-      .get(`movie/${movieId}`, {
-        params: {
-          append_to_response: "videos,similar,credits",
-          language: "ko",
-          region: "ko",
-        },
-      })
-      .then((response) => {
-        const detailData = response.data;
-        setMovieDetail(detailData);
-        console.log(detailData);
-      })
-      .catch();
-  };
   return (
     <div className="movie-wrap">
       {movie &&
@@ -32,7 +16,7 @@ function SearchMovieCard({ movie }) {
               <div
                 className="img-box"
                 onClick={() => {
-                  detailData(item.id);
+                  detailData(item.id, setMovieDetail);
                   movieProvider(item.id, setProviderData);
                 }}
                 style={{

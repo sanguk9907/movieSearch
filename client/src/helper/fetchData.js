@@ -1,24 +1,37 @@
 import React from "react";
-import { instance } from "../apis";
+import { instance, requests } from "../apis";
 
-const fetchData = (url, setMovie) => {
-  instance
-    .get(url, {
+// const fetchData = async (setMovie) => {
+//   await instance
+//     .get(`/mainPageData`, {
+//       params: {
+//         category: requests.Popular,
+//       },
+//     })
+//     .then((response) => {
+//       // setMovie(response);
+//       console.log(response);
+//     });
+// };
+
+const fetchData = async (category, setMovie) => {
+  await instance
+    .get(`/mainPageData`, {
       params: {
-        language: "ko",
+        category: category,
       },
     })
-    .then((response) => {
-      setMovie(response.data.results);
-      console.log(response.data);
+    .then(({ data }) => {
+      setMovie(data.results);
     });
 };
 
 // 영화 id로 영화 상세정보 불러오기
-const detailData = (movieId, setMovieDetail) => {
-  instance
-    .get(`movie/${movieId}`, {
+const detailData = async (movieId, setMovieDetail) => {
+  await instance
+    .get(`/Information`, {
       params: {
+        movieId: movieId,
         append_to_response: "videos,similar,credits",
         language: "ko",
         region: "ko",
@@ -27,25 +40,22 @@ const detailData = (movieId, setMovieDetail) => {
     .then((response) => {
       const detailData = response.data;
       setMovieDetail(detailData);
-      // console.log(detailData);
     });
 };
 
 const movieProvider = (movieId, setProviderData) => {
   instance
-    .get(`movie/${movieId}/watch/providers`, {
+    .get(`/providers`, {
       params: {
+        movieId: movieId,
         language: "ko",
         region: "ko",
       },
     })
-    .then((response) => {
+    .then(({ data }) => {
       const detailData =
-        response.data.results.KR &&
-        response.data.results.KR.flatrate &&
-        response.data.results.KR.flatrate;
+        data.results.KR && data.results.KR.flatrate && data.results.KR.flatrate;
       setProviderData(detailData);
-      // console.log(detailData);
     });
 };
 

@@ -2,6 +2,7 @@ import React from "react";
 import MovieCard from "./MovieCard";
 import { requests } from "../apis";
 import { fetchData } from "../helper/fetchData";
+import axios from "axios";
 
 function Popular() {
   const [movie, setMovie] = React.useState([]);

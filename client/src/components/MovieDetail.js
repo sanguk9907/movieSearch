@@ -103,7 +103,7 @@ function MovieDetail({
                   (넷플릭스, 디즈니plus, 왓챠, 웨이브의 정보만 제공됩니다.)
                 </p>
               ) : (
-                provider.map((item) => {
+                provider.map((item, index) => {
                   if (
                     item.provider_id !== 356 &&
                     item.provider_id !== 97 &&
@@ -124,6 +124,7 @@ function MovieDetail({
                       href={ottLink}
                       alt="item.provider_name"
                       target="blank"
+                      key={`OTT-${index}`}
                     >
                       <img
                         className="preovier-img"
