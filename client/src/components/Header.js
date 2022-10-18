@@ -27,7 +27,11 @@ function Header() {
             <Icon name="sign in" />
             <p>로그인</p>
           </li>
-          <li>
+          <li
+            onClick={() => {
+              navigation("/join");
+            }}
+          >
             <Icon name="user plus" />
             <p>회원가입</p>
           </li>

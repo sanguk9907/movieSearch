@@ -1,9 +1,51 @@
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const { Schema } = require("mongoose");
 const request = require("request");
 const app = express();
 
+/**
+ *
+ *
+ * 몽구스 설치, 근데 어떻게 하는지 잘 모르겠음
+ *
+ *
+ */
+// 내 db주소
+const uri = `mongodb+srv://tkddnr6079:asas4545@user.24uzmhz.mongodb.net/?retryWrites=true&w=majority`;
+
+// db 연결
+mongoose.connect(uri);
+
+// 스키마생성
+const userSchema = new Schema({
+  user_id: {
+    required: true,
+    unique: true,
+    type: String,
+  },
+
+  password: {
+    required: true,
+    type: String,
+  },
+  versionKey: false,
+});
+
+// 모델생성
+const usersModel = mongoose.model("user", userSchema);
+/**
+ *
+ *
+ *
+ *
+ *
+ */
+
 app.use(cors());
+app.use(express.json());
+
 const key = "3cf148810eae178af2afb1a072cfe76d";
 app.get("/mainPageData", async function (req, res) {
   const { category } = req.query;
@@ -74,6 +116,12 @@ app.get("/search", async function (req, res) {
       res.send(data);
     }
   );
+});
+// 회원가입
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.post("/join", (req, res) => {
+  res.send(".");
 });
 
 app.listen(5000, function () {
