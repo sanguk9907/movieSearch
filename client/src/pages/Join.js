@@ -1,24 +1,33 @@
 import React from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { StoreContext } from "../App";
 
 function Join() {
+  const { setLoginUser } = React.useContext(StoreContext);
+  const navigation = useNavigate();
   const [joinInfo, setJoinInfo] = React.useState({
     id: "",
     pw: "",
+    nick: "",
   });
 
   const signUp = async () => {
-    axios
-      .post("http://localhost:5000/join", {
-        firstName: "Fred",
-        lastName: "Flintstone",
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    await axios({
+      url: "http://localhost:5000/join",
+      method: "post",
+      data: {
+        id: joinInfo.id,
+        pw: joinInfo.pw,
+        nick: joinInfo.nick,
+      },
+    }).then(({ data }) => {
+      alert(data.message);
+      if (data.code === "success") {
+        setLoginUser(joinInfo);
+        navigation("/");
+      }
+    });
   };
 
   return (
@@ -27,7 +36,6 @@ function Join() {
         onSubmit={(e) => {
           e.preventDefault();
           setJoinInfo(joinInfo);
-          console.log(joinInfo);
           signUp();
         }}
       >
@@ -48,6 +56,16 @@ function Join() {
           onChange={(e) => {
             const cloneJoin = { ...joinInfo };
             cloneJoin.pw = e.target.value;
+            setJoinInfo(cloneJoin);
+          }}
+        ></input>
+        <input
+          type="text"
+          placeholder="사용하실 닉네임을 입력해주세요"
+          value={joinInfo.nick}
+          onChange={(e) => {
+            const cloneJoin = { ...joinInfo };
+            cloneJoin.nick = e.target.value;
             setJoinInfo(cloneJoin);
           }}
         ></input>

@@ -5,7 +5,6 @@ import { StoreContext } from "../App";
 
 function SearchPage() {
   const { search } = React.useContext(StoreContext);
-  const [page, setPage] = React.useState(1);
 
   React.useEffect(() => {
     searchMovie();
@@ -20,7 +19,6 @@ function SearchPage() {
           language: "ko",
           region: "ko",
           query: search.text,
-          page: page,
         },
       })
       .then((response) => {

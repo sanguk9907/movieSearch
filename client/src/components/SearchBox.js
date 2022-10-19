@@ -2,7 +2,7 @@ import React from "react";
 import { StoreContext } from "../App";
 
 function SearchBox({ clickedSearch, setClickedSearch }) {
-  const { setDispatchType } = React.useContext(StoreContext);
+  const { serach, setSearch } = React.useContext(StoreContext);
   const [inputValue, setInputValue] = React.useState({
     text: "",
     page: "/search",
@@ -13,7 +13,7 @@ function SearchBox({ clickedSearch, setClickedSearch }) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          setDispatchType({
+          setSearch({
             text: inputValue.text,
             page: inputValue.page,
           });

@@ -7,10 +7,6 @@ export const StoreContext = React.createContext();
 
 function App() {
   const navigation = useNavigate();
-  const [dispatchType, setDispatchType] = React.useState({
-    text: "",
-    page: "",
-  });
 
   const [search, setSearch] = React.useState({
     text: "",
@@ -18,11 +14,15 @@ function App() {
   });
 
   React.useEffect(() => {
-    navigation(dispatchType.page);
-    setSearch(dispatchType);
-  }, [dispatchType]);
+    navigation(search.page);
+  }, [search]);
   return (
-    <StoreContext.Provider value={{ setDispatchType: setDispatchType, search }}>
+    <StoreContext.Provider
+      value={{
+        search: search,
+        setSearch: setSearch,
+      }}
+    >
       <AppIndex />
     </StoreContext.Provider>
   );
