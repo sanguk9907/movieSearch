@@ -1,12 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../App";
 
 function SearchBox({ clickedSearch, setClickedSearch }) {
-  const { serach, setSearch } = React.useContext(StoreContext);
+  const { setSearch } = React.useContext(StoreContext);
   const [inputValue, setInputValue] = React.useState({
     text: "",
-    page: "/search",
   });
+
+  const navigation = useNavigate();
 
   return (
     <div className={`searchBox-wrap ${clickedSearch ? "slidedown" : ""}`}>
@@ -15,9 +17,9 @@ function SearchBox({ clickedSearch, setClickedSearch }) {
           e.preventDefault();
           setSearch({
             text: inputValue.text,
-            page: inputValue.page,
           });
           setClickedSearch(false);
+          navigation("/search");
         }}
       >
         <input

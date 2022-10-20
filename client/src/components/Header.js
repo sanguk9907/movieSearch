@@ -23,7 +23,11 @@ function Header() {
         </div>
 
         <ul>
-          <li>
+          <li
+            onClick={() => {
+              navigation("/login");
+            }}
+          >
             <Icon name="sign in" />
             <p>로그인</p>
           </li>

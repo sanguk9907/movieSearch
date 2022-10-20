@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const request = require("request");
 const crypto = require("crypto");
+const { read } = require("fs");
+const { resolve } = require("path");
+const { rejects } = require("assert");
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -147,6 +150,57 @@ app.post("/join", (req, res) => {
     }
     createHashedPassword(id, pw, nick);
   }
+  res.send(resulte);
+});
+
+app.get("/login", (req, res) => {
+  res.send("get");
+});
+app.post("/login", (req, res) => {
+  const { id, pw } = req.body;
+
+  const resulte = {
+    code: "success",
+    message: "성공적으로 로그인 되었습니다.",
+  };
+  const examArray = [1];
+  const findUserID = db.find((item) => {
+    return item.user.userID === id;
+  });
+
+  const dbSalt = !findUserID ? undefined : findUserID.user.salt;
+  const dbPassword = !findUserID ? undefined : findUserID.user.hashedPassword;
+
+  const passKey = !dbSalt
+    ? ""
+    : crypto.pbkdf2Sync(pw, dbSalt, 100514, 64, "sha512").toString("base64");
+
+  for (let key in examArray) {
+    if (id === "") {
+      resulte.code = "fail";
+      resulte.message = "아이디를 입력해주세요";
+      break;
+    }
+
+    if (pw === "") {
+      (resulte.code = "fail"), (resulte.message = "비밀번호를 입력해주세요");
+      break;
+    }
+
+    if (findUserID === undefined || findUserID.user.userID !== id) {
+      resulte.code = "fail";
+      resulte.message =
+        "등록되지 않은 아이디이거나, 틀린 아이디입니다 다시 한 번 확인해주세요.";
+      break;
+    }
+
+    if (passKey !== dbPassword) {
+      resulte.code = "fail";
+      resulte.message = "비밀번호가 올바르지 않습니다";
+      break;
+    }
+  }
+
   res.send(resulte);
 });
 

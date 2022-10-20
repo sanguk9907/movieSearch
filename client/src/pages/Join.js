@@ -25,6 +25,11 @@ function Join() {
       alert(data.message);
       if (data.code === "success") {
         setLoginUser(joinInfo);
+        setLoginUser({
+          id: "",
+          pw: "",
+          nick: "",
+        });
         navigation("/");
       }
     });

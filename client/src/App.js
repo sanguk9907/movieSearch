@@ -12,15 +12,17 @@ function App() {
     text: "",
     page: "",
   });
-
-  React.useEffect(() => {
-    navigation(search.page);
-  }, [search]);
+  const [loginUser, setLoginUser] = React.useState({
+    id: "",
+    nick: "",
+  });
   return (
     <StoreContext.Provider
       value={{
         search: search,
         setSearch: setSearch,
+        loginUser: loginUser,
+        setLoginUser: setLoginUser,
       }}
     >
       <AppIndex />
