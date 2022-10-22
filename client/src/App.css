@@ -621,6 +621,49 @@ b {
   margin-bottom: 5px;
 }
 
+.join-wrap,
+.login-wrap {
+  width: 100vw;
+  min-width: 420px;
+  min-height: 100vh;
+  background-color: #181818;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.join-form,
+.login-form {
+  padding: 50px;
+  background-color: #383838;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+}
+
+.ui.form .field input {
+  width: 300px;
+}
+.ui.form .field > label {
+  color: #fff;
+  font-weight: 300;
+}
+
+.ui.checkbox label,
+.ui.checkbox input:focus ~ label,
+.ui.checkbox label:hover {
+  color: #fff;
+  width: 40%;
+}
+.ui.checkbox label:after {
+  top: -4px;
+}
+
+.ui.button {
+  background-color: #b73e3e;
+  color: #fff;
+}
+
 @media (max-width: 1200px) {
   .slide-text-warp .overview {
     overflow: hidden;

@@ -31,11 +31,11 @@ function Header() {
               if (loginUser.id === "") {
                 navigation("/login");
               } else {
-                localStorage.removeItem(loginUser);
                 setLoginUser({
                   id: "",
                   nick: "",
                 });
+                localStorage.removeItem("loginUser");
               }
             }}
           >
