@@ -2,10 +2,13 @@ import React from "react";
 import { Icon } from "semantic-ui-react";
 import SearchBox from "./SearchBox";
 import { useNavigate } from "react-router-dom";
+import { StoreContext } from "../App";
 
 function Header() {
   const navigation = useNavigate();
+  const { loginUser, setLoginUser } = React.useContext(StoreContext);
   const [clickedSearch, setClickedSearch] = React.useState(false);
+
   return (
     <>
       <SearchBox
@@ -25,11 +28,19 @@ function Header() {
         <ul>
           <li
             onClick={() => {
-              navigation("/login");
+              if (loginUser.id === "") {
+                navigation("/login");
+              } else {
+                localStorage.removeItem(loginUser);
+                setLoginUser({
+                  id: "",
+                  nick: "",
+                });
+              }
             }}
           >
-            <Icon name="sign in" />
-            <p>로그인</p>
+            <Icon name={loginUser.id === "" ? "sign in" : "sign out"} />
+            <p>{loginUser.id === "" ? "로그인" : "로그아웃"}</p>
           </li>
           <li
             onClick={() => {

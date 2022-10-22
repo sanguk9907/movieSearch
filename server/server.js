@@ -16,11 +16,13 @@ const db = [
       hashedPassword: "다져진비번",
       nick: "닉네임",
       salt: "소금",
+      session_id: "",
     },
   },
 ];
 
 const key = "3cf148810eae178af2afb1a072cfe76d";
+
 app.get("/mainPageData", async function (req, res) {
   const { category } = req.query;
   request(
@@ -162,6 +164,7 @@ app.post("/login", (req, res) => {
   const resulte = {
     code: "success",
     message: "성공적으로 로그인 되었습니다.",
+    user: null,
   };
   const examArray = [1];
   const findUserID = db.find((item) => {
@@ -199,6 +202,11 @@ app.post("/login", (req, res) => {
       resulte.message = "비밀번호가 올바르지 않습니다";
       break;
     }
+
+    resulte.user = {
+      id: id,
+      nick: findUserID.user.nick,
+    };
   }
 
   res.send(resulte);

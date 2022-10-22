@@ -19,8 +19,13 @@ function Login() {
         id: loginInfo.id,
         pw: loginInfo.pw,
       },
-    }).then((res) => {
-      console.log(res);
+    }).then(({ data }) => {
+      if (data.code === "success") {
+        setLoginUser(data.user);
+        localStorage.setItem("loginUser", JSON.stringify(data.user));
+        alert(data.message);
+        navigation("/");
+      }
     });
   };
 
@@ -31,7 +36,6 @@ function Login() {
           e.preventDefault();
           setLoginInfo(loginInfo);
           login();
-          console.log(loginInfo);
           setLoginInfo({
             id: "",
             pw: "",
