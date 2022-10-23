@@ -508,8 +508,13 @@ b {
   color: #fff;
   letter-spacing: 0.7px;
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+}
+.detail-wrap .detail-card::-webkit-scrollbar {
+  background: #383838;
+}
+.detail-wrap .detail-card::-webkit-scrollbar-thumb {
+  background: #ddd;
 }
 
 .detail-card .close {
@@ -520,18 +525,26 @@ b {
   font-size: 20px;
 }
 
+.detail-card > .movie-info > .movie-text > p,
+.detail-card > .movie-info > .movie-text > .preovier {
+  background-color: #282828;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
 .detail-wrap .detail-card .movie-info {
   width: 100%;
   display: flex;
 }
 
 .detail-wrap > .detail-card > .movie-info > img {
-  width: 30%;
+  width: 35%;
   margin-right: 15px;
 }
 
 .detail-wrap > .detail-card .movie-text {
-  width: 50%;
+  width: 60%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -595,15 +608,38 @@ b {
 }
 
 .detail-card .noHaveVideo {
-  width: 100%;
-  padding: 50px 0;
-  text-align: center;
+  width: 30%;
+  padding-bottom: 42%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 20px auto;
 }
 
 .detail-card .videos iframe {
   width: 100%;
   height: 100%;
   position: absolute;
+}
+
+.detail-card .review .review-box {
+  border: 2px solid #383838;
+  padding: 10px;
+  height: 200px;
+  border-radius: 10px;
+  overflow-y: scroll;
+}
+.detail-card .review .review-box::-webkit-scrollbar {
+  background-color: #383838;
+}
+.detail-card .review .review-box::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+}
+.detail-card .review .review-box .review-content {
+  background-color: #383838;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 20px;
 }
 
 .preovier-box {
@@ -681,6 +717,10 @@ b {
   .searchBody-warp .person-card {
     width: 48%;
   }
+
+  .detail-wrap .detail-card .movie-info {
+    align-items: center;
+  }
 }
 
 @media (max-width: 768px) {
@@ -709,6 +749,10 @@ b {
   .searchBody-warp .person-card {
     width: 100%;
   }
+  .detail-card .noHaveVideo {
+    width: 40%;
+    padding-bottom: 53%;
+  }
 }
 
 @media (max-width: 420px) {
@@ -719,5 +763,9 @@ b {
     width: 100%;
     height: 100%;
     margin-top: 70px;
+  }
+  .detail-card .noHaveVideo {
+    width: 60%;
+    padding-bottom: 80%;
   }
 }

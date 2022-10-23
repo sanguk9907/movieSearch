@@ -1,6 +1,7 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
 import { detailData, movieProvider } from "../helper/fetchData";
+import notFoundImg from "../img/not-found.jpg";
 
 function MovieDetail({
   movieDetail,
@@ -8,7 +9,10 @@ function MovieDetail({
   provider,
   setProviderData,
 }) {
-  const posterUrl = `https://image.tmdb.org/t/p/original/${movieDetail.poster_path}`; //포스터 이미지
+  const posterUrl =
+    movieDetail.poster_path === null
+      ? notFoundImg
+      : `https://image.tmdb.org/t/p/original/${movieDetail.poster_path}`; //포스터 이미지
   const movieTitle = movieDetail.title; // 영화 제목
   const tagLine = movieDetail.tagline; // 영화 테그
   const genres = movieDetail.genres; //장르
@@ -23,9 +27,10 @@ function MovieDetail({
   const iframe = () => {
     if (movieDetail.videos.results.length === 0) {
       return (
-        <div className="noHaveVideo">
-          <h3>아직 제공된 영상이 없습니다</h3>
-        </div>
+        <div
+          className="noHaveVideo"
+          style={{ backgroundImage: `url(${notFoundImg})` }}
+        ></div>
       );
     } else {
       return (
@@ -39,8 +44,6 @@ function MovieDetail({
       );
     }
   };
-
-  console.log(movieDetail);
 
   React.useEffect(() => {
     setProviderData(provider);
@@ -153,7 +156,24 @@ function MovieDetail({
         {/* 리뷰 */}
         <div className="review">
           <b>영화 리뷰</b>
-          <div>{average}</div>
+          <div className="review-box">
+            전체평점:{average}
+            <div className="review-content">
+              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
+            </div>
+            <div className="review-content">
+              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
+            </div>
+            <div className="review-content">
+              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
+            </div>
+            <div className="review-content">
+              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
+            </div>
+            <div className="review-content">
+              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
+            </div>
+          </div>
         </div>
 
         {/* 비슷한영화 */}
@@ -171,7 +191,11 @@ function MovieDetail({
                   }}
                 >
                   <img
-                    src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`}
+                    src={
+                      item.poster_path === null
+                        ? notFoundImg
+                        : `https://image.tmdb.org/t/p/w300/${item.poster_path}`
+                    }
                     alt="similarMovie"
                   ></img>
                   <p>{item.title}</p>

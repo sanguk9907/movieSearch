@@ -3,6 +3,7 @@ import { instance } from "../apis";
 import { movieProvider } from "../helper/fetchData";
 import MovieDetail from "./MovieDetail";
 import { detailData } from "../helper/fetchData";
+import notFoundImg from "../img/not-found.jpg";
 
 function SearchMovieCard({ movie }) {
   const [movieDetail, setMovieDetail] = React.useState();
@@ -20,7 +21,9 @@ function SearchMovieCard({ movie }) {
                   movieProvider(item.id, setProviderData);
                 }}
                 style={{
-                  backgroundImage: `url("https://image.tmdb.org/t/p/w500/${item.poster_path}")`,
+                  backgroundImage: !item.poster_path
+                    ? `url("${notFoundImg}")`
+                    : `url("https://image.tmdb.org/t/p/w500/${item.poster_path}")`,
                 }}
               ></div>
               <p className="title">{item.title}</p>

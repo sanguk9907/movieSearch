@@ -2,7 +2,6 @@ import React from "react";
 import "./App.css";
 import AppIndex from "./AppIndex";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 
 export const StoreContext = React.createContext();
 
@@ -16,12 +15,12 @@ function App() {
     nick: "",
   });
 
-  const navigation = useNavigate();
   const { pathname } = useLocation();
+  const navigation = useNavigate();
+
   const nonAccess = () => {
     const nonAccessAddress = ["join", "Login"];
     const address = pathname.slice(1);
-    console.log(pathname);
 
     if (nonAccessAddress.includes(address) && loginUser.id !== "") {
       navigation("/");
@@ -41,12 +40,13 @@ function App() {
   };
 
   React.useEffect(() => {
-    nonAccess();
+    autoLogin();
   }, [pathname]);
 
   React.useEffect(() => {
-    autoLogin();
-  }, []);
+    nonAccess();
+  }, [loginUser]);
+
   return (
     <StoreContext.Provider
       value={{
