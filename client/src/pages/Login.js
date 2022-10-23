@@ -28,7 +28,11 @@ function Login() {
         return;
       }
       setLoginUser(data.user);
-      localStorage.setItem("loginUser", JSON.stringify(data.user));
+      if (loginInfo.autologin) {
+        localStorage.setItem("loginUser", JSON.stringify(data.user));
+      } else {
+        sessionStorage.setItem("loginUser", JSON.stringify(data.user));
+      }
 
       alert(data.message);
       navigation("/");

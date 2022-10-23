@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import AppIndex from "./AppIndex";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const StoreContext = React.createContext();
 
@@ -28,11 +29,14 @@ function App() {
   };
 
   const autoLogin = () => {
-    const user = JSON.parse(localStorage.getItem("loginUser"));
+    const localStorageUser = JSON.parse(localStorage.getItem("loginUser"));
 
-    console.log("localStorage : ", user);
-    if (user) {
-      setLoginUser(user);
+    const sessionStorageUser = JSON.parse(sessionStorage.getItem("loginUser"));
+
+    if (localStorageUser) {
+      setLoginUser(localStorageUser);
+    } else if (sessionStorageUser) {
+      setLoginUser(sessionStorageUser);
     }
   };
 

@@ -13,8 +13,11 @@ function MovieDetail({
   const tagLine = movieDetail.tagline; // 영화 테그
   const genres = movieDetail.genres; //장르
   const overView = movieDetail.overview; // 줄거리
-  const cast = movieDetail.credits.cast; //출연진
   const similar = movieDetail.similar.results; //비슷한 영화
+  const average = movieDetail.vote_average.toFixed(1); //평점
+  const vote_count = movieDetail.vote_count; //평점 낸 인원
+  const movieId = movieDetail.id; //영화 고유 아이디
+  const release = movieDetail.release_date; //개봉일자
 
   // 비디오 출력
   const iframe = () => {
@@ -36,6 +39,8 @@ function MovieDetail({
       );
     }
   };
+
+  console.log(movieDetail);
 
   React.useEffect(() => {
     setProviderData(provider);
@@ -86,6 +91,8 @@ function MovieDetail({
               <br />
               {overView}
             </p>
+
+            <p className="release-date">개봉일 : {release}</p>
 
             {/* <div className="cast">
               출연진
@@ -140,9 +147,16 @@ function MovieDetail({
           </div>
         </div>
 
-        {iframe()}
         {/* 비디오 출력 */}
+        {iframe()}
 
+        {/* 리뷰 */}
+        <div className="review">
+          <b>영화 리뷰</b>
+          <div>{average}</div>
+        </div>
+
+        {/* 비슷한영화 */}
         <div className="similar">
           <b>비슷한 영화</b>
           <div>
