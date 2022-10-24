@@ -22,21 +22,25 @@ function Login() {
         id: loginInfo.id,
         pw: loginInfo.pw,
       },
-    }).then(({ data }) => {
-      if (data.code === "fail") {
-        alert(data.message);
-        return;
-      }
-      setLoginUser(data.user);
-      if (loginInfo.autologin) {
-        localStorage.setItem("loginUser", JSON.stringify(data.user));
-      } else {
-        sessionStorage.setItem("loginUser", JSON.stringify(data.user));
-      }
+    })
+      .then(({ data }) => {
+        if (data.code === "fail") {
+          alert(data.message);
+          return;
+        }
+        setLoginUser(data.user);
+        if (loginInfo.autologin) {
+          localStorage.setItem("loginUser", JSON.stringify(data.user));
+        } else {
+          sessionStorage.setItem("loginUser", JSON.stringify(data.user));
+        }
 
-      alert(data.message);
-      navigation("/");
-    });
+        alert(data.message);
+        navigation("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

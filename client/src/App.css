@@ -538,9 +538,51 @@ b {
   display: flex;
 }
 
-.detail-wrap > .detail-card > .movie-info > img {
+.detail-wrap > .detail-card > .movie-info > .img-box {
   width: 35%;
   margin-right: 15px;
+  position: relative;
+}
+
+.detail-wrap > .detail-card > .movie-info > .img-box .like-icon {
+  position: absolute;
+  right: 10px;
+  bottom: 30px;
+  font-size: 26px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.detail-wrap > .detail-card > .movie-info > .img-box .like-icon.active {
+  color: #b73e3e;
+}
+.detail-wrap > .detail-card > .movie-info > .img-box .like-icon.active::after {
+  content: "LIKE";
+  font-weight: bold;
+  font-size: 10px;
+  position: absolute;
+  bottom: -130%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+}
+.detail-wrap > .detail-card > .movie-info > .img-box .like-icon:hover {
+  animation: likeBtnHoverAni 1s;
+}
+
+@keyframes likeBtnHoverAni {
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.detail-wrap > .detail-card > .movie-info > .img-box .outline {
+}
+
+.detail-wrap > .detail-card > .movie-info > .img-box img {
+  width: 100%;
 }
 
 .detail-wrap > .detail-card .movie-text {
@@ -728,7 +770,7 @@ b {
     flex-direction: column;
     align-items: center;
   }
-  .detail-wrap > .detail-card > .movie-info > img {
+  .detail-wrap > .detail-card > .movie-info > .img-box {
     width: 50%;
   }
   .detail-wrap > .detail-card .movie-text {
@@ -756,7 +798,7 @@ b {
 }
 
 @media (max-width: 420px) {
-  .detail-wrap > .detail-card > .movie-info > img {
+  .detail-wrap > .detail-card > .movie-info > .img-box {
     width: 100%;
   }
   .detail-wrap .detail-card {

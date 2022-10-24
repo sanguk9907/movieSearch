@@ -1,7 +1,10 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
+import { instance } from "../apis";
 import { detailData, movieProvider } from "../helper/fetchData";
 import notFoundImg from "../img/not-found.jpg";
+import { StoreContext } from "../App";
+import axios from "axios";
 
 function MovieDetail({
   movieDetail,
@@ -9,6 +12,8 @@ function MovieDetail({
   provider,
   setProviderData,
 }) {
+  const [clickedLike, setClickedLike] = React.useState(true);
+  const { loginUser, setLoginUser } = React.useContext(StoreContext);
   const posterUrl =
     movieDetail.poster_path === null
       ? notFoundImg
@@ -22,6 +27,19 @@ function MovieDetail({
   const vote_count = movieDetail.vote_count; //평점 낸 인원
   const movieId = movieDetail.id; //영화 고유 아이디
   const release = movieDetail.release_date; //개봉일자
+
+  const findLike = loginUser.liked.find((item) => {
+    return item === movieId;
+  });
+
+  const likeInit = () => {
+    if (findLike === movieId) {
+      setClickedLike(false);
+    }
+  };
+  const likeIconclassName = clickedLike ? "like-icon" : "like-icon active";
+
+  const likeIconName = clickedLike ? "heart outline" : "heart";
 
   // 비디오 출력
   const iframe = () => {
@@ -45,8 +63,31 @@ function MovieDetail({
     }
   };
 
+  const cerateLike = async () => {
+    await axios({
+      url: "http://localhost:5000/like",
+      method: "post",
+      data: {
+        clickedLike: clickedLike,
+        movieID: movieId,
+        userID: loginUser.id,
+      },
+    })
+      .then(({ data }) => {
+        const likeID = data[data.length - 1].movieID;
+
+        const cloneLoginUser = { ...loginUser };
+        cloneLoginUser.liked.push(likeID);
+        setLoginUser(cloneLoginUser);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   React.useEffect(() => {
     setProviderData(provider);
+    likeInit();
   }, []);
 
   return (
@@ -75,7 +116,28 @@ function MovieDetail({
 
         {/*포스터이미지*/}
         <div className="movie-info">
-          <img className="movie-img" src={posterUrl} alt={movieTitle}></img>
+          <div className="img-box">
+            <img className="movie-img" src={posterUrl} alt={movieTitle}></img>
+            <Icon
+              className={likeIconclassName}
+              name={likeIconName}
+              onClick={(e) => {
+                if (!loginUser.id) {
+                  alert("로그인 후 이용해주세요");
+                  return;
+                }
+
+                if (clickedLike) {
+                  cerateLike();
+                  setClickedLike(!clickedLike);
+                  return;
+                }
+
+                console.log(clickedLike);
+              }}
+            />
+          </div>
+
           <div className="movie-text">
             <div className="title">
               <h3>{movieTitle}</h3>
@@ -97,14 +159,6 @@ function MovieDetail({
 
             <p className="release-date">개봉일 : {release}</p>
 
-            {/* <div className="cast">
-              출연진
-              <br />
-              {cast.map((item, index) => {
-                item.name = ` ${item.name}, `;
-                return <b key={`cast-${index}`}>{item.name}</b>;
-              })}
-            </div> */}
             <div className="preovier">
               {!provider ? (
                 <p className="none">

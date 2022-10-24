@@ -8,6 +8,7 @@ app.use(express.json());
 const key = "3cf148810eae178af2afb1a072cfe76d";
 //////////////////// MYSQL연결
 const mysql = require("mysql2");
+const { json } = require("express");
 const DB = mysql.createPoolCluster();
 
 DB.add("moviesearch", {
@@ -229,6 +230,17 @@ app.post("/login", async (req, res) => {
     query: "SELECT * FROM users",
   });
 
+  const likedata = await runDB({
+    database: "moviesearch",
+    query: `select * from lieked where userID ="${id}"`,
+  });
+
+  const userLikeArray = [];
+
+  likedata.forEach((item) => {
+    userLikeArray.push(item.movieID);
+  });
+
   const findUserID = dataSelect.find((item) => {
     return item.userID === id;
   });
@@ -268,10 +280,39 @@ app.post("/login", async (req, res) => {
     resulte.user = {
       id: id,
       nick: findUserID.nick,
+      liked: userLikeArray,
     };
   }
 
   res.send(resulte);
+});
+
+app.get("/like", (req, res) => {
+  res.send("likeget");
+});
+app.post("/like", async (req, res) => {
+  const { clickedLike, movieID, userID } = req.body;
+
+  if (clickedLike) {
+    const insertQuery = createInsert({
+      table: "lieked",
+      data: {
+        movieID: movieID,
+        userID: userID,
+      },
+    });
+
+    await runDB({
+      database: "moviesearch",
+      query: insertQuery,
+    });
+
+    const data = await runDB({
+      database: "moviesearch",
+      query: "select * from lieked",
+    });
+    res.send(data);
+  }
 });
 
 app.listen(5000, function () {

@@ -13,6 +13,7 @@ function App() {
   const [loginUser, setLoginUser] = React.useState({
     id: "",
     nick: "",
+    liked: [],
   });
 
   const { pathname } = useLocation();
