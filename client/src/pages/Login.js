@@ -6,7 +6,7 @@ import { Button, Checkbox, Form } from "semantic-ui-react";
 import { Header } from "../components";
 
 function Login() {
-  const { setLoginUser } = React.useContext(StoreContext);
+  const { setLoginUser, loginUser } = React.useContext(StoreContext);
   const navigation = useNavigate();
   const [loginInfo, setLoginInfo] = React.useState({
     id: "",
@@ -29,13 +29,17 @@ function Login() {
           return;
         }
         setLoginUser(data.user);
+        const cloneLoginUser = { ...loginUser };
+        setLoginInfo((cloneLoginUser.autoLogin = loginInfo.autologin));
         if (loginInfo.autologin) {
           localStorage.setItem("loginUser", JSON.stringify(data.user));
         } else {
           sessionStorage.setItem("loginUser", JSON.stringify(data.user));
         }
-
+        sessionStorage.setItem("likeList", JSON.stringify(data.liked));
+        console.log(data);
         alert(data.message);
+
         navigation("/");
       })
       .catch((err) => {

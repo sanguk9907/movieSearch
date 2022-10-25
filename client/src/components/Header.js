@@ -37,6 +37,7 @@ function Header() {
                 });
                 localStorage.removeItem("loginUser");
                 sessionStorage.removeItem("loginUser");
+                sessionStorage.removeItem("likeList");
               }
             }}
           >

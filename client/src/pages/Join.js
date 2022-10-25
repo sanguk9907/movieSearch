@@ -44,11 +44,13 @@ function Join() {
       <Form
         onSubmit={(e) => {
           e.preventDefault();
+
           if (joinInfo.pw !== joinInfo.confirmPw) {
             alert("비밀번호가 일치하지 않습니다 다시 한 번 확인해주세요");
             return;
           }
           setJoinInfo(joinInfo);
+          console.log(joinInfo);
           signUp();
         }}
         className="join-form"

@@ -13,6 +13,7 @@ function App() {
   const [loginUser, setLoginUser] = React.useState({
     id: "",
     nick: "",
+    autoLogin: false,
     liked: [],
   });
 
@@ -55,6 +56,7 @@ function App() {
         setSearch: setSearch,
         loginUser: loginUser,
         setLoginUser: setLoginUser,
+        autoLogin: autoLogin,
       }}
     >
       <AppIndex />

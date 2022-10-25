@@ -5,6 +5,7 @@ import { detailData, movieProvider } from "../helper/fetchData";
 import notFoundImg from "../img/not-found.jpg";
 import { StoreContext } from "../App";
 import axios from "axios";
+import { json } from "react-router-dom";
 
 function MovieDetail({
   movieDetail,
@@ -13,7 +14,7 @@ function MovieDetail({
   setProviderData,
 }) {
   const [clickedLike, setClickedLike] = React.useState(true);
-  const { loginUser, setLoginUser } = React.useContext(StoreContext);
+  const { loginUser, setLoginUser, autoLogin } = React.useContext(StoreContext);
   const posterUrl =
     movieDetail.poster_path === null
       ? notFoundImg
@@ -28,13 +29,16 @@ function MovieDetail({
   const movieId = movieDetail.id; //영화 고유 아이디
   const release = movieDetail.release_date; //개봉일자
 
-  const findLike = loginUser.liked.find((item) => {
-    return item === movieId;
-  });
-
   const likeInit = () => {
+    const likeList = JSON.parse(sessionStorage.getItem("likeList"));
+    const findLike = likeList.find((item) => {
+      return item === movieId;
+    });
+    console.log("findLike : ", findLike);
     if (findLike === movieId) {
       setClickedLike(false);
+    } else {
+      setClickedLike(true);
     }
   };
   const likeIconclassName = clickedLike ? "like-icon" : "like-icon active";
@@ -63,10 +67,10 @@ function MovieDetail({
     }
   };
 
-  const cerateLike = async () => {
+  const liked = async () => {
     await axios({
       url: "http://localhost:5000/like",
-      method: "post",
+      method: "put",
       data: {
         clickedLike: clickedLike,
         movieID: movieId,
@@ -74,11 +78,8 @@ function MovieDetail({
       },
     })
       .then(({ data }) => {
-        const likeID = data[data.length - 1].movieID;
-
-        const cloneLoginUser = { ...loginUser };
-        cloneLoginUser.liked.push(likeID);
-        setLoginUser(cloneLoginUser);
+        console.log("sesson : ", data);
+        sessionStorage.setItem("likeList", JSON.stringify(data));
       })
       .catch((err) => {
         console.log(err);
@@ -126,14 +127,8 @@ function MovieDetail({
                   alert("로그인 후 이용해주세요");
                   return;
                 }
-
-                if (clickedLike) {
-                  cerateLike();
-                  setClickedLike(!clickedLike);
-                  return;
-                }
-
-                console.log(clickedLike);
+                liked();
+                setClickedLike(!clickedLike);
               }}
             />
           </div>
@@ -181,7 +176,6 @@ function MovieDetail({
                     ""
                   )}.com/`;
 
-                  console.log(ottLink);
                   return (
                     <a
                       className="preovier-box"

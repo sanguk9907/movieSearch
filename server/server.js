@@ -164,18 +164,27 @@ app.post("/join", async (req, res) => {
   };
   const examArray = [1];
 
-  const dataSelect = await runDB({
-    database: "moviesearch",
-    query: "SELECT * FROM users",
-  });
+  // 회원가입 정규표현식
 
-  const findUserID = dataSelect.find((item) => {
-    return item.userID === id;
-  });
+  // 하나이상의 대소문자,숫자 8자 이상(특수문자X)
+  const IDReg = /^(?=.*[A-Za-z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+  // 하나이상의 대소문자,숫자 8자 이상(특수문자O)
+  const PWReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+
+  const IDCheck = IDReg.test(id);
+  const PWCheck = PWReg.test(pw);
 
   for (let key in examArray) {
     if (id === "") {
       (resulte.code = "fail"), (resulte.message = "아이디를 입력해주세요");
+      break;
+    }
+
+    if (!IDCheck) {
+      (resulte.code = "fail"),
+        (resulte.message =
+          "아이디는 영어와 숫자만을 포함한 8글자 이상이어야 합니다");
       break;
     }
 
@@ -184,10 +193,26 @@ app.post("/join", async (req, res) => {
       break;
     }
 
+    if (!PWCheck) {
+      (resulte.code = "fail"),
+        (resulte.message =
+          "비밀번호는 영어와 숫자, 특수문자만을 포함한 8글자 이상이어야 합니다");
+      break;
+    }
+
     if (nick === "") {
       (resulte.code = "fail"), (resulte.message = "닉네임을 입력해주세요");
       break;
     }
+
+    const dataSelect = await runDB({
+      database: "moviesearch",
+      query: "SELECT * FROM users",
+    });
+
+    const findUserID = dataSelect.find((item) => {
+      return item.userID === id;
+    });
 
     if (findUserID) {
       (resulte.code = "fail"),
@@ -223,6 +248,7 @@ app.post("/login", async (req, res) => {
     code: "success",
     message: "성공적으로 로그인 되었습니다.",
     user: null,
+    liked: null,
   };
   const examArray = [1];
   const dataSelect = await runDB({
@@ -232,7 +258,7 @@ app.post("/login", async (req, res) => {
 
   const likedata = await runDB({
     database: "moviesearch",
-    query: `select * from lieked where userID ="${id}"`,
+    query: `select movieID from lieked inner join users on lieked.userID = users.userID where lieked.userID ="${id}"`,
   });
 
   const userLikeArray = [];
@@ -240,7 +266,6 @@ app.post("/login", async (req, res) => {
   likedata.forEach((item) => {
     userLikeArray.push(item.movieID);
   });
-
   const findUserID = dataSelect.find((item) => {
     return item.userID === id;
   });
@@ -280,8 +305,8 @@ app.post("/login", async (req, res) => {
     resulte.user = {
       id: id,
       nick: findUserID.nick,
-      liked: userLikeArray,
     };
+    resulte.liked = userLikeArray;
   }
 
   res.send(resulte);
@@ -290,7 +315,7 @@ app.post("/login", async (req, res) => {
 app.get("/like", (req, res) => {
   res.send("likeget");
 });
-app.post("/like", async (req, res) => {
+app.put("/like", async (req, res) => {
   const { clickedLike, movieID, userID } = req.body;
 
   if (clickedLike) {
@@ -311,7 +336,32 @@ app.post("/like", async (req, res) => {
       database: "moviesearch",
       query: "select * from lieked",
     });
-    res.send(data);
+
+    const likedMovieID = [];
+
+    data.forEach((item) => {
+      likedMovieID.push(item.movieID);
+    });
+    res.send(likedMovieID);
+
+    return;
+  }
+
+  if (!clickedLike) {
+    await runDB({
+      database: "moviesearch",
+      query: `delete from lieked where movieID =${movieID} && userID ="${userID}"`,
+    });
+    const data = await runDB({
+      database: "moviesearch",
+      query: "select * from lieked",
+    });
+    const unlikedMovieID = [];
+
+    data.forEach((item) => {
+      unlikedMovieID.push(item.movieID);
+    });
+    res.send(unlikedMovieID);
   }
 });
 
