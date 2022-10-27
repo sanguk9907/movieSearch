@@ -1,19 +1,6 @@
 import React from "react";
 import { instance, requests } from "../apis";
 
-// const fetchData = async (setMovie) => {
-//   await instance
-//     .get(`/mainPageData`, {
-//       params: {
-//         category: requests.Popular,
-//       },
-//     })
-//     .then((response) => {
-//       // setMovie(response);
-//       console.log(response);
-//     });
-// };
-
 const fetchData = async (category, setMovie) => {
   await instance
     .get(`/mainPageData`, {
@@ -22,7 +9,7 @@ const fetchData = async (category, setMovie) => {
       },
     })
     .then(({ data }) => {
-      setMovie(data.results);
+      setMovie(data);
     });
 };
 

@@ -1,11 +1,10 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
-import { instance } from "../apis";
 import { detailData, movieProvider } from "../helper/fetchData";
 import notFoundImg from "../img/not-found.jpg";
 import { StoreContext } from "../App";
 import axios from "axios";
-import { json } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function MovieDetail({
   movieDetail,
@@ -14,40 +13,56 @@ function MovieDetail({
   setProviderData,
 }) {
   const [clickedLike, setClickedLike] = React.useState(true);
-  const { loginUser, setLoginUser, autoLogin } = React.useContext(StoreContext);
-  const posterUrl =
-    movieDetail.poster_path === null
-      ? notFoundImg
-      : `https://image.tmdb.org/t/p/original/${movieDetail.poster_path}`; //포스터 이미지
-  const movieTitle = movieDetail.title; // 영화 제목
-  const tagLine = movieDetail.tagline; // 영화 테그
-  const genres = movieDetail.genres; //장르
-  const overView = movieDetail.overview; // 줄거리
-  const similar = movieDetail.similar.results; //비슷한 영화
-  const average = movieDetail.vote_average.toFixed(1); //평점
-  const vote_count = movieDetail.vote_count; //평점 낸 인원
-  const movieId = movieDetail.id; //영화 고유 아이디
-  const release = movieDetail.release_date; //개봉일자
+  const { loginUser } = React.useContext(StoreContext);
+  const navigation = useNavigate();
 
+  const {
+    movieTitle, // 제목
+    tagLine, // 테그
+    genres, // 장르
+    overView, // 줄거리
+    similar, // 비슷한영화
+    average, // 평점
+    vote_count, // 평점 낸 인원 수
+    movieId, // 영화 고유아이디
+    release, // 개봉일자
+    posterImage, // 포스터이미지
+    background, // 배경이미지
+    videos, // 영화 관련 유튜브 코드
+  } = movieDetail;
+
+  // 포스터 url 없으면 못찾은 이미지 나오게
+  const posterUrl =
+    posterImage === null
+      ? notFoundImg
+      : `https://image.tmdb.org/t/p/original/${posterImage}`;
+
+  // 배경 url
+  const backgroundImg = `url("https://image.tmdb.org/t/p/original/${background}")`;
+
+  // 좋아요 상태
   const likeInit = () => {
+    if (!loginUser.id) {
+      return;
+    }
     const likeList = JSON.parse(sessionStorage.getItem("likeList"));
     const findLike = likeList.find((item) => {
       return item === movieId;
     });
-    console.log("findLike : ", findLike);
     if (findLike === movieId) {
       setClickedLike(false);
     } else {
       setClickedLike(true);
     }
   };
-  const likeIconclassName = clickedLike ? "like-icon" : "like-icon active";
 
+  // 하트 아이콘 채우고 비우기용
+  const likeIconclassName = clickedLike ? "like-icon" : "like-icon active";
   const likeIconName = clickedLike ? "heart outline" : "heart";
 
   // 비디오 출력
   const iframe = () => {
-    if (movieDetail.videos.results.length === 0) {
+    if (videos.results.length === 0) {
       return (
         <div
           className="noHaveVideo"
@@ -58,15 +73,16 @@ function MovieDetail({
       return (
         <div className="videos">
           <iframe
-            src={`https://www.youtube.com/embed/${movieDetail.videos.results[0].key}`}
+            src={`https://www.youtube.com/embed/${videos.results[0].key}`}
             frameBorder="0"
-            title={movieDetail.videos.results[0].name}
+            title={videos.results[0].name}
           ></iframe>
         </div>
       );
     }
   };
 
+  // 좋아요 버튼 클릭 함수 (좋아요 한 영화 아이디 DB저장,취소한 아이디 DB삭제)
   const liked = async () => {
     await axios({
       url: "http://localhost:5000/like",
@@ -95,7 +111,7 @@ function MovieDetail({
     <div
       className="detail-wrap"
       style={{
-        backgroundImage: `url("https://image.tmdb.org/t/p/original/${movieDetail.backdrop_path}")`,
+        backgroundImage: backgroundImg,
       }}
     >
       {/*바깥부분 누르면 나가지기*/}
@@ -115,7 +131,6 @@ function MovieDetail({
           }}
         />
 
-        {/*포스터이미지*/}
         <div className="movie-info">
           <div className="img-box">
             <img className="movie-img" src={posterUrl} alt={movieTitle}></img>
@@ -125,6 +140,7 @@ function MovieDetail({
               onClick={(e) => {
                 if (!loginUser.id) {
                   alert("로그인 후 이용해주세요");
+                  navigation("/login");
                   return;
                 }
                 liked();
@@ -228,7 +244,7 @@ function MovieDetail({
         <div className="similar">
           <b>비슷한 영화</b>
           <div>
-            {similar.map((item, index) => {
+            {similar.results.map((item, index) => {
               return (
                 <div
                   className="similar-card"

@@ -42,12 +42,12 @@ function MainSlider() {
                   <div
                     className={`slide-img item-${index}`}
                     style={{
-                      backgroundImage: `url("https://image.tmdb.org/t/p/original/${item.backdrop_path}")`,
+                      backgroundImage: `url("https://image.tmdb.org/t/p/original/${item.background}")`,
                     }}
                   ></div>
 
                   <SlideText
-                    movieId={item.id}
+                    movieId={item.movieID}
                     index={index}
                     setShowDetail={setShowDetail}
                     setProviderData={setProviderData}

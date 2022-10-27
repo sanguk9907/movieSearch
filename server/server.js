@@ -91,8 +91,18 @@ app.get("/mainPageData", async function (req, res) {
       qs: { language: "ko" },
     },
     function (error, response, body) {
-      const data = JSON.parse(body);
-      res.send(data);
+      const movies = JSON.parse(body);
+      const { results } = movies;
+      const sendData = [];
+      results.forEach((item) => {
+        sendData.push({
+          movieID: item.id,
+          posterImage: item.poster_path,
+          title: item.title,
+          background: item.backdrop_path,
+        });
+      });
+      res.send(sendData);
     }
   );
 });
@@ -111,7 +121,22 @@ app.get("/Information", async function (req, res) {
     },
     function (error, response, body) {
       const data = JSON.parse(body);
-      res.send(data);
+      const sendData = {
+        movieId: data.id,
+        movieTitle: data.title,
+        tagLine: data.tagline,
+        genres: data.genres,
+        overView: data.overview,
+        similar: data.similar,
+        average: data.vote_average.toFixed(1),
+        vote_count: data.vote_count,
+        release: data.release_date,
+        posterImage: data.poster_path,
+        background: data.backdrop_path,
+        videos: data.videos,
+      };
+      // console.log(sendData);
+      res.send(sendData);
     }
   );
 });
@@ -135,7 +160,7 @@ app.get("/providers", async function (req, res) {
 });
 
 app.get("/search", async function (req, res) {
-  const { query } = req.query;
+  const { query, page } = req.query;
   request(
     {
       uri: `https://api.themoviedb.org/3/search/movie?api_key=${key}`,
@@ -144,6 +169,7 @@ app.get("/search", async function (req, res) {
         language: "ko",
         region: "ko",
         query: query,
+        page: page,
       },
     },
     function (error, response, body) {

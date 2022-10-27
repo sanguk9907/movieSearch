@@ -4,16 +4,19 @@ import { movieProvider } from "../helper/fetchData";
 import MovieDetail from "./MovieDetail";
 import { detailData } from "../helper/fetchData";
 import notFoundImg from "../img/not-found.jpg";
+import { StoreContext } from "../App";
 
-function SearchMovieCard({ movie }) {
+function SearchMovieCard({ movie, ref }) {
+  const { search } = React.useContext(StoreContext);
   const [movieDetail, setMovieDetail] = React.useState();
   const [providerData, setProviderData] = React.useState();
+
   return (
     <div className="movie-wrap">
       {movie &&
         movie.map((item, index) => {
           return (
-            <div key={`movie-${index}`} className="movie-card">
+            <div key={`movie-card-${index}`} className="movie-card">
               <div
                 className="img-box"
                 onClick={() => {

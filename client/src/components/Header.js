@@ -31,6 +31,9 @@ function Header() {
               if (loginUser.id === "") {
                 navigation("/login");
               } else {
+                if (!window.confirm("로그아웃 하시겠습니까?")) {
+                  return;
+                }
                 setLoginUser({
                   id: "",
                   nick: "",
@@ -46,11 +49,15 @@ function Header() {
           </li>
           <li
             onClick={() => {
-              navigation("/join");
+              if (loginUser.id === "") {
+                navigation("/join");
+              } else {
+                alert("회원정보 보기 및 수정 제작중입니다..");
+              }
             }}
           >
-            <Icon name="user plus" />
-            <p>회원가입</p>
+            <Icon name={loginUser.id === "" ? "user plus" : "user"} />
+            <p>{loginUser.id === "" ? "회원가입" : `${loginUser.nick} 님`}</p>
           </li>
           <li
             className="search-icon"

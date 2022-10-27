@@ -40,11 +40,11 @@ function MovieCard({ movie }) {
                   <div
                     className="img-box"
                     onClick={() => {
-                      detailData(item.id, setMovieDetail);
-                      movieProvider(item.id, setProviderData);
+                      detailData(item.movieID, setMovieDetail);
+                      movieProvider(item.movieID, setProviderData);
                     }}
                     style={{
-                      backgroundImage: `url("https://image.tmdb.org/t/p/w500/${item.poster_path}")`,
+                      backgroundImage: `url("https://image.tmdb.org/t/p/w500/${item.posterImage}")`,
                     }}
                   ></div>
                   <p className="title">{item.title}</p>
