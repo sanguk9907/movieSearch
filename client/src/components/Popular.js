@@ -3,12 +3,14 @@ import MovieCard from "./MovieCard";
 import { requests } from "../apis";
 import { fetchData } from "../helper/fetchData";
 import axios from "axios";
+import { StoreContext } from "../App";
 
 function Popular() {
   const [movie, setMovie] = React.useState([]);
+  const { loading, setLoading } = React.useContext(StoreContext);
 
   React.useEffect(() => {
-    fetchData(requests.Popular, setMovie);
+    fetchData(requests.Popular, setMovie, setLoading);
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 import React from "react";
-import { instance, requests } from "../apis";
+import { instance } from "../apis";
 
-const fetchData = async (category, setMovie) => {
+const fetchData = async (category, setMovie, setLoading) => {
   await instance
     .get(`/mainPageData`, {
       params: {
@@ -10,6 +10,9 @@ const fetchData = async (category, setMovie) => {
     })
     .then(({ data }) => {
       setMovie(data);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
     });
 };
 

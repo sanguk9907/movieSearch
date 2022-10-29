@@ -8,7 +8,7 @@ export const StoreContext = React.createContext();
 function App() {
   const [search, setSearch] = React.useState({
     text: "",
-    page: "",
+    reset: [],
   });
   const [loginUser, setLoginUser] = React.useState({
     id: "",
@@ -16,6 +16,10 @@ function App() {
     autoLogin: false,
     liked: [],
   });
+  const [loading, setLoading] = React.useState(true);
+  const loadStyle = loading
+    ? { overflow: "hidden", height: "100vh" }
+    : { overflow: "hidden" };
 
   const { pathname } = useLocation();
   const navigation = useNavigate();
@@ -57,6 +61,9 @@ function App() {
         loginUser: loginUser,
         setLoginUser: setLoginUser,
         autoLogin: autoLogin,
+        loading: loading,
+        setLoading: setLoading,
+        loadStyle: loadStyle,
       }}
     >
       <AppIndex />

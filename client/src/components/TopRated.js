@@ -1,13 +1,15 @@
 import React from "react";
 import { requests } from "../apis";
+import { StoreContext } from "../App";
 import { fetchData } from "../helper/fetchData";
 import MovieCard from "./MovieCard";
 
 function TopRated() {
   const [movie, setMovie] = React.useState([]);
+  const { setLoading } = React.useContext(StoreContext);
 
   React.useEffect(() => {
-    fetchData(requests.TopRated, setMovie);
+    fetchData(requests.TopRated, setMovie, setLoading);
   }, []);
 
   return (

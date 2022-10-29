@@ -3,25 +3,14 @@ import SearchMovieCard from "./SearchMovieCard";
 import { useInView } from "react-intersection-observer";
 import { StoreContext } from "../App";
 import { instance } from "../apis";
-import { movieProvider } from "../helper/fetchData";
-import MovieDetail from "./MovieDetail";
-import { detailData } from "../helper/fetchData";
-import notFoundImg from "../img/not-found.jpg";
-
 function SearchBody() {
-  const { search } = React.useContext(StoreContext);
+  const { search, setLoading } = React.useContext(StoreContext);
   const [movie, setMovie] = React.useState([]);
   const [ref, inView] = useInView();
-  const [pageNumber, setPageNumber] = React.useState(1);
-  const [movieDetail, setMovieDetail] = React.useState();
-  const [providerData, setProviderData] = React.useState();
   const [totalPage, setTotalPage] = React.useState(0);
+  const [pageNumber, setPageNumber] = React.useState(1);
 
-  const loadMore = () => {
-    setPageNumber(pageNumber + 1);
-  };
-
-  const searchMovie = () => {
+  const infisearchMovie = () => {
     instance
       .get(`/search`, {
         params: {
@@ -34,63 +23,53 @@ function SearchBody() {
       .then((response) => {
         setMovie([...movie, ...response.data.results]);
         setTotalPage(response.data.total_pages);
+      });
+  };
+
+  const searchMovie = () => {
+    instance
+      .get(`/search`, {
+        params: {
+          language: "ko",
+          region: "ko",
+          query: search.text,
+          page: 1,
+        },
       })
-      .catch(() => {
-        console.log("에러");
+      .then((response) => {
+        setPageNumber(1);
+        setMovie(response.data.results);
+        setTotalPage(response.data.total_pages);
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
       });
   };
 
   React.useEffect(() => {
+    infisearchMovie();
+  }, [pageNumber]);
+
+  React.useEffect(() => {
+    setLoading(true);
     searchMovie();
-  }, [search, pageNumber]);
+    window.scroll({
+      top: 0,
+    });
+  }, [search]);
 
   React.useEffect(() => {
     if (pageNumber === totalPage) {
       return;
     }
-    if (inView === true && movie.length !== 0) {
-      loadMore();
-      console.log("현재페이지", pageNumber);
+    if (inView === true && movie && movie.length !== 0) {
+      setPageNumber(pageNumber + 1);
     }
   }, [inView]);
 
-  React.useEffect(() => {
-    setPageNumber(1);
-    setMovie([]);
-  }, [search]);
-
   return (
     <div className="searchBody-warp">
-      <div className="movie-wrap">
-        {movie &&
-          movie.map((item, index) => {
-            return (
-              <div key={`movie-card-${index}`} className="movie-card">
-                <div
-                  className="img-box"
-                  onClick={() => {
-                    detailData(item.id, setMovieDetail);
-                    movieProvider(item.id, setProviderData);
-                  }}
-                  style={{
-                    backgroundImage: !item.poster_path
-                      ? `url("${notFoundImg}")`
-                      : `url("https://image.tmdb.org/t/p/w500/${item.poster_path}")`,
-                  }}
-                ></div>
-                <p className="title">{item.title}</p>
-              </div>
-            );
-          })}
-        {movieDetail && (
-          <MovieDetail
-            movieDetail={movieDetail}
-            setMovieDetail={setMovieDetail}
-            provider={providerData}
-            setProviderData={setProviderData}
-          />
-        )}
-      </div>
+      <SearchMovieCard movie={movie} />
       <div ref={ref} />
     </div>
   );

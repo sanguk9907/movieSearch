@@ -1,13 +1,13 @@
 import React from "react";
-import { Header, SearchBody } from "../components";
-
+import { Header, SearchBody, Loading } from "../components";
 import { StoreContext } from "../App";
 
 function SearchPage() {
-  const { search } = React.useContext(StoreContext);
+  const { search, loading, loadStyle } = React.useContext(StoreContext);
 
   return (
-    <div className="SearchPage-wrap">
+    <div style={loadStyle} className="SearchPage-wrap">
+      {loading && <Loading />}
       <Header />
       <div className="searchResultText">
         {search.text === "" ? (

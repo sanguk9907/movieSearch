@@ -766,6 +766,16 @@ b {
   color: #fff;
 }
 
+.loading-wrap {
+  width: 100vw;
+  height: 100vh;
+  background-color: #181818;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 @media (max-width: 1200px) {
   .slide-text-warp .overview {
     overflow: hidden;

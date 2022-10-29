@@ -9,14 +9,16 @@ import { fetchData } from "../helper/fetchData";
 import { requests } from "../apis";
 import SlideText from "./SlideText";
 import MovieDetail from "./MovieDetail";
+import { StoreContext } from "../App";
 // 스와이퍼
 
 function MainSlider() {
   const [movie, setMovie] = React.useState([]);
   const [showDetail, setShowDetail] = React.useState(false);
   const [providerData, setProviderData] = React.useState();
+  const { setLoading } = React.useContext(StoreContext);
   React.useEffect(() => {
-    fetchData(requests.Popular, setMovie);
+    fetchData(requests.Popular, setMovie, setLoading);
   }, []);
   return (
     <>

@@ -1,13 +1,10 @@
 import React from "react";
-import { instance } from "../apis";
 import { movieProvider } from "../helper/fetchData";
 import MovieDetail from "./MovieDetail";
 import { detailData } from "../helper/fetchData";
 import notFoundImg from "../img/not-found.jpg";
-import { StoreContext } from "../App";
 
-function SearchMovieCard({ movie, ref }) {
-  const { search } = React.useContext(StoreContext);
+function SearchMovieCard({ movie }) {
   const [movieDetail, setMovieDetail] = React.useState();
   const [providerData, setProviderData] = React.useState();
 

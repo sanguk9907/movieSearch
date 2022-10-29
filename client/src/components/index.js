@@ -14,6 +14,7 @@ import MovieDetail from "./MovieDetail";
 import Header from "./Header";
 import MainSlider from "./MainSlider";
 import SlideText from "./SlideText";
+import Loading from "./Loading";
 
 export {
   MovieCard,
@@ -32,4 +33,5 @@ export {
   Header,
   MainSlider,
   SlideText,
+  Loading,
 };

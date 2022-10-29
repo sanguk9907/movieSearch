@@ -1,13 +1,15 @@
 import React from "react";
 import { requests } from "../apis";
+import { StoreContext } from "../App";
 import { fetchData } from "../helper/fetchData";
 import MovieCard from "./MovieCard";
 
 function Trending() {
   const [movie, setMovie] = React.useState([]);
+  const { setLoading } = React.useContext(StoreContext);
 
   React.useEffect(() => {
-    fetchData(requests.Trending, setMovie);
+    fetchData(requests.Trending, setMovie, setLoading);
   }, []);
 
   return (
