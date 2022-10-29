@@ -25,6 +25,17 @@ function Main() {
       <Trending />
       <TopRated />
       <NowPlaying />
+      <div
+        className="go-top-btn"
+        onClick={() => {
+          window.scroll({
+            top: 0,
+            behavior: "smooth",
+          });
+        }}
+      >
+        TOP
+      </div>
     </div>
   );
 }

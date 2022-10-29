@@ -689,10 +689,8 @@ b {
 }
 
 .detail-card .review .review-box {
-  border: 2px solid #383838;
-  padding: 10px;
-  height: 200px;
-  border-radius: 10px;
+  max-height: 400px;
+
   overflow-y: scroll;
 }
 .detail-card .review .review-box::-webkit-scrollbar {
@@ -774,6 +772,26 @@ b {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  z-index: 9999;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.go-top-btn {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background-color: #fff;
+  color: #b73e3e;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: fixed;
+  right: 10px;
+  bottom: 50px;
 }
 
 @media (max-width: 1200px) {

@@ -5,6 +5,7 @@ import notFoundImg from "../img/not-found.jpg";
 import { StoreContext } from "../App";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Review from "./Review";
 
 function MovieDetail({
   movieDetail,
@@ -122,7 +123,7 @@ function MovieDetail({
         }}
       ></div>
 
-      <div className="detail-card">
+      <div className="detail-card" id="detail-card">
         {/*닫기버튼*/}
         <Icon
           name="close"
@@ -217,29 +218,6 @@ function MovieDetail({
         {/* 비디오 출력 */}
         {iframe()}
 
-        {/* 리뷰 */}
-        <div className="review">
-          <b>영화 리뷰</b>
-          <div className="review-box">
-            전체평점:{average}
-            <div className="review-content">
-              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
-            </div>
-            <div className="review-content">
-              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
-            </div>
-            <div className="review-content">
-              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
-            </div>
-            <div className="review-content">
-              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
-            </div>
-            <div className="review-content">
-              ㅇㅇㅇ<p>아이디(혹은닉네임) : 어쩌고저쩌고 머시깽이한 영화</p>
-            </div>
-          </div>
-        </div>
-
         {/* 비슷한영화 */}
         <div className="similar">
           <b>비슷한 영화</b>
@@ -252,6 +230,10 @@ function MovieDetail({
                   onClick={() => {
                     detailData(item.id, setMovieDetail);
                     movieProvider(item.id, setProviderData);
+                    document.getElementById("detail-card").scroll({
+                      top: 0,
+                      behavior: "smooth",
+                    });
                   }}
                 >
                   <img
@@ -268,6 +250,8 @@ function MovieDetail({
             })}
           </div>
         </div>
+        {/* 리뷰 */}
+        <Review />
       </div>
     </div>
   );
