@@ -8,7 +8,7 @@ app.use(express.json());
 const key = "3cf148810eae178af2afb1a072cfe76d";
 //////////////////// MYSQL연결
 const mysql = require("mysql2");
-const { json } = require("express");
+const { json, query } = require("express");
 const DB = mysql.createPoolCluster();
 
 DB.add("moviesearch", {
@@ -41,7 +41,6 @@ async function cerateUserInfo(parmas) {
   });
   return userInfo;
 }
-// salt,HashedPassword 만들기
 
 ////////////디비 실행
 async function runDB(params) {
@@ -65,7 +64,6 @@ async function runDB(params) {
 
   return data;
 }
-////////////디비 실행
 
 ////////////인서트 만들기
 function createInsert(params) {
@@ -80,7 +78,6 @@ function createInsert(params) {
 
   return query;
 }
-////////////인서트 만들기
 
 app.get("/mainPageData", async function (req, res) {
   const { category } = req.query;
@@ -135,7 +132,6 @@ app.get("/Information", async function (req, res) {
         background: data.backdrop_path,
         videos: data.videos,
       };
-      // console.log(sendData);
       res.send(sendData);
     }
   );
@@ -391,6 +387,51 @@ app.put("/like", async (req, res) => {
   }
 });
 
+app.get("/review", async (req, res) => {
+  const { movieId } = req.query;
+  if (movieId === undefined) {
+    res.send();
+    return;
+  } else {
+    const callReview = await runDB({
+      database: "moviesearch",
+      query: `SELECT * FROM review WHERE movieID =${movieId}`,
+    });
+    res.send(callReview);
+  }
+});
+
+app.post("/review", async (req, res) => {
+  const data = req.body;
+  const { userID, content } = data;
+  const resulte = {
+    code: "success",
+    message: "리뷰가 성공적으로 남겨졌습니다.",
+  };
+  const examArray = [1];
+
+  for (let key in examArray) {
+    if (userID === "") {
+      (resulte.code = "fail"), (resulte.message = "로그인 후 이용해주세요");
+      break;
+    }
+
+    if (content === "") {
+      (resulte.code = "fail"), (resulte.message = "리뷰 내용을 입력해주세요");
+      break;
+    }
+    const reviewInsert = createInsert({
+      table: "review",
+      data: data,
+    });
+
+    await runDB({
+      database: "moviesearch",
+      query: reviewInsert,
+    });
+  }
+  res.send(resulte);
+});
 app.listen(5000, function () {
   console.log("서버켜짐");
 });

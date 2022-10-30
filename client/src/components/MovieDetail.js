@@ -251,7 +251,7 @@ function MovieDetail({
           </div>
         </div>
         {/* 리뷰 */}
-        <Review />
+        <Review movieId={movieId} />
       </div>
     </div>
   );

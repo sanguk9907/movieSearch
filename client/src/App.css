@@ -706,6 +706,15 @@ b {
   margin-top: 20px;
 }
 
+.detail-card .review form {
+  margin-top: 10px;
+}
+
+.detail-card .review .ui.input {
+  width: 100%;
+  min-height: 200px;
+}
+
 .preovier-box {
   float: left;
   display: flex;
