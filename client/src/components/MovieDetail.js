@@ -17,6 +17,21 @@ function MovieDetail({
   const { loginUser } = React.useContext(StoreContext);
   const navigation = useNavigate();
 
+  const backgroundFixed = () => {
+    document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow-y: scroll;
+      width: 100%;`;
+    return;
+  };
+
+  const backgroundUnFixed = () => {
+    const scrollY = document.body.style.top;
+    document.body.style.cssText = "";
+    window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
+  };
+
   const {
     movieTitle, // 제목
     tagLine, // 테그
@@ -106,6 +121,7 @@ function MovieDetail({
   React.useEffect(() => {
     setProviderData(provider);
     likeInit();
+    backgroundFixed();
   }, []);
 
   return (
@@ -120,6 +136,7 @@ function MovieDetail({
         className="overlay"
         onClick={() => {
           setMovieDetail(null);
+          backgroundUnFixed();
         }}
       ></div>
 
@@ -129,6 +146,7 @@ function MovieDetail({
           name="close"
           onClick={() => {
             setMovieDetail(null);
+            backgroundUnFixed();
           }}
         />
 

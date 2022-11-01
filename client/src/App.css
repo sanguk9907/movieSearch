@@ -147,33 +147,68 @@ b {
   text-align: center;
 }
 
-.header-wrap ul {
+.header-wrap > ul {
   width: 250px;
-  height: 80%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.header-wrap ul li {
+.header-wrap ul > li {
   width: 33.33%;
+  height: 100%;
   line-height: 100%;
   cursor: pointer;
   text-align: center;
   color: #ccc;
   transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
-.header-wrap ul li:hover {
+.header-wrap ul > li > .depth2 {
+  width: 120%;
+  position: absolute;
+  bottom: 0;
+  transform: translateY(100%);
+  height: 0;
+  overflow: hidden;
+  transition: 1s;
+}
+
+.header-wrap ul > li:nth-child(2):hover .depth2 {
+  height: auto;
+}
+
+.header-wrap ul > li > .depth2 li {
+  width: 100%;
+  padding: 10px 8px;
+  font-size: 14px;
+  background-color: #282828;
+  color: #fff;
+  transition: 0.1s;
+}
+
+.header-wrap ul > li > div li:hover {
+  color: #fff;
+  background-color: #b73e3e;
+}
+
+.header-wrap ul > li:hover {
   color: #fff;
 }
 
-.header-wrap ul li p {
+.header-wrap ul > li > p {
   font-size: 13px;
   font-size: 100;
+  margin-top: 10px;
 }
 
-.header-wrap .logo-img {
+.header-wrap > .logo-img {
   cursor: pointer;
 }
 
@@ -591,6 +626,61 @@ b {
 }
 .detail-wrap > .detail-card > .movie-info > .img-box .like-icon:hover {
   animation: likeBtnHoverAni 1s;
+}
+
+.profile-wrap {
+  width: 100vw;
+  height: 100vh;
+  background-color: #181818;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.profile-wrap > .profile-card {
+  width: 50%;
+  min-height: 50%;
+  background-color: #484848;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  color: #fff;
+  position: relative;
+}
+
+.profile-wrap > .profile-card > P {
+  text-align: center;
+}
+
+.profile-wrap > .profile-card > .profile-img {
+  width: 200px;
+  height: 200px;
+  background-color: #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+  background-image: url(../src/img/not-found.jpg);
+  background-size: 120%;
+  background-position: center;
+}
+
+.profile-wrap > .profile-card > .profile-info {
+  width: 100%;
+  padding: 0 20px;
+  position: relative;
+}
+
+.profile-wrap > .profile-card > .profile-info::after {
+  content: "";
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  left: 50%;
+  top: -30px;
+  background-color: #fff;
+  transform: translateX(-50%);
 }
 
 @keyframes likeBtnHoverAni {
