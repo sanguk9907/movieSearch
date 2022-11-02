@@ -630,57 +630,49 @@ b {
 
 .profile-wrap {
   width: 100vw;
-  height: 100vh;
   background-color: #181818;
+  padding-top: 70px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  flex-wrap: wrap;
 }
 
-.profile-wrap > .profile-card {
-  width: 50%;
-  min-height: 50%;
-  background-color: #484848;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+.profile-wrap form {
+  width: 70%;
+
+  background-color: #181818;
+  padding: 50px 100px;
+}
+
+.profile-wrap form p {
+  font-size: 12px;
+  font-weight: lighter;
+  color: #ccc;
+}
+
+.ui.form .field > label {
   color: #fff;
-  position: relative;
 }
 
-.profile-wrap > .profile-card > P {
-  text-align: center;
+.profile-wrap aside {
+  width: 15%;
+  min-width: 200px;
+  min-height: 100vh;
+  background-color: #383838;
+  color: #fff;
 }
 
-.profile-wrap > .profile-card > .profile-img {
-  width: 200px;
-  height: 200px;
-  background-color: #ddd;
-  border-radius: 50%;
+.profile-wrap aside > ul {
+  width: 100%;
+}
+.profile-wrap aside > ul > li {
+  width: 100%;
+  padding: 10px 20px;
   cursor: pointer;
-  background-image: url(../src/img/not-found.jpg);
-  background-size: 120%;
-  background-position: center;
 }
 
-.profile-wrap > .profile-card > .profile-info {
-  width: 100%;
-  padding: 0 20px;
-  position: relative;
-}
-
-.profile-wrap > .profile-card > .profile-info::after {
-  content: "";
-  width: 100%;
-  height: 2px;
-  position: absolute;
-  left: 50%;
-  top: -30px;
-  background-color: #fff;
-  transform: translateX(-50%);
+.profile-wrap aside > ul > .active {
+  background-color: #e4e4e4;
+  color: #181818;
 }
 
 @keyframes likeBtnHoverAni {
@@ -843,7 +835,8 @@ b {
 .ui.form .field input {
   width: 300px;
 }
-.ui.form .field > label {
+.join-form .ui.form .field > label,
+.login-form .ui.form .field > label {
   color: #fff;
   font-weight: 300;
 }

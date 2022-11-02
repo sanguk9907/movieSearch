@@ -15,6 +15,7 @@ function App() {
     nick: "",
     autoLogin: false,
     liked: [],
+    userIntroduction: "나를 소개해주세요!",
   });
   const [loading, setLoading] = React.useState(true);
   const loadStyle = loading
@@ -31,6 +32,9 @@ function App() {
     if (nonAccessAddress.includes(address) && loginUser.id !== "") {
       navigation("/");
     }
+    // if (nonAccessAddress.includes(address) && loginUser.id === "") {
+    //   navigation("/");
+    // }
   };
 
   const autoLogin = () => {

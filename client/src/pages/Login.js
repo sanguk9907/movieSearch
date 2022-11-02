@@ -12,6 +12,7 @@ function Login() {
     id: "",
     pw: "",
     autologin: false,
+    liked: [],
   });
 
   const login = async () => {
@@ -24,6 +25,7 @@ function Login() {
       },
     })
       .then(({ data }) => {
+        console.log(data);
         if (data.code === "fail") {
           alert(data.message);
           return;

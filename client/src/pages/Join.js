@@ -68,6 +68,7 @@ function Join() {
             value={joinInfo.id}
           />
         </Form.Field>
+
         <Form.Field>
           <label>닉네임</label>
           <input

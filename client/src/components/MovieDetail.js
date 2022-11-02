@@ -62,6 +62,7 @@ function MovieDetail({
       return;
     }
     const likeList = JSON.parse(sessionStorage.getItem("likeList"));
+    console.log(likeList);
     const findLike = likeList.find((item) => {
       return item === movieId;
     });

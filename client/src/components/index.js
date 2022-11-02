@@ -16,6 +16,7 @@ import MainSlider from "./MainSlider";
 import SlideText from "./SlideText";
 import Loading from "./Loading";
 import Review from "./Review";
+import Unchange from "./Unchange";
 
 export {
   MovieCard,
@@ -36,4 +37,5 @@ export {
   SlideText,
   Loading,
   Review,
+  Unchange,
 };

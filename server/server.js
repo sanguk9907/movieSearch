@@ -327,6 +327,7 @@ app.post("/login", async (req, res) => {
     resulte.user = {
       id: id,
       nick: findUserID.nick,
+      liked: userLikeArray,
     };
     resulte.liked = userLikeArray;
   }
@@ -432,6 +433,12 @@ app.post("/review", async (req, res) => {
   }
   res.send(resulte);
 });
+
+app.get("/profile", async (req, res) => {
+  console.log(req.query);
+  res.send(req.query);
+});
+
 app.listen(5000, function () {
   console.log("서버켜짐");
 });
