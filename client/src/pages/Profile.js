@@ -6,16 +6,20 @@ import { Header } from "../components";
 import { Unchange } from "../components";
 
 function Profile() {
-  const { loginUser } = React.useContext(StoreContext);
-  const { id, nick, liked, userIntroduction } = loginUser;
-  const [update, setUpdate] = React.useState({
-    nick: loginUser.nick,
+  const [textAreaCount, setTextAreaCount] = React.useState(0);
+
+  const { loginUser, setLoginUser } = React.useContext(StoreContext);
+  const { id, nick, liked, userIntroduction, email, phoneNumber } = loginUser;
+  const [updateUser, setUpdateUser] = React.useState({
+    nick: nick,
     userIntroduction: userIntroduction,
   });
+
   const [tab, setTab] = React.useState("li1");
   const active = (liNumber) => {
     return tab === liNumber ? "active" : "";
   };
+  const textareaLength = React.useRef();
 
   const profile = async () => {
     await axios({
@@ -23,18 +27,18 @@ function Profile() {
       method: "get",
       params: {
         id: id,
+        nick: updateUser.nick,
+        userIntroduction: updateUser.userIntroduction,
       },
     }).then(({ data }) => {
-      console.log(data);
+      const cloneLoginUser = { ...loginUser };
+      cloneLoginUser.nick = data.nick;
+      cloneLoginUser.userIntroduction = data.userIntroduction;
+      setLoginUser(cloneLoginUser);
     });
   };
 
-  console.log(loginUser);
-
-  React.useEffect(() => {
-    profile();
-  }, []);
-
+  console.log(updateUser);
   return (
     <>
       <Header />
@@ -80,17 +84,8 @@ function Profile() {
           </Form.Field>
           <Form.Field>
             <Unchange
-              label={"이름"}
-              content={nick}
-              description={
-                "회원가입 시 입력하신 회원님의 이름입니다. 아이디, 비밀번호 찾기에 사용되며 변경은 불가능합니다."
-              }
-            />
-          </Form.Field>
-          <Form.Field>
-            <Unchange
               label={"전화번호"}
-              content={"010-1234-****"}
+              content={phoneNumber}
               description={
                 "회원가입 시 입력하신 회원님의 전화번호입니다. 아이디, 비밀번호 찾기에 사용되며 변경은 불가능합니다."
               }
@@ -99,7 +94,7 @@ function Profile() {
           <Form.Field>
             <Unchange
               label={"이메일"}
-              content={"aaaa@aaaa.aaa"}
+              content={email}
               description={
                 "회원가입 시 입력하신 회원님의 이메일입니다. 아이디, 비밀번호 찾기에 사용되며 변경은 불가능합니다."
               }
@@ -108,29 +103,39 @@ function Profile() {
           <Form.Field>
             <label>닉네임</label>
             <input
-              value={update.nick}
+              value={updateUser.nick}
               placeholder="닉네임"
               onChange={(e) => {
-                const cloneUpdate = { ...update };
+                const cloneUpdate = { ...updateUser };
                 cloneUpdate.nick = e.target.value;
-                setUpdate(cloneUpdate);
+                setUpdateUser(cloneUpdate);
               }}
             />
             <p>닉네임은 중복 가능하게 할까말까..</p>
           </Form.Field>
           <Form.Field>
-            <label>소개</label>
+            <label>소개 </label>
             <textarea
-              value={update.userIntroduction}
+              rows="4"
+              cols="50"
+              value={updateUser.userIntroduction}
               placeholder="나를 소개해주세요!"
+              ref={textareaLength}
               onChange={(e) => {
-                const cloneUpdate = { ...update };
+                setTextAreaCount(e.target.value.length);
+                if (e.target.value.length >= 100) {
+                  alert("100자를 초과하셨습니다.");
+                  return;
+                }
+
+                const cloneUpdate = { ...updateUser };
                 cloneUpdate.userIntroduction = e.target.value;
-                setUpdate(cloneUpdate);
-                console.log(e.target.value);
+                setUpdateUser(cloneUpdate);
               }}
             />
-            <p>짦은 글로 나를 소개해보세요! textarea는 겁나게 크지만요!</p>
+
+            <p>100자 이내의 짧은 글로 자신을 소개해보세요!</p>
+            <p>{textAreaCount}/100</p>
           </Form.Field>
           <Form.Field>
             <label>좋아하는 영화</label>
@@ -196,7 +201,18 @@ function Profile() {
               }}
             ></div>
           </Form.Field>
-          <Button type="submit">수정하기</Button>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              if (updateUser.nick === "") {
+                alert("닉네임을 확인해주세요");
+                return;
+              }
+              profile();
+            }}
+          >
+            수정하기
+          </Button>
         </Form>
       </div>
     </>

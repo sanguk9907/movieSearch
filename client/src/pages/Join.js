@@ -6,13 +6,15 @@ import { Button, Form } from "semantic-ui-react";
 import { Header } from "../components";
 
 function Join() {
-  const { setLoginUser } = React.useContext(StoreContext);
+  const { loginUser, setLoginUser } = React.useContext(StoreContext);
   const navigation = useNavigate();
   const [joinInfo, setJoinInfo] = React.useState({
     id: "",
     pw: "",
     confirmPw: "",
     nick: "",
+    email: "",
+    phoneNumber: "",
   });
 
   const signUp = async () => {
@@ -23,15 +25,20 @@ function Join() {
         id: joinInfo.id,
         pw: joinInfo.pw,
         nick: joinInfo.nick,
+        email: joinInfo.email,
+        phoneNumber: joinInfo.phoneNumber,
       },
     }).then(({ data }) => {
       alert(data.message);
       if (data.code === "success") {
         setLoginUser(joinInfo);
-        setLoginUser({
+        sessionStorage.setItem("loginUser", JSON.stringify(data.user));
+        setJoinInfo({
           id: "",
           pw: "",
           nick: "",
+          email: "",
+          phoneNumber: "",
         });
         navigation("/");
       }
@@ -80,6 +87,32 @@ function Join() {
               setJoinInfo(cloneJoin);
             }}
             value={joinInfo.nick}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label>이메일</label>
+          <input
+            type="text"
+            placeholder="이메일을 입력해주세요"
+            onChange={(e) => {
+              const cloneJoin = { ...joinInfo };
+              cloneJoin.email = e.target.value;
+              setJoinInfo(cloneJoin);
+            }}
+            value={joinInfo.email}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label>전화번호</label>
+          <input
+            type="text"
+            placeholder="전화번호를 입력해주세요"
+            onChange={(e) => {
+              const cloneJoin = { ...joinInfo };
+              cloneJoin.phoneNumber = e.target.value;
+              setJoinInfo(cloneJoin);
+            }}
+            value={joinInfo.phoneNumber}
           />
         </Form.Field>
         <Form.Field>

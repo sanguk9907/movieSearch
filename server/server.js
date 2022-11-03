@@ -22,7 +22,7 @@ DB.add("moviesearch", {
 
 // salt,HashedPassword 만들기
 async function cerateUserInfo(parmas) {
-  const { id, password, nick } = parmas;
+  const { id, password, nick, email, phoneNumber } = parmas;
   const userInfo = await new Promise((resolve) => {
     crypto.randomBytes(64, (err, buf) => {
       if (err) {
@@ -35,6 +35,8 @@ async function cerateUserInfo(parmas) {
           password: key.toString("base64"),
           salt: salt,
           nick: nick,
+          email: email,
+          phoneNumber: phoneNumber,
         });
       });
     });
@@ -179,7 +181,7 @@ app.get("/join", (req, res) => {
   res.send("get");
 });
 app.post("/join", async (req, res) => {
-  const { id, pw, nick } = req.body;
+  const { id, pw, nick, email, phoneNumber } = req.body;
   const resulte = {
     code: "success",
     message: "회원가입이 성공적으로 완료되었습니다.",
@@ -193,9 +195,12 @@ app.post("/join", async (req, res) => {
 
   // 하나이상의 대소문자,숫자 8자 이상(특수문자O)
   const PWReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+  const EmailReg =
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
   const IDCheck = IDReg.test(id);
   const PWCheck = PWReg.test(pw);
+  const EmailCheck = EmailReg.test(email);
 
   for (let key in examArray) {
     if (id === "") {
@@ -227,6 +232,17 @@ app.post("/join", async (req, res) => {
       break;
     }
 
+    if (email === "") {
+      (resulte.code = "fail"), (resulte.message = "이메일을 입력해주세요");
+      break;
+    }
+    if (!EmailCheck) {
+      (resulte.code = "fail"),
+        (resulte.message =
+          "이메일 형식이 올바르지 않습니다. 다시 한 번 확인해주세요");
+      break;
+    }
+
     const dataSelect = await runDB({
       database: "moviesearch",
       query: "SELECT * FROM users",
@@ -246,6 +262,8 @@ app.post("/join", async (req, res) => {
       id: id,
       password: pw,
       nick: nick,
+      email: email,
+      phoneNumber: phoneNumber,
     });
     const insertQuery = createInsert({
       table: "users",
@@ -328,6 +346,9 @@ app.post("/login", async (req, res) => {
       id: id,
       nick: findUserID.nick,
       liked: userLikeArray,
+      email: findUserID.email,
+      phoneNumber: findUserID.phoneNumber,
+      userIntroduction: findUserID.userIntroduction,
     };
     resulte.liked = userLikeArray;
   }
@@ -404,6 +425,7 @@ app.get("/review", async (req, res) => {
 
 app.post("/review", async (req, res) => {
   const data = req.body;
+  console.log(data.nick);
   const { userID, content } = data;
   const resulte = {
     code: "success",
@@ -435,8 +457,24 @@ app.post("/review", async (req, res) => {
 });
 
 app.get("/profile", async (req, res) => {
-  console.log(req.query);
-  res.send(req.query);
+  const { id, nick, userIntroduction } = req.query;
+  await runDB({
+    database: "moviesearch",
+    query: `update users set userIntroduction="${userIntroduction}",nick="${nick}" where userID="${id}"`,
+  });
+
+  const data = await runDB({
+    database: "moviesearch",
+    query: `select * from users where userID="${id}"`,
+  });
+
+  const updateUser = {
+    nick: data[0].nick,
+    userIntroduction: data[0].userIntroduction,
+  };
+
+  console.log(updateUser);
+  res.send(updateUser);
 });
 
 app.listen(5000, function () {

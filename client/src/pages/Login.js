@@ -13,6 +13,9 @@ function Login() {
     pw: "",
     autologin: false,
     liked: [],
+    email: "",
+    phoneNumber: "",
+    userIntroduction: "",
   });
 
   const login = async () => {
@@ -39,7 +42,7 @@ function Login() {
           sessionStorage.setItem("loginUser", JSON.stringify(data.user));
         }
         sessionStorage.setItem("likeList", JSON.stringify(data.liked));
-        console.log(data);
+
         alert(data.message);
 
         navigation("/");

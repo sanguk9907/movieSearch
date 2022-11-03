@@ -15,7 +15,7 @@ function App() {
     nick: "",
     autoLogin: false,
     liked: [],
-    userIntroduction: "나를 소개해주세요!",
+    userIntroduction: "",
   });
   const [loading, setLoading] = React.useState(true);
   const loadStyle = loading

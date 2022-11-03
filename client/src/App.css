@@ -797,6 +797,10 @@ b {
   min-height: 200px;
 }
 
+.detail-card .review .review-box .review-content p span {
+  font-size: 12px;
+}
+
 .preovier-box {
   float: left;
   display: flex;

@@ -7,6 +7,7 @@ function Review(movieId) {
   const { loginUser } = React.useContext(StoreContext);
   const [review, setReview] = React.useState({
     userID: loginUser.id,
+    nick: loginUser.nick,
     movieID: movieId.movieId,
     content: "",
   });
@@ -18,6 +19,7 @@ function Review(movieId) {
       method: "post",
       data: {
         userID: review.userID,
+        nick: review.nick,
         movieID: review.movieID,
         content: review.content,
       },
@@ -39,6 +41,7 @@ function Review(movieId) {
       params: movieId,
     }).then(({ data }) => {
       setReviewList(data);
+      console.log(data);
     });
   };
 
@@ -80,7 +83,8 @@ function Review(movieId) {
             return (
               <li key={`review-${index}`} className="review-content">
                 <p>
-                  {item.userID} : {item.content}
+                  {item.nick}
+                  {/* <span>({item.userID})</span> */} : {item.content}
                 </p>
               </li>
             );
