@@ -21,17 +21,11 @@ function Join() {
     await axios({
       url: "http://localhost:5000/join",
       method: "post",
-      data: {
-        id: joinInfo.id,
-        pw: joinInfo.pw,
-        nick: joinInfo.nick,
-        email: joinInfo.email,
-        phoneNumber: joinInfo.phoneNumber,
-      },
+      data: joinInfo,
     }).then(({ data }) => {
       alert(data.message);
       if (data.code === "success") {
-        setLoginUser(joinInfo);
+        setLoginUser(data.user);
         sessionStorage.setItem("loginUser", JSON.stringify(data.user));
         setJoinInfo({
           id: "",

@@ -51,12 +51,14 @@ function Header() {
             onClick={() => {
               if (loginUser.id === "") {
                 navigation("/join");
+              } else {
+                navigation("/profile");
               }
             }}
           >
             <Icon name={loginUser.id === "" ? "user plus" : "user"} />
             <p>{loginUser.id === "" ? "회원가입" : `${loginUser.nick} 님`}</p>
-            <div className="depth2">
+            {/* <div className="depth2">
               <ul>
                 <li
                   onClick={() => {
@@ -69,7 +71,7 @@ function Header() {
                 <li>회원정보</li>
                 <li>회원정보</li>
               </ul>
-            </div>
+            </div> */}
           </li>
           <li
             className="search-icon"

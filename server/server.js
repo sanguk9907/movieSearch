@@ -343,7 +343,7 @@ app.post("/login", async (req, res) => {
     }
 
     resulte.user = {
-      id: id,
+      id: findUserID.userID,
       nick: findUserID.nick,
       liked: userLikeArray,
       email: findUserID.email,
@@ -425,7 +425,7 @@ app.get("/review", async (req, res) => {
 
 app.post("/review", async (req, res) => {
   const data = req.body;
-  console.log(data.nick);
+
   const { userID, content } = data;
   const resulte = {
     code: "success",
@@ -465,16 +465,17 @@ app.get("/profile", async (req, res) => {
 
   const data = await runDB({
     database: "moviesearch",
-    query: `select * from users where userID="${id}"`,
+    query: `SELECT userID,nick,userIntroduction,email,phoneNumber FROM users WHERE userID="${id}"`,
   });
 
-  const updateUser = {
+  const updateData = {
+    id: data[0].userID,
     nick: data[0].nick,
+    email: data[0].email,
+    phoneNumber: data[0].phoneNumber,
     userIntroduction: data[0].userIntroduction,
   };
-
-  console.log(updateUser);
-  res.send(updateUser);
+  res.send(updateData);
 });
 
 app.listen(5000, function () {

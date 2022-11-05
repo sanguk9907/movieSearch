@@ -13,8 +13,9 @@ function App() {
   const [loginUser, setLoginUser] = React.useState({
     id: "",
     nick: "",
-    autoLogin: false,
     liked: [],
+    email: "",
+    phoneNumber: "",
     userIntroduction: "",
   });
   const [loading, setLoading] = React.useState(true);

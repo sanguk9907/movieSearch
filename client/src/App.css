@@ -633,12 +633,11 @@ b {
   background-color: #181818;
   padding-top: 70px;
   display: flex;
-  flex-wrap: wrap;
 }
 
-.profile-wrap form {
+.profile-wrap form,
+.delet {
   width: 70%;
-
   background-color: #181818;
   padding: 50px 100px;
 }
@@ -673,6 +672,18 @@ b {
 .profile-wrap aside > ul > .active {
   background-color: #e4e4e4;
   color: #181818;
+}
+
+.profile-wrap .delete {
+  color: #fff;
+}
+
+.profile-wrap .delete h3 {
+  font-size: 20px;
+}
+
+.profile-wrap .delete p {
+  margin: 10px 0;
 }
 
 @keyframes likeBtnHoverAni {
