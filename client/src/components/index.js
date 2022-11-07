@@ -17,6 +17,8 @@ import SlideText from "./SlideText";
 import Loading from "./Loading";
 import Review from "./Review";
 import Unchange from "./Unchange";
+import Profile from "./Profile";
+import Delete from "./Delete";
 
 export {
   MovieCard,
@@ -38,4 +40,6 @@ export {
   Loading,
   Review,
   Unchange,
+  Profile,
+  Delete,
 };

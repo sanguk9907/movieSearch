@@ -635,8 +635,7 @@ b {
   display: flex;
 }
 
-.profile-wrap form,
-.delet {
+.profile-wrap form {
   width: 70%;
   background-color: #181818;
   padding: 50px 100px;
@@ -674,16 +673,35 @@ b {
   color: #181818;
 }
 
-.profile-wrap .delete {
+.delete-modal-bg {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.delete-modal-bg .delete-modal {
+  width: 500px;
+  height: 500px;
+  background-color: #282828;
+  border-radius: 10px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  padding: 30px;
+}
+
+.delete-modal-bg .delete-modal .icon {
   color: #fff;
-}
-
-.profile-wrap .delete h3 {
+  position: absolute;
+  right: 3%;
+  top: 3%;
   font-size: 20px;
-}
-
-.profile-wrap .delete p {
-  margin: 10px 0;
+  cursor: pointer;
 }
 
 @keyframes likeBtnHoverAni {

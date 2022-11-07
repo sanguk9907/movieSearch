@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import { StoreContext } from "../App";
 import { Button, Form } from "semantic-ui-react";
 import { Header } from "../components";
@@ -24,9 +24,9 @@ function Join() {
       data: joinInfo,
     }).then(({ data }) => {
       alert(data.message);
+      setLoginUser(data.user);
+      sessionStorage.setItem("loginUser", JSON.stringify(data.user));
       if (data.code === "success") {
-        setLoginUser(data.user);
-        sessionStorage.setItem("loginUser", JSON.stringify(data.user));
         setJoinInfo({
           id: "",
           pw: "",

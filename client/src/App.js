@@ -11,6 +11,7 @@ function App() {
     reset: [],
   });
   const [loginUser, setLoginUser] = React.useState({
+    seq: "",
     id: "",
     nick: "",
     liked: [],
@@ -27,15 +28,16 @@ function App() {
   const navigation = useNavigate();
 
   const nonAccess = () => {
-    const nonAccessAddress = ["join", "Login"];
+    const nonAccessAddress = ["join", "login"];
     const address = pathname.slice(1);
 
     if (nonAccessAddress.includes(address) && loginUser.id !== "") {
       navigation("/");
     }
-    // if (nonAccessAddress.includes(address) && loginUser.id === "") {
-    //   navigation("/");
-    // }
+    if ("profile".includes(address) && loginUser.id === "") {
+      console.log(loginUser.id);
+      navigation("/");
+    }
   };
 
   const autoLogin = () => {

@@ -3,8 +3,27 @@ const cors = require("cors");
 const request = require("request");
 const crypto = require("crypto");
 const app = express();
-app.use(cors());
+const fs = require("fs");
+const multer = require("multer");
+const path = require("path");
+const mime = require("mime");
+
+const session = require("express-session");
+
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(
+  session({
+    secret: "THISSECRET",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 const key = "3cf148810eae178af2afb1a072cfe76d";
 //////////////////// MYSQL연결
 const mysql = require("mysql2");
@@ -243,16 +262,12 @@ app.post("/join", async (req, res) => {
       break;
     }
 
-    const dataSelect = await runDB({
+    const findUser = await runDB({
       database: "moviesearch",
-      query: "SELECT * FROM users",
+      query: `SELECT * FROM users where userID = "${id}"`,
     });
 
-    const findUserID = dataSelect.find((item) => {
-      return item.userID === id;
-    });
-
-    if (findUserID) {
+    if (!findUser === []) {
       (resulte.code = "fail"),
         (resulte.message = "이미 존재하는 아이디입니다.");
       break;
@@ -275,6 +290,19 @@ app.post("/join", async (req, res) => {
       query: insertQuery,
     });
   }
+  const findUser = await runDB({
+    database: "moviesearch",
+    query: `SELECT * FROM users where userID = "${id}"`,
+  });
+  const user = {};
+  (user.seq = findUser[0].seq),
+    (user.id = findUser[0].userID),
+    (user.nick = findUser[0].nick),
+    (user.email = findUser[0].email),
+    (user.phoneNumber = findUser[0].phoneNumber),
+    (user.userIntroduction = findUser[0].userIntroduction);
+  resulte.user = user;
+
   res.send(resulte);
 });
 
@@ -343,6 +371,7 @@ app.post("/login", async (req, res) => {
     }
 
     resulte.user = {
+      seq: findUserID.seq,
       id: findUserID.userID,
       nick: findUserID.nick,
       liked: userLikeArray,
@@ -465,17 +494,49 @@ app.get("/profile", async (req, res) => {
 
   const data = await runDB({
     database: "moviesearch",
-    query: `SELECT userID,nick,userIntroduction,email,phoneNumber FROM users WHERE userID="${id}"`,
+    query: `SELECT seq,userID,nick,userIntroduction,email,phoneNumber FROM users WHERE userID="${id}"`,
   });
 
   const updateData = {
+    userSeq: data[0].seq,
     id: data[0].userID,
     nick: data[0].nick,
     email: data[0].email,
     phoneNumber: data[0].phoneNumber,
     userIntroduction: data[0].userIntroduction,
   };
+
   res.send(updateData);
+});
+
+app.delete("/delete", async (req, res) => {
+  const { seq, id, password } = req.body;
+  const resulte = {
+    code: "fail",
+    message: "실패했습니다. 비밀번호를 확인해주세요",
+  };
+
+  const findUser = await runDB({
+    database: "moviesearch",
+    query: `select * from users where seq="${seq}" && userID="${id}"`,
+  });
+
+  const dbSalt = findUser[0].salt;
+  const dbPassword = findUser[0].password;
+
+  const passKey = crypto
+    .pbkdf2Sync(password, dbSalt, 100514, 64, "sha512")
+    .toString("base64");
+
+  if (dbPassword === passKey) {
+    runDB({
+      data: "moviesearch",
+      query: `DELETE FROM users WHERE seq=${seq} && userID="${id}" && password="${passKey}"`,
+    });
+    resulte.code = "success";
+    resulte.message = "회원 아이디가 정상적으로 삭제되었습니다.";
+  }
+  res.send(resulte);
 });
 
 app.listen(5000, function () {
