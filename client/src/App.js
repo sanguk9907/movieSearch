@@ -2,10 +2,12 @@ import React from "react";
 import "./App.css";
 import AppIndex from "./AppIndex";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const StoreContext = React.createContext();
 
 function App() {
+  axios.defaults.withCredentials = true;
   const [search, setSearch] = React.useState({
     text: "",
     reset: [],

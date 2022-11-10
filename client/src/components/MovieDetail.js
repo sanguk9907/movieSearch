@@ -14,6 +14,7 @@ function MovieDetail({
   setProviderData,
 }) {
   const [clickedLike, setClickedLike] = React.useState(true);
+  const [likeMovie, setLikeMovie] = React.useState();
   const { loginUser } = React.useContext(StoreContext);
   const navigation = useNavigate();
 
@@ -56,23 +57,6 @@ function MovieDetail({
   // 배경 url
   const backgroundImg = `url("https://image.tmdb.org/t/p/original/${background}")`;
 
-  // 좋아요 상태
-  const likeInit = () => {
-    if (!loginUser.id) {
-      return;
-    }
-    const likeList = JSON.parse(sessionStorage.getItem("likeList"));
-    console.log(likeList);
-    const findLike = likeList.find((item) => {
-      return item === movieId;
-    });
-    if (findLike === movieId) {
-      setClickedLike(false);
-    } else {
-      setClickedLike(true);
-    }
-  };
-
   // 하트 아이콘 채우고 비우기용
   const likeIconclassName = clickedLike ? "like-icon" : "like-icon active";
   const likeIconName = clickedLike ? "heart outline" : "heart";
@@ -109,14 +93,28 @@ function MovieDetail({
         movieID: movieId,
         userID: loginUser.id,
       },
-    })
-      .then(({ data }) => {
-        console.log("sesson : ", data);
-        sessionStorage.setItem("likeList", JSON.stringify(data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then(({ data }) => {
+      console.log(data);
+      alert(data.message);
+    });
+  };
+
+  // 좋아요 상태
+  const likeInit = async () => {
+    await axios({
+      url: "http://localhost:5000/like",
+      method: "get",
+      params: {
+        movieID: movieId,
+        userID: loginUser.id,
+      },
+    }).then(({ data }) => {
+      if (data.movieID === movieId) {
+        setClickedLike(false);
+      } else {
+        setClickedLike(true);
+      }
+    });
   };
 
   React.useEffect(() => {

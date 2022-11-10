@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
-import { json, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../App";
 import { Button, Form } from "semantic-ui-react";
 import { Header } from "../components";
 
 function Join() {
+  axios.defaults.withCredentials = true;
   const { loginUser, setLoginUser } = React.useContext(StoreContext);
   const navigation = useNavigate();
   const [joinInfo, setJoinInfo] = React.useState({
@@ -51,7 +52,6 @@ function Join() {
             return;
           }
           setJoinInfo(joinInfo);
-          console.log(joinInfo);
           signUp();
         }}
         className="join-form"

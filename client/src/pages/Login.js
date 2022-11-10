@@ -6,6 +6,7 @@ import { Button, Checkbox, Form } from "semantic-ui-react";
 import { Header } from "../components";
 
 function Login() {
+  axios.defaults.withCredentials = true;
   const { setLoginUser, loginUser } = React.useContext(StoreContext);
   const navigation = useNavigate();
   const [loginInfo, setLoginInfo] = React.useState({
@@ -44,7 +45,7 @@ function Login() {
         sessionStorage.setItem("likeList", JSON.stringify(data.liked));
 
         alert(data.message);
-
+        console.log(data.user);
         navigation("/");
       })
       .catch((err) => {
@@ -97,7 +98,6 @@ function Login() {
           label="자동로그인"
           onChange={() => {
             loginInfo.autologin = !loginInfo.autologin;
-            console.log(loginInfo.autologin);
           }}
         />
         <Button type="submit">로그인</Button>

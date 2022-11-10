@@ -3,27 +3,32 @@ const cors = require("cors");
 const request = require("request");
 const crypto = require("crypto");
 const app = express();
+
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
 const mime = require("mime");
 
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(
+  session({
+    secret: "this",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(
   cors({
     origin: true,
     credentials: true,
   })
 );
-app.use(express.json());
-app.use(
-  session({
-    secret: "THISSECRET",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+
 const key = "3cf148810eae178af2afb1a072cfe76d";
 //////////////////// MYSQL연결
 const mysql = require("mysql2");
@@ -311,6 +316,7 @@ app.get("/login", (req, res) => {
 });
 app.post("/login", async (req, res) => {
   const { id, pw } = req.body;
+  console.log(req.session);
 
   const resulte = {
     code: "success",
@@ -321,8 +327,10 @@ app.post("/login", async (req, res) => {
   const examArray = [1];
   const dataSelect = await runDB({
     database: "moviesearch",
-    query: "SELECT * FROM users",
+    query: `SELECT * FROM users where userID = "${id}"`,
   });
+
+  const findUser = dataSelect[0];
 
   const likedata = await runDB({
     database: "moviesearch",
@@ -334,12 +342,9 @@ app.post("/login", async (req, res) => {
   likedata.forEach((item) => {
     userLikeArray.push(item.movieID);
   });
-  const findUserID = dataSelect.find((item) => {
-    return item.userID === id;
-  });
 
-  const dbSalt = !findUserID ? undefined : findUserID.salt;
-  const dbPassword = !findUserID ? undefined : findUserID.password;
+  const dbSalt = !findUser ? undefined : findUser.salt;
+  const dbPassword = !findUser ? undefined : findUser.password;
 
   const passKey = !dbSalt
     ? ""
@@ -357,7 +362,7 @@ app.post("/login", async (req, res) => {
       break;
     }
 
-    if (findUserID === undefined || findUserID.userID !== id) {
+    if (findUser === undefined || findUser.userID !== id) {
       resulte.code = "fail";
       resulte.message =
         "등록되지 않은 아이디이거나, 틀린 아이디입니다 다시 한 번 확인해주세요.";
@@ -371,25 +376,40 @@ app.post("/login", async (req, res) => {
     }
 
     resulte.user = {
-      seq: findUserID.seq,
-      id: findUserID.userID,
-      nick: findUserID.nick,
+      seq: findUser.seq,
+      id: findUser.userID,
+      nick: findUser.nick,
       liked: userLikeArray,
-      email: findUserID.email,
-      phoneNumber: findUserID.phoneNumber,
-      userIntroduction: findUserID.userIntroduction,
+      email: findUser.email,
+      phoneNumber: findUser.phoneNumber,
+      userIntroduction: findUser.userIntroduction,
     };
     resulte.liked = userLikeArray;
+    req.session.loginUser = resulte.user;
+    req.session.save();
   }
 
   res.send(resulte);
 });
 
-app.get("/like", (req, res) => {
-  res.send("likeget");
+app.get("/like", async (req, res) => {
+  const { movieID, userID } = req.query;
+
+  const likeData = await runDB({
+    database: "moviesearch",
+    query: `SELECT * FROM lieked WHERE userID="${userID}" && movieID=${movieID}`,
+  });
+
+  console.log(likeData[0]);
+
+  res.send(likeData[0]);
 });
 app.put("/like", async (req, res) => {
   const { clickedLike, movieID, userID } = req.body;
+  const resulte = {
+    code: "fail",
+    message: "좋아요 목록 업데이트에 실패했습니다.",
+  };
 
   if (clickedLike) {
     const insertQuery = createInsert({
@@ -405,19 +425,8 @@ app.put("/like", async (req, res) => {
       query: insertQuery,
     });
 
-    const data = await runDB({
-      database: "moviesearch",
-      query: "select * from lieked",
-    });
-
-    const likedMovieID = [];
-
-    data.forEach((item) => {
-      likedMovieID.push(item.movieID);
-    });
-    res.send(likedMovieID);
-
-    return;
+    (resulte.code = "success"),
+      (resulte.message = "좋아요 목록에 추가되었습니다.");
   }
 
   if (!clickedLike) {
@@ -425,17 +434,10 @@ app.put("/like", async (req, res) => {
       database: "moviesearch",
       query: `delete from lieked where movieID =${movieID} && userID ="${userID}"`,
     });
-    const data = await runDB({
-      database: "moviesearch",
-      query: "select * from lieked",
-    });
-    const unlikedMovieID = [];
-
-    data.forEach((item) => {
-      unlikedMovieID.push(item.movieID);
-    });
-    res.send(unlikedMovieID);
+    (resulte.code = "success"),
+      (resulte.message = "좋아요 목록에서 삭제되었습니다.");
   }
+  res.send(resulte);
 });
 
 app.get("/review", async (req, res) => {

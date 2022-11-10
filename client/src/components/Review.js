@@ -41,7 +41,6 @@ function Review(movieId) {
       params: movieId,
     }).then(({ data }) => {
       setReviewList(data);
-      console.log(data);
     });
   };
 
