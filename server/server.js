@@ -8,24 +8,35 @@ const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
 const mime = require("mime");
-
 const session = require("express-session");
-const cookieParser = require("cookie-parser");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(
-  session({
-    secret: "this",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+const dir = "../client/public/img";
+
+const storage = multer.diskStorage({
+  // 파일 어디다가 저장할건지
+  destination: function (req, file, cb) {
+    cb(null, "../client/public/img");
+  },
+
+  // 파일 이름 중복방지
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "_" + Date.now() + ".jpg");
+  },
+});
+const upload = multer({ storage });
+
 app.use(
   cors({
     origin: true,
     credentials: true,
+  })
+);
+app.use(express.json());
+app.use(
+  session({
+    secret: "ASDASD",
+    resave: false,
+    saveUninitialized: true,
   })
 );
 
@@ -541,6 +552,37 @@ app.delete("/delete", async (req, res) => {
   res.send(resulte);
 });
 
+app.post("/file", upload.array("file"), async (req, res) => {
+  const { loginUser } = req.session;
+  console.log(loginUser);
+  const files = req?.files[0];
+  files.user_seq = loginUser?.seq || 1;
+
+  const filesInsertQuery = createInsert({
+    table: "userprofileimage",
+    data: files,
+  });
+
+  await runDB({
+    database: "moviesearch",
+    query: filesInsertQuery,
+  });
+
+  const userprofileimage = await runDB({
+    database: "moviesearch",
+    query: `SELECT * FROM userprofileimage WHERE user_seq =${loginUser.seq}`,
+  });
+
+  console.log(userprofileimage);
+
+  res.send(userprofileimage[0]);
+
+  res.send("/");
+});
+
 app.listen(5000, function () {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
   console.log("서버켜짐");
 });

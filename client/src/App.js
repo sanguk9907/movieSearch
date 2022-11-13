@@ -80,8 +80,4 @@ function App() {
   );
 }
 
-function Test() {
-  return <div>test</div>;
-}
-
-export default Test;
+export default App;
