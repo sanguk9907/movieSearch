@@ -6,7 +6,7 @@ import { Join, Login, Main, ProfilePage, SearchPage } from "./pages";
 function Test() {
   const { loginUser } = React.useContext(StoreContext);
   const [file, setFile] = React.useState([]);
-  const [image, setImage] = React.useState("");
+  const [image, setImage] = React.useState();
 
   const 파일서버저장 = async () => {
     const file_element = document.querySelector(".file");
@@ -26,19 +26,9 @@ function Test() {
       },
     }).then(({ data }) => {
       console.log(data);
-      setImage(`../public/img/${data.filename}`);
+      setImage(`/img/${data}`);
     });
   };
-
-  // React.useEffect(() => {
-  //   (async () => {
-  //     await axios({
-  //       url: "http://localhost:5000/image",
-  //     }).then((res) => {
-  //       console.log(res.data);
-  //     });
-  //   })();
-  // }, []);
 
   return (
     <div>
@@ -46,7 +36,7 @@ function Test() {
       <button onClick={파일서버저장}>파일 저장</button>
       <img
         style={{ widht: "500px", height: "500px" }}
-        src={process.env.PUBLIC_URL + "file_1668328843492.jpg"}
+        src={process.env.PUBLIC_URL + image}
         alt="이미지"
       ></img>
     </div>
