@@ -25,6 +25,7 @@ function Test() {
         "Content-Type": "multipart/form-data",
       },
     }).then(({ data }) => {
+      console.log(data);
       setImage(`../public/img/${data.filename}`);
     });
   };
@@ -45,7 +46,7 @@ function Test() {
       <button onClick={파일서버저장}>파일 저장</button>
       <img
         style={{ widht: "500px", height: "500px" }}
-        src={process.env.PUBLIC_URL + "file_1667725007368.jpg"}
+        src={process.env.PUBLIC_URL + "file_1668328843492.jpg"}
         alt="이미지"
       ></img>
     </div>

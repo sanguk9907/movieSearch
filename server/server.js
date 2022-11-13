@@ -556,6 +556,7 @@ app.post("/file", upload.array("file"), async (req, res) => {
   const { loginUser } = req.session;
   console.log(loginUser);
   const files = req?.files[0];
+  console.log(files.filename);
   files.user_seq = loginUser?.seq || 1;
 
   const filesInsertQuery = createInsert({
@@ -563,21 +564,21 @@ app.post("/file", upload.array("file"), async (req, res) => {
     data: files,
   });
 
-  await runDB({
-    database: "moviesearch",
-    query: filesInsertQuery,
-  });
+  // await runDB({
+  //   database: "moviesearch",
+  //   query: filesInsertQuery,
+  // });
 
-  const userprofileimage = await runDB({
-    database: "moviesearch",
-    query: `SELECT * FROM userprofileimage WHERE user_seq =${loginUser.seq}`,
-  });
+  // const userprofileimage = await runDB({
+  //   database: "moviesearch",
+  //   query: `SELECT * FROM userprofileimage WHERE user_seq =${loginUser.seq}`,
+  // });
 
-  console.log(userprofileimage);
+  // console.log(userprofileimage);
 
-  res.send(userprofileimage[0]);
+  // res.send(userprofileimage[0]);
 
-  res.send("/");
+  res.send(files.filename);
 });
 
 app.listen(5000, function () {
