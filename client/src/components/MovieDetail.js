@@ -6,7 +6,7 @@ import { StoreContext } from "../App";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Review from "./Review";
-
+axios.defaults.withCredentials = true;
 function MovieDetail({
   movieDetail,
   setMovieDetail,
@@ -91,14 +91,12 @@ function MovieDetail({
       data: {
         clickedLike: clickedLike,
         movieID: movieId,
-        userID: loginUser.id,
       },
     }).then(({ data }) => {
       console.log(data);
       alert(data.message);
     });
   };
-
   // 좋아요 상태
   const likeInit = async () => {
     await axios({
@@ -106,7 +104,6 @@ function MovieDetail({
       method: "get",
       params: {
         movieID: movieId,
-        userID: loginUser.id,
       },
     }).then(({ data }) => {
       if (data.movieID === movieId) {

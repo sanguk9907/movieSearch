@@ -8,24 +8,35 @@ const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
 const mime = require("mime");
-
 const session = require("express-session");
-const cookieParser = require("cookie-parser");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(
-  session({
-    secret: "this",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+const dir = "../client/public/img";
+
+const storage = multer.diskStorage({
+  // 파일 어디다가 저장할건지
+  destination: function (req, file, cb) {
+    cb(null, "../client/public/img");
+  },
+
+  // 파일 이름 중복방지
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "_" + Date.now() + ".jpg");
+  },
+});
+const upload = multer({ storage });
+
 app.use(
   cors({
     origin: true,
     credentials: true,
+  })
+);
+app.use(express.json());
+app.use(
+  session({
+    secret: "ASDASD",
+    resave: false,
+    saveUninitialized: true,
   })
 );
 
@@ -102,6 +113,23 @@ function createInsert(params) {
     "','"
   )}')`;
 
+  return query;
+}
+
+// 업데이트 만들기
+function createUpdate(params) {
+  const { table, data, where } = params;
+
+  const column = Object.keys(data);
+  const value = Object.values(data);
+
+  const updateQuery = [];
+
+  column.forEach((item, index) => {
+    updateQuery.push(` ${item} = "${value[index]}"`);
+  });
+
+  const query = `UPDATE ${table} set${updateQuery} where ${where}`;
   return query;
 }
 
@@ -316,13 +344,11 @@ app.get("/login", (req, res) => {
 });
 app.post("/login", async (req, res) => {
   const { id, pw } = req.body;
-  console.log(req.session);
 
   const resulte = {
     code: "success",
     message: "성공적으로 로그인 되었습니다.",
     user: null,
-    liked: null,
   };
   const examArray = [1];
   const dataSelect = await runDB({
@@ -331,17 +357,6 @@ app.post("/login", async (req, res) => {
   });
 
   const findUser = dataSelect[0];
-
-  const likedata = await runDB({
-    database: "moviesearch",
-    query: `select movieID from lieked inner join users on lieked.userID = users.userID where lieked.userID ="${id}"`,
-  });
-
-  const userLikeArray = [];
-
-  likedata.forEach((item) => {
-    userLikeArray.push(item.movieID);
-  });
 
   const dbSalt = !findUser ? undefined : findUser.salt;
   const dbPassword = !findUser ? undefined : findUser.password;
@@ -379,12 +394,10 @@ app.post("/login", async (req, res) => {
       seq: findUser.seq,
       id: findUser.userID,
       nick: findUser.nick,
-      liked: userLikeArray,
       email: findUser.email,
       phoneNumber: findUser.phoneNumber,
       userIntroduction: findUser.userIntroduction,
     };
-    resulte.liked = userLikeArray;
     req.session.loginUser = resulte.user;
     req.session.save();
   }
@@ -393,19 +406,19 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/like", async (req, res) => {
-  const { movieID, userID } = req.query;
+  const { loginUser } = req.session;
+  const { movieID } = req.query;
 
   const likeData = await runDB({
     database: "moviesearch",
-    query: `SELECT * FROM lieked WHERE userID="${userID}" && movieID=${movieID}`,
+    query: `SELECT * FROM likes WHERE user_seq=${loginUser.seq} && movieID=${movieID}`,
   });
-
-  console.log(likeData[0]);
 
   res.send(likeData[0]);
 });
 app.put("/like", async (req, res) => {
-  const { clickedLike, movieID, userID } = req.body;
+  const { loginUser } = req.session;
+  const { clickedLike, movieID } = req.body;
   const resulte = {
     code: "fail",
     message: "좋아요 목록 업데이트에 실패했습니다.",
@@ -413,10 +426,10 @@ app.put("/like", async (req, res) => {
 
   if (clickedLike) {
     const insertQuery = createInsert({
-      table: "lieked",
+      table: "likes",
       data: {
         movieID: movieID,
-        userID: userID,
+        user_seq: loginUser.seq,
       },
     });
 
@@ -432,7 +445,7 @@ app.put("/like", async (req, res) => {
   if (!clickedLike) {
     await runDB({
       database: "moviesearch",
-      query: `delete from lieked where movieID =${movieID} && userID ="${userID}"`,
+      query: `delete from likes where movieID =${movieID} && user_seq=${loginUser.seq}`,
     });
     (resulte.code = "success"),
       (resulte.message = "좋아요 목록에서 삭제되었습니다.");
@@ -541,6 +554,59 @@ app.delete("/delete", async (req, res) => {
   res.send(resulte);
 });
 
+app.post("/file", upload.array("file"), async (req, res) => {
+  const { loginUser } = req.session;
+  const files = req?.files[0];
+  files.user_seq = loginUser.seq;
+  const searchImage = await runDB({
+    database: "moviesearch",
+    query: `select * from image where user_seq = ${loginUser.seq}`,
+  });
+
+  if (searchImage.length === 0) {
+    console.log("인서트 실행됨");
+    const insertQuery = createInsert({
+      table: "image",
+      data: files,
+    });
+
+    await runDB({
+      database: "moviesearch",
+      query: insertQuery,
+    });
+  } else {
+    console.log("업데이트 실행ㅇ됨");
+    const updateQuery = createUpdate({
+      table: "image",
+      data: files,
+      where: `user_seq = ${loginUser.seq}`,
+    });
+
+    await runDB({
+      database: "moviesearch",
+      query: updateQuery,
+    });
+  }
+  const profileImage = await runDB({
+    database: "moviesearch",
+    query: `select * from image where user_seq = ${loginUser.seq}`,
+  });
+  res.send(profileImage[0].filename);
+});
+
+app.get("/profileImage", async (req, res) => {
+  const { loginUser } = req.session;
+  const profileImage = await runDB({
+    database: "moviesearch",
+    query: `select * from image where user_seq = ${loginUser.seq}`,
+  });
+  console.log(profileImage[0].filename);
+  res.send(profileImage[0].filename);
+});
+
 app.listen(5000, function () {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
   console.log("서버켜짐");
 });

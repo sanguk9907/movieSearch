@@ -641,6 +641,14 @@ b {
   padding: 50px 100px;
 }
 
+.profile-wrap .ui.form .field {
+  margin: 25px 0;
+}
+
+.profile-wrap button {
+  width: 50%;
+}
+
 .profile-wrap form p {
   font-size: 12px;
   font-weight: lighter;
@@ -702,6 +710,18 @@ b {
   top: 3%;
   font-size: 20px;
   cursor: pointer;
+}
+
+.profile-image {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+
+.profile-image img {
+  width: 50%;
+  height: 50%;
+  border-radius: 100%;
 }
 
 @keyframes likeBtnHoverAni {

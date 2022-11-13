@@ -16,7 +16,6 @@ function App() {
     seq: "",
     id: "",
     nick: "",
-    liked: [],
     email: "",
     phoneNumber: "",
     userIntroduction: "",
@@ -36,10 +35,10 @@ function App() {
     if (nonAccessAddress.includes(address) && loginUser.id !== "") {
       navigation("/");
     }
-    if ("profile".includes(address) && loginUser.id === "") {
-      console.log(loginUser.id);
-      navigation("/");
-    }
+    // if ("profile".includes(address) && loginUser.id === "") {
+    //   console.log(loginUser.id);
+    //   navigation("/");
+    // }
   };
 
   const autoLogin = () => {

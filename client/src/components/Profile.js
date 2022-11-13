@@ -3,17 +3,49 @@ import React from "react";
 import { Button, Form } from "semantic-ui-react";
 import { StoreContext } from "../App";
 import Unchange from "./Unchange";
-
+axios.defaults.withCredentials = true;
 function Profile() {
-  const [textAreaCount, setTextAreaCount] = React.useState(0);
   const { loginUser, setLoginUser } = React.useContext(StoreContext);
   const { id, nick, userIntroduction, email, phoneNumber } = loginUser;
-
+  const [textAreaCount, setTextAreaCount] = React.useState(0);
   const [updateUser, setUpdateUser] = React.useState({
     nick: nick,
     userIntroduction: userIntroduction,
   });
+  const [profileImage, setProfileImage] = React.useState("");
   const textareaLength = React.useRef();
+
+  //사진 올리기(db저장,클라이언트폴더에 저장)
+  const submitFile = async () => {
+    const file_element = document.querySelector(".file");
+    const file = file_element.files[0];
+    const form = new FormData();
+
+    form.append("file", file);
+    await axios({
+      url: "http://localhost:5000/file",
+      method: "post",
+      data: {
+        file,
+      },
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }).then(() => {
+      console.log("파일업로드");
+      loadProfileImage();
+    });
+  };
+  //사진 불러오기
+  const loadProfileImage = async () => {
+    await axios({
+      url: "http://localhost:5000/profileImage",
+    }).then(({ data }) => {
+      console.log(data);
+      setProfileImage(`/img/${data}`);
+    });
+  };
+
   const profile = async () => {
     await axios({
       url: "http://localhost:5000/profile",
@@ -40,8 +72,36 @@ function Profile() {
       });
     });
   };
+  React.useEffect(() => {
+    loadProfileImage();
+  }, []);
   return (
-    <Form>
+    <Form
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
+      <div className="profile-image">
+        <img
+          src={process.env.PUBLIC_URL + profileImage}
+          alt="프로필이미지"
+        ></img>
+        <input
+          style={{
+            width: "50%",
+            padding: "0",
+            color: "#fff",
+            backgroundColor: "inherit",
+          }}
+          className="file"
+          type="file"
+          accept="image/*"
+        />
+        <Button onClick={submitFile} type="button">
+          등록하기
+        </Button>
+        <p>나를 표현하는 프로필 이미지를 등록해보세요</p>
+      </div>
       <Form.Field>
         <Unchange
           label={"아이디"}
@@ -113,7 +173,6 @@ function Profile() {
         <p>100자 이내의 짧은 글로 자신을 소개해보세요!</p>
         <p>{textAreaCount}/100</p>
       </Form.Field>
-
       <Form.Field>
         <Button
           onClick={(e) => {
