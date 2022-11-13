@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../App";
 import { Button, Checkbox, Form } from "semantic-ui-react";
 import { Header } from "../components";
-
+axios.defaults.withCredentials = true;
 function Login() {
   axios.defaults.withCredentials = true;
   const { setLoginUser, loginUser } = React.useContext(StoreContext);

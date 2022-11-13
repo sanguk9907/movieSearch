@@ -600,8 +600,9 @@ app.get("/profileImage", async (req, res) => {
     database: "moviesearch",
     query: `select * from image where user_seq = ${loginUser.seq}`,
   });
-  console.log(profileImage[0].filename);
-  res.send(profileImage[0].filename);
+  const filename = profileImage.length === 0 ? "" : profileImage[0].filename;
+  console.log(filename);
+  res.send(filename);
 });
 
 app.listen(5000, function () {
