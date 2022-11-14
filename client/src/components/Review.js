@@ -1,15 +1,16 @@
 import axios from "axios";
 import React from "react";
-import { Button, Form } from "semantic-ui-react";
+import { Button, Form, Icon } from "semantic-ui-react";
 import { StoreContext } from "../App";
 
 function Review(movieId) {
   const { loginUser } = React.useContext(StoreContext);
   const [review, setReview] = React.useState({
-    userID: loginUser.id,
+    user_seq: loginUser.seq,
     nick: loginUser.nick,
     movieID: movieId.movieId,
     content: "",
+    review_seq: "",
   });
   const [reviewList, setReviewList] = React.useState([]);
 
@@ -17,16 +18,11 @@ function Review(movieId) {
     await axios({
       url: "http://localhost:5000/review",
       method: "post",
-      data: {
-        userID: review.userID,
-        nick: review.nick,
-        movieID: review.movieID,
-        content: review.content,
-      },
+      data: review,
     })
       .then(({ data }) => {
-        console.log(data);
         alert(data.message);
+
         getReview();
       })
       .catch((err) => {
@@ -44,6 +40,21 @@ function Review(movieId) {
     });
   };
 
+  const deleteReview = async () => {
+    await axios({
+      url: "http://localhost:5000/review",
+      method: "delete",
+      data: review,
+    }).then(({ data }) => {
+      alert(data);
+      getReview();
+    });
+  };
+
+  React.useEffect(() => {
+    deleteReview();
+  }, [review.review_seq]);
+
   React.useEffect(() => {
     getReview();
   }, []);
@@ -52,11 +63,13 @@ function Review(movieId) {
     <div className="review">
       <b>리뷰</b>
       <Form
-        onSubmit={() => {
+        onSubmit={(e) => {
           writeReview();
+          document.querySelector(".reviewText > textarea").value = "";
         }}
       >
         <Form.TextArea
+          className="reviewText"
           value={review.content}
           onChange={(e) => {
             const cloneReview = { ...review };
@@ -81,9 +94,26 @@ function Review(movieId) {
           reviewList.map((item, index) => {
             return (
               <li key={`review-${index}`} className="review-content">
+                {item.user_seq === loginUser.seq ? (
+                  <Icon
+                    onClick={() => {
+                      const cloneReview = { ...review };
+                      cloneReview.review_seq = item.seq;
+                      setReview(cloneReview);
+                    }}
+                    style={{
+                      position: "inherit",
+                      float: "right",
+                      fontSize: "16px",
+                    }}
+                    name="close"
+                  />
+                ) : (
+                  ""
+                )}
+
                 <p>
-                  {item.nick}
-                  {/* <span>({item.userID})</span> */} : {item.content}
+                  {item.nick} : {item.content}
                 </p>
               </li>
             );

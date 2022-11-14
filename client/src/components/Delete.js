@@ -1,10 +1,12 @@
 import axios from "axios";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Icon, Input } from "semantic-ui-react";
 import { StoreContext } from "../App";
 import Unchange from "./Unchange";
 
 function Delete() {
+  const Navigation = useNavigate();
   const { loginUser, setLoginUser } = React.useContext(StoreContext);
   const { seq, id } = loginUser;
   const [userCheckInfo, setUserCheckInfo] = React.useState({
@@ -21,15 +23,17 @@ function Delete() {
       data: userCheckInfo,
     }).then(({ data }) => {
       alert(data.message);
-      localStorage.removeItem("loginUser", "likeList");
-      sessionStorage.removeItem("loginUser", "likeList");
+      localStorage.removeItem("loginUser");
+      sessionStorage.removeItem("loginUser");
       const cloneUser = { ...loginUser };
-      (cloneUser.seq = "")((cloneUser.id = ""))((cloneUser.nick = ""))(
-        (cloneUser.liked = [])
-      )((cloneUser.email = ""))((cloneUser.phoneNumber = ""))(
-        (cloneUser.userIntroduction = "")
-      );
+      cloneUser.seq = "";
+      cloneUser.id = "";
+      cloneUser.nick = "";
+      cloneUser.email = "";
+      cloneUser.phoneNumber = "";
+      cloneUser.userIntroduction = "";
       setLoginUser(cloneUser);
+      Navigation("/");
     });
   };
 

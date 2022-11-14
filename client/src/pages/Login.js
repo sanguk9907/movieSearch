@@ -42,10 +42,7 @@ function Login() {
         } else {
           sessionStorage.setItem("loginUser", JSON.stringify(data.user));
         }
-        sessionStorage.setItem("likeList", JSON.stringify(data.liked));
-
         alert(data.message);
-        console.log(data.user);
         navigation("/");
       })
       .catch((err) => {

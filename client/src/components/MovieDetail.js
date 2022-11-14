@@ -14,7 +14,6 @@ function MovieDetail({
   setProviderData,
 }) {
   const [clickedLike, setClickedLike] = React.useState(true);
-  const [likeMovie, setLikeMovie] = React.useState();
   const { loginUser } = React.useContext(StoreContext);
   const navigation = useNavigate();
 
@@ -93,7 +92,6 @@ function MovieDetail({
         movieID: movieId,
       },
     }).then(({ data }) => {
-      console.log(data);
       alert(data.message);
     });
   };

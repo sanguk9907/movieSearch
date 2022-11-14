@@ -408,13 +408,17 @@ app.post("/login", async (req, res) => {
 app.get("/like", async (req, res) => {
   const { loginUser } = req.session;
   const { movieID } = req.query;
+  if (!loginUser) {
+    res.send("");
+    return;
+  } else {
+    const likeData = await runDB({
+      database: "moviesearch",
+      query: `SELECT * FROM likes WHERE user_seq=${loginUser.seq} && movieID=${movieID}`,
+    });
 
-  const likeData = await runDB({
-    database: "moviesearch",
-    query: `SELECT * FROM likes WHERE user_seq=${loginUser.seq} && movieID=${movieID}`,
-  });
-
-  res.send(likeData[0]);
+    res.send(likeData[0]);
+  }
 });
 app.put("/like", async (req, res) => {
   const { loginUser } = req.session;
@@ -455,22 +459,21 @@ app.put("/like", async (req, res) => {
 
 app.get("/review", async (req, res) => {
   const { movieId } = req.query;
-  if (movieId === undefined) {
-    res.send();
-    return;
-  } else {
-    const callReview = await runDB({
-      database: "moviesearch",
-      query: `SELECT * FROM review WHERE movieID =${movieId}`,
-    });
-    res.send(callReview);
-  }
+  const callReview = await runDB({
+    database: "moviesearch",
+    query: `SELECT * FROM review WHERE movieID =${movieId}`,
+  });
+  res.send(callReview);
 });
 
 app.post("/review", async (req, res) => {
-  const data = req.body;
-
-  const { userID, content } = data;
+  const { user_seq, content, nick, movieID } = req.body;
+  const insertData = {
+    user_seq: user_seq,
+    content: content,
+    nick: nick,
+    movieID: movieID,
+  };
   const resulte = {
     code: "success",
     message: "리뷰가 성공적으로 남겨졌습니다.",
@@ -478,7 +481,7 @@ app.post("/review", async (req, res) => {
   const examArray = [1];
 
   for (let key in examArray) {
-    if (userID === "") {
+    if (!user_seq) {
       (resulte.code = "fail"), (resulte.message = "로그인 후 이용해주세요");
       break;
     }
@@ -489,7 +492,7 @@ app.post("/review", async (req, res) => {
     }
     const reviewInsert = createInsert({
       table: "review",
-      data: data,
+      data: insertData,
     });
 
     await runDB({
@@ -498,6 +501,19 @@ app.post("/review", async (req, res) => {
     });
   }
   res.send(resulte);
+});
+
+app.delete("/review", async (req, res) => {
+  const { user_seq, review_seq, movieID } = req.body;
+  if (!review_seq) {
+    return;
+  } else {
+    await runDB({
+      database: "moviesearch",
+      query: `delete from review where movieID = ${movieID} && user_seq =${user_seq} && seq = ${review_seq}`,
+    });
+    res.send("리뷰를 삭제했습니다.");
+  }
 });
 
 app.get("/profile", async (req, res) => {
@@ -542,7 +558,6 @@ app.delete("/delete", async (req, res) => {
   const passKey = crypto
     .pbkdf2Sync(password, dbSalt, 100514, 64, "sha512")
     .toString("base64");
-
   if (dbPassword === passKey) {
     runDB({
       data: "moviesearch",
@@ -601,7 +616,6 @@ app.get("/profileImage", async (req, res) => {
     query: `select * from image where user_seq = ${loginUser.seq}`,
   });
   const filename = profileImage.length === 0 ? "" : profileImage[0].filename;
-  console.log(filename);
   res.send(filename);
 });
 

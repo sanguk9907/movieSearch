@@ -22,7 +22,7 @@ function Header() {
             navigation("/");
           }}
         >
-          로고
+          <img src={process.env.PUBLIC_URL + "/logo.png"}></img>
         </div>
 
         <ul>
