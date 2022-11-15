@@ -1,7 +1,7 @@
 import React from "react";
 import MovieCard from "./MovieCard";
 import { requests } from "../apis";
-import { fetchData } from "../helper/fetchData";
+import { fetchData } from "../apis/fetchData";
 import axios from "axios";
 import { StoreContext } from "../App";
 

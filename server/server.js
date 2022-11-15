@@ -1,3 +1,12 @@
+/*
+    (궁금한것)
+    쿠키에 저장된 세션을 클라이언트에서도 사용가능한지
+    가능하다면 로컬,세션스토리지는 사용하지 않는게 좋은지
+    왜 req.session.destroy()만으로는 안지워지는지
+    왜 DB와 약 3번정도 접촉하면 DB연결이 끊어지는지(진짜모름)
+    (EX)리뷰달기,좋아요누르기,파일업로드 등등
+    */
+
 const express = require("express");
 const cors = require("cors");
 const request = require("request");
@@ -233,7 +242,7 @@ app.get("/join", (req, res) => {
   res.send("get");
 });
 app.post("/join", async (req, res) => {
-  const { id, pw, nick, email, phoneNumber } = req.body;
+  const { id, pw, confirmPw, nick, email, phoneNumber } = req.body;
   const resulte = {
     code: "success",
     message: "회원가입이 성공적으로 완료되었습니다.",
@@ -249,10 +258,12 @@ app.post("/join", async (req, res) => {
   const PWReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
   const EmailReg =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  const PhoneReg = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 
   const IDCheck = IDReg.test(id);
   const PWCheck = PWReg.test(pw);
   const EmailCheck = EmailReg.test(email);
+  const PhoneCheck = PhoneReg.test(phoneNumber);
 
   for (let key in examArray) {
     if (id === "") {
@@ -279,6 +290,13 @@ app.post("/join", async (req, res) => {
       break;
     }
 
+    if (pw !== confirmPw) {
+      (resulte.code = "fail"),
+        (resulte.message =
+          "비밀번호가 일치하지 않습니다 다시 한 번 확인해주세요");
+      break;
+    }
+
     if (nick === "") {
       (resulte.code = "fail"), (resulte.message = "닉네임을 입력해주세요");
       break;
@@ -292,6 +310,13 @@ app.post("/join", async (req, res) => {
       (resulte.code = "fail"),
         (resulte.message =
           "이메일 형식이 올바르지 않습니다. 다시 한 번 확인해주세요");
+      break;
+    }
+
+    if (!PhoneCheck) {
+      (resulte.code = "fail"),
+        (resulte.message =
+          "휴대폰 번호 형식이 올바르지 않습니다. 다시 한 번 확인해주세요");
       break;
     }
 
@@ -322,19 +347,24 @@ app.post("/join", async (req, res) => {
       database: "moviesearch",
       query: insertQuery,
     });
+
+    const createdUser = await runDB({
+      database: "moviesearch",
+      query: `SELECT * FROM users where userID = "${id}"`,
+    });
+
+    const user = {};
+    user.seq = createdUser[0].seq;
+    user.id = createdUser[0].userID;
+    user.nick = createdUser[0].nick;
+    user.email = createdUser[0].email;
+    user.phoneNumber = createdUser[0].phoneNumber;
+    user.userIntroduction = createdUser[0].userIntroduction;
+    resulte.user = user;
+
+    req.session.loginUser = user;
+    req.session.save();
   }
-  const findUser = await runDB({
-    database: "moviesearch",
-    query: `SELECT * FROM users where userID = "${id}"`,
-  });
-  const user = {};
-  (user.seq = findUser[0].seq),
-    (user.id = findUser[0].userID),
-    (user.nick = findUser[0].nick),
-    (user.email = findUser[0].email),
-    (user.phoneNumber = findUser[0].phoneNumber),
-    (user.userIntroduction = findUser[0].userIntroduction);
-  resulte.user = user;
 
   res.send(resulte);
 });
@@ -403,6 +433,13 @@ app.post("/login", async (req, res) => {
   }
 
   res.send(resulte);
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie("connect.sid");
+    res.redirect("/");
+  });
 });
 
 app.get("/like", async (req, res) => {
@@ -606,6 +643,7 @@ app.post("/file", upload.array("file"), async (req, res) => {
     database: "moviesearch",
     query: `select * from image where user_seq = ${loginUser.seq}`,
   });
+  console.log(profileImage[0].filename);
   res.send(profileImage[0].filename);
 });
 

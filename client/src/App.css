@@ -908,6 +908,13 @@ b {
   align-items: center;
 }
 
+.login-wrap .ui.checkbox label,
+.login-wrap .ui.checkbox label,
+.login-wrap .ui.checkbox input:focus ~ label,
+.login-wrap .ui.checkbox label:hover {
+  width: 100%;
+}
+
 .join-form,
 .login-form {
   padding: 50px;

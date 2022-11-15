@@ -92,7 +92,7 @@ function Login() {
           />
         </Form.Field>
         <Checkbox
-          label="자동로그인"
+          label="로그인상태 유지하기"
           onChange={() => {
             loginInfo.autologin = !loginInfo.autologin;
           }}

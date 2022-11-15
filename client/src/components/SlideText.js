@@ -1,5 +1,5 @@
 import React from "react";
-import { detailData, movieProvider } from "../helper/fetchData";
+import { detailData, movieProvider } from "../apis/fetchData";
 
 function SlideText({ movieId, index, setShowDetail, setProviderData }) {
   const [movieDetail, setMovieDetail] = React.useState({});

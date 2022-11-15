@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css";
 // 스와이퍼
 import MovieDetail from "./MovieDetail"; //영화 상세정보 모달
-import { detailData, movieProvider } from "../helper/fetchData";
+import { detailData, movieProvider } from "../apis/fetchData";
 
 SwiperCore.use([Navigation, Pagination]);
 

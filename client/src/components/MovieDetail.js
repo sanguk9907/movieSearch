@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
-import { detailData, movieProvider } from "../helper/fetchData";
-import notFoundImg from "../img/not-found.jpg";
+import { detailData, movieProvider } from "../apis/fetchData";
+import notFoundImg from "../not-found.jpg";
 import { StoreContext } from "../App";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";

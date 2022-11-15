@@ -1,8 +1,8 @@
 import React from "react";
-import { movieProvider } from "../helper/fetchData";
+import { movieProvider } from "../apis/fetchData";
 import MovieDetail from "./MovieDetail";
-import { detailData } from "../helper/fetchData";
-import notFoundImg from "../img/not-found.jpg";
+import { detailData } from "../apis/fetchData";
+import notFoundImg from "../not-found.jpg";
 
 function SearchMovieCard({ movie }) {
   const [movieDetail, setMovieDetail] = React.useState();

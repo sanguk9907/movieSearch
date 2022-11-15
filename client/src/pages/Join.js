@@ -25,12 +25,16 @@ function Join() {
       data: joinInfo,
     }).then(({ data }) => {
       alert(data.message);
+      if (!data.user) {
+        return;
+      }
       setLoginUser(data.user);
       sessionStorage.setItem("loginUser", JSON.stringify(data.user));
       if (data.code === "success") {
         setJoinInfo({
           id: "",
           pw: "",
+          confirmPw: "",
           nick: "",
           email: "",
           phoneNumber: "",
@@ -47,10 +51,6 @@ function Join() {
         onSubmit={(e) => {
           e.preventDefault();
 
-          if (joinInfo.pw !== joinInfo.confirmPw) {
-            alert("비밀번호가 일치하지 않습니다 다시 한 번 확인해주세요");
-            return;
-          }
           setJoinInfo(joinInfo);
           signUp();
         }}
@@ -76,6 +76,10 @@ function Join() {
             type="text"
             placeholder="사용하실 닉네임을 입력해주세요"
             onChange={(e) => {
+              if (e.target.value.length > 10) {
+                alert("10글자 이내로 작성해주세요");
+                return;
+              }
               const cloneJoin = { ...joinInfo };
               cloneJoin.nick = e.target.value;
               setJoinInfo(cloneJoin);

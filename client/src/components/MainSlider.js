@@ -5,7 +5,7 @@ import { Autoplay, Pagination } from "swiper";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css";
-import { fetchData } from "../helper/fetchData";
+import { fetchData } from "../apis/fetchData";
 import { requests } from "../apis";
 import SlideText from "./SlideText";
 import MovieDetail from "./MovieDetail";

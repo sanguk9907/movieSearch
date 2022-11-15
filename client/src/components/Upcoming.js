@@ -1,7 +1,7 @@
 import React from "react";
 import { requests } from "../apis";
 import { StoreContext } from "../App";
-import { fetchData } from "../helper/fetchData";
+import { fetchData } from "../apis/fetchData";
 import MovieCard from "./MovieCard";
 
 function Upcoming() {

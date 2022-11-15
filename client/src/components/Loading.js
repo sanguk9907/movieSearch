@@ -1,6 +1,6 @@
 import React from "react";
 import Lottie from "lottie-react";
-import animationData from "../helper/124534-tricube-spinner-1.json";
+import animationData from "../124534-tricube-spinner-1.json";
 
 function Loading() {
   return (
