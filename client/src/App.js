@@ -3,6 +3,7 @@ import "./App.css";
 import AppIndex from "./AppIndex";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useMediaQuery } from "react-responsive";
 
 export const StoreContext = React.createContext();
 
@@ -53,6 +54,8 @@ function App() {
     }
   };
 
+  const showMobileHeader = useMediaQuery({ maxWidth: 768 });
+
   React.useEffect(() => {
     autoLogin();
   }, [pathname]);
@@ -72,6 +75,7 @@ function App() {
         loading: loading,
         setLoading: setLoading,
         loadStyle: loadStyle,
+        showMobileHeader: showMobileHeader,
       }}
     >
       <AppIndex />

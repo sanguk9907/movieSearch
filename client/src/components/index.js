@@ -19,6 +19,8 @@ import Review from "./Review";
 import Unchange from "./Unchange";
 import Profile from "./Profile";
 import Delete from "./Delete";
+import MobileHeader from "./MobileHeader";
+import MobileMenu from "./MobileMenu";
 
 export {
   MovieCard,
@@ -42,4 +44,6 @@ export {
   Unchange,
   Profile,
   Delete,
+  MobileHeader,
+  MobileMenu,
 };

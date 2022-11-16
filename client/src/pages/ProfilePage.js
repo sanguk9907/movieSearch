@@ -1,8 +1,10 @@
 import React from "react";
+import { StoreContext } from "../App";
 
-import { Delete, Header, Profile } from "../components";
+import { Delete, Header, MobileHeader, Profile } from "../components";
 
 function ProfilePage() {
+  const { showMobileHeader } = React.useContext(StoreContext);
   const [tab, setTab] = React.useState("li1");
   const active = (liNumber) => {
     return tab === liNumber ? "active" : "";
@@ -10,7 +12,8 @@ function ProfilePage() {
 
   return (
     <>
-      <Header />
+      {showMobileHeader ? <MobileHeader /> : <Header />}
+
       <div className="profile-wrap">
         <aside>
           <ul>
@@ -34,6 +37,7 @@ function ProfilePage() {
             <li></li>
           </ul>
         </aside>
+
         {tab === "li1" ? <Profile /> : <Delete />}
       </div>
     </>

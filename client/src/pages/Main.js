@@ -9,15 +9,17 @@ import {
   Header,
   MainSlider,
   Loading,
+  MobileHeader,
 } from "../components/";
 
 function Main() {
-  const { loading, loadStyle } = React.useContext(StoreContext);
+  const { loading, loadStyle, showMobileHeader } =
+    React.useContext(StoreContext);
 
   return (
     <div style={loadStyle} className="main-wrap">
       {loading && <Loading />}
-      <Header />
+      {showMobileHeader ? <MobileHeader /> : <Header />}
       <MainSlider />
       <h2>카테고리별 BEST 20</h2>
       <Popular />

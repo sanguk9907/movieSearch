@@ -3,11 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../App";
 import { Button, Checkbox, Form } from "semantic-ui-react";
-import { Header } from "../components";
+import { Header, MobileHeader } from "../components";
 axios.defaults.withCredentials = true;
 function Login() {
   axios.defaults.withCredentials = true;
-  const { setLoginUser, loginUser } = React.useContext(StoreContext);
+  const { setLoginUser, loginUser, showMobileHeader } =
+    React.useContext(StoreContext);
   const navigation = useNavigate();
   const [loginInfo, setLoginInfo] = React.useState({
     id: "",
@@ -52,7 +53,7 @@ function Login() {
 
   return (
     <div className="login-wrap">
-      <Header />
+      {showMobileHeader ? <MobileHeader /> : <Header />}
       <Form
         onSubmit={(e) => {
           e.preventDefault();

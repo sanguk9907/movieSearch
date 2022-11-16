@@ -2,7 +2,14 @@ import axios from "axios";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { StoreContext } from "./App";
-import { Join, Login, Main, ProfilePage, SearchPage } from "./pages";
+import {
+  Join,
+  Login,
+  Main,
+  ProfilePage,
+  SearchPage,
+  DeletePage,
+} from "./pages";
 function Test() {
   const { loginUser } = React.useContext(StoreContext);
   const [file, setFile] = React.useState([]);
@@ -51,6 +58,7 @@ function AppIndex() {
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/profile" element={<ProfilePage />} />
       <Route exact path="/test" element={<Test />} />
+      <Route exact path="/userdelete" element={<DeletePage />}></Route>
     </Routes>
   );
 }

@@ -3,11 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../App";
 import { Button, Form } from "semantic-ui-react";
-import { Header } from "../components";
+import { Header, MobileHeader } from "../components";
 
 function Join() {
   axios.defaults.withCredentials = true;
-  const { loginUser, setLoginUser } = React.useContext(StoreContext);
+  const { setLoginUser, showMobileHeader } = React.useContext(StoreContext);
   const navigation = useNavigate();
   const [joinInfo, setJoinInfo] = React.useState({
     id: "",
@@ -46,7 +46,7 @@ function Join() {
 
   return (
     <div className="join-wrap">
-      <Header />
+      {showMobileHeader ? <MobileHeader /> : <Header />}
       <Form
         onSubmit={(e) => {
           e.preventDefault();
