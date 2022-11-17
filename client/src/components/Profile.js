@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Form } from "semantic-ui-react";
 import { StoreContext } from "../App";
 import Unchange from "./Unchange";
@@ -15,6 +16,7 @@ function Profile() {
   const [profileImage, setProfileImage] = React.useState("");
   const [bigImage, setBigImage] = React.useState(false);
   const textareaLength = React.useRef();
+  const navigation = useNavigate();
 
   //사진 올리기(db저장,클라이언트폴더에 저장)
   const submitFile = async () => {
@@ -122,7 +124,15 @@ function Profile() {
         <Form.Field>
           <Unchange
             label={"비밀번호"}
-            content={<Button>비밀번호 변경</Button>}
+            content={
+              <Button
+                onClick={() => {
+                  navigation("/newpaddword");
+                }}
+              >
+                비밀번호 변경
+              </Button>
+            }
             description={"비밀번호는 열람이 불가능하며 변경만 가능합니다."}
           />
         </Form.Field>

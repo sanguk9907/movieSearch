@@ -53,6 +53,7 @@ const key = "3cf148810eae178af2afb1a072cfe76d";
 //////////////////// MYSQL연결
 const mysql = require("mysql2");
 const { json, query } = require("express");
+const { send } = require("process");
 const DB = mysql.createPoolCluster();
 
 DB.add("moviesearch", {
@@ -63,7 +64,6 @@ DB.add("moviesearch", {
   port: 3306,
 });
 //////////////////// MYSQL연결
-
 // salt,HashedPassword 만들기
 async function cerateUserInfo(parmas) {
   const { id, password, nick, email, phoneNumber } = parmas;
@@ -261,6 +261,7 @@ app.post("/join", async (req, res) => {
   const PhoneReg = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 
   const IDCheck = IDReg.test(id);
+
   const PWCheck = PWReg.test(pw);
   const EmailCheck = EmailReg.test(email);
   const PhoneCheck = PhoneReg.test(phoneNumber);
@@ -655,6 +656,85 @@ app.get("/profileImage", async (req, res) => {
   });
   const filename = profileImage.length === 0 ? "" : profileImage[0].filename;
   res.send(filename);
+});
+
+app.post("/changepassword", async (req, res) => {
+  const { loginUser } = req.session;
+  const { password, newPassword, newPasswordConfirm } = req.body;
+  const resulte = {
+    code: "success",
+    message: "비밀번호가 성공적으로 수정되었습니다.",
+  };
+  const aa = [1];
+
+  const PWReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+  const PWCheck = PWReg.test(password);
+  const newPWCheck = PWReg.test(newPassword);
+
+  const dataSelect = await runDB({
+    database: "moviesearch",
+    query: `SELECT * FROM users where seq = ${loginUser.seq}`,
+  });
+
+  const passKey = crypto
+    .pbkdf2Sync(password, dataSelect[0].salt, 100514, 64, "sha512")
+    .toString("base64");
+
+  for (let key in aa) {
+    console.log("바꾸기전" + dataSelect[0].password);
+    if (password === newPassword) {
+      (resulte.code = "fail"),
+        (resulte.message =
+          "새로운 비밀번호는 현재 비밀번호와 다르게 만들어주세요");
+      break;
+    }
+
+    if (!PWCheck || !newPWCheck) {
+      (resulte.code = "fail"),
+        (resulte.message =
+          "비밀번호는 영어와 숫자를 포함한 8글자 이상이어야 합니다");
+      break;
+    }
+
+    if (passKey !== dataSelect[0].password) {
+      (resulte.code = "fail"),
+        (resulte.message = "현재 비밀번호가 틀립니다 다시 한 번 확인해주세요");
+      break;
+    }
+
+    if (newPassword !== newPasswordConfirm) {
+      (resulte.code = "fail"),
+        (resulte.message = "새 비밀번호가 틀립니다 다시 한 번 확인해주세요");
+      break;
+    }
+
+    const createnewpassword = await new Promise((resolve) => {
+      crypto.randomBytes(64, (err, buf) => {
+        if (err) {
+          resulte.err = err;
+        }
+        const salt = buf.toString("base64");
+        crypto.pbkdf2(newPassword, salt, 100514, 64, "sha512", (err, key) => {
+          resolve({
+            password: key.toString("base64"),
+            salt: salt,
+          });
+        });
+      });
+    });
+    const newpassword = createUpdate({
+      table: "users",
+      data: createnewpassword,
+      where: `seq = ${loginUser.seq}`,
+    });
+    await runDB({
+      database: "moviesearch",
+      query: newpassword,
+    });
+    console.log("바꾼" + dataSelect[0].password);
+  }
+
+  res.send(resulte);
 });
 
 app.listen(5000, function () {

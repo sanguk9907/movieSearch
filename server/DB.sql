@@ -32,13 +32,15 @@ CREATE TABLE `image` (
   `path` varchar(100) DEFAULT NULL,
   `size` varchar(100) DEFAULT NULL,
   KEY `seq` (`seq`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
 
 /*Data for the table `image` */
 
 insert  into `image`(`seq`,`user_seq`,`fieldname`,`originalname`,`encoding`,`mimetype`,`destination`,`filename`,`path`,`size`) values 
 (50,27,'file','KakaoTalk_20210624_103042408.jpg','7bit','image/jpeg','../client/public/img','file_1668426853801.jpg','..clientpublicimgfile_1668426853801.jpg','2184914'),
-(51,30,'file','KakaoTalk_20210624_103042408.jpg','7bit','image/jpeg','../client/public/img','file_1668428137734.jpg','..clientpublicimgfile_1668428137734.jpg','2184914');
+(51,30,'file','KakaoTalk_20210624_103042408.jpg','7bit','image/jpeg','../client/public/img','file_1668428137734.jpg','..clientpublicimgfile_1668428137734.jpg','2184914'),
+(52,32,'file','2U4A87411.jpg','7bit','image/jpeg','../client/public/img','file_1668521707296.jpg','..clientpublicimgfile_1668521707296.jpg','7972058'),
+(53,34,'file','2U4A85681.jpg','7bit','image/jpeg','../client/public/img','file_1668601257676.jpg','..clientpublicimgfile_1668601257676.jpg','7948492');
 
 /*Table structure for table `likes` */
 
@@ -88,13 +90,17 @@ CREATE TABLE `review` (
   `user_seq` int(12) NOT NULL COMMENT '리뷰 단 유저 아이디',
   `nick` varchar(100) NOT NULL COMMENT '유저 닉네임',
   PRIMARY KEY (`seq`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
 
 /*Data for the table `review` */
 
 insert  into `review`(`seq`,`movieID`,`content`,`user_seq`,`nick`) values 
 (75,436270,'리뷰 작성 / 삭제 구현 완료 수정은 pass..',28,'11'),
-(80,436270,'ㅇㅇ',28,'11');
+(80,436270,'ㅇㅇ',28,'11'),
+(81,505642,'d',32,'이상욱'),
+(82,505642,'d',32,'이상욱'),
+(83,505642,'d',32,'이상욱'),
+(84,505642,'d',32,'이상욱');
 
 /*Table structure for table `users` */
 
@@ -110,14 +116,16 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL COMMENT '유저 이메일',
   `phoneNumber` int(11) NOT NULL COMMENT '유저 전화번호',
   PRIMARY KEY (`seq`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 /*Data for the table `users` */
 
 insert  into `users`(`seq`,`userID`,`password`,`salt`,`nick`,`userIntroduction`,`email`,`phoneNumber`) values 
 (28,'tkddnr11','vhP4xsmAEx+unsj4LxrYf7rRybj6L4WECajDN4gF1DR5cX+57l2lAnJjk0SZWT2PYOyhMcjobVznM/kYDActTw==','qkby+VwnqIkmxCY4jYoTN15mkOeDxLy5Pnlix0WwxynEQWRmXZMB7v6PjxaKYD77x2AV5dZyG4z/jmcOnNXcag==','11','','aa@aa.aa',11),
 (29,'tkddnr11','4SbN0xW++ukqVR3XAE7AAwji50zcjhVv7Q+VU66K3XrCqy5k4mmxoyuFHlDAdgcQzvdevfnWUzkhhv07FKIM7A==','JsFpeMTla5ktQQoNCdPCdp0bGDzMW82KMXxWLDmFB3I7G7GMk+RsTQzBBia6cz86YJsiG8N16BoX57RSCJKQlA==','11','','aa@aa.aa',11),
-(31,'tkddnr22','av5P1Pg4ylsII52JNG8MjaLE+LA56PWsK1c9OFrKYiIG20vmQzxtMRDYOMd5FO6sMejy9ypti/SlJGc+3Dgnfg==','7H/MrBfvkLwgnVu+Qi3oLWJOmv0hzO66JLa+tJujqjR3plJg/vB9Jky/qXs3L5viyozi6heTZME5rBSeDyQIUQ==','asas','나를 소개해주세요!','as@as.as',11);
+(31,'tkddnr22','av5P1Pg4ylsII52JNG8MjaLE+LA56PWsK1c9OFrKYiIG20vmQzxtMRDYOMd5FO6sMejy9ypti/SlJGc+3Dgnfg==','7H/MrBfvkLwgnVu+Qi3oLWJOmv0hzO66JLa+tJujqjR3plJg/vB9Jky/qXs3L5viyozi6heTZME5rBSeDyQIUQ==','asas','나를 소개해주세요!','as@as.as',11),
+(33,'tkdtkd123','tiet7wpJo9xIKHjZzj/XIietBG1+y3Hod1P8BHtCcLGxsbFMueAjfDfrowcphS7MicwX3npFS190PHzCBdEPSg==','oZ0CnBIX41dpxNUL+QHc8r8OAIKygoR1iy8KuTOLJBOBKy7jyocUeyxSesopXgHxBQtWmSlIhmA+gmQw3xBDQQ==','이상욱','나를 소개해주세요!','dd@dd.cc',101111111),
+(34,'tkdtkd11','D+iCzWjVLK4uvJSo2NpUfvOSCpjAPTwqCOPTQEWClmfzyFMmXwdCgLsRCNlJ6klyya29WffgFzeea14fgj9Niw==','257I2jyppT8QVVA5R0dfQiGy1j50mYp7fHa3dLIN9nH5Mj1ZuBD4XCjjPdzYVgInz9UAYULFQ8bB0GhXCTxA0Q==','qq','나를 소개해주세요!','dd@dd.cc',1011111111);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
