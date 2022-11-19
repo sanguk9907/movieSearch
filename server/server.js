@@ -102,9 +102,9 @@ async function runDB(params) {
 
         resolve(data);
       });
-
-      connection.release();
     });
+
+    connection.release();
   });
 
   return data;
