@@ -57,9 +57,9 @@ const { send } = require("process");
 const DB = mysql.createPoolCluster();
 
 DB.add("moviesearch", {
-  host: "127.0.0.1",
+  host: "52.196.233.251",
   user: "root",
-  password: "",
+  password: "Asas4545@@",
   database: "moviesearch",
   port: 3306,
 });
