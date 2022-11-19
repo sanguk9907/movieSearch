@@ -50,11 +50,10 @@ app.use(
 const key = "3cf148810eae178af2afb1a072cfe76d";
 //////////////////// MYSQL연결
 const mysql = require("mysql2");
-const { json, query } = require("express");
-const { send } = require("process");
 const DB = mysql.createPoolCluster();
 
 DB.add("moviesearch", {
+  connectionLimit: 10,
   host: "52.196.233.251",
   user: "root",
   password: "Asas4545@@",
@@ -62,6 +61,7 @@ DB.add("moviesearch", {
   port: 3306,
 });
 //////////////////// MYSQL연결
+
 // salt,HashedPassword 만들기
 async function cerateUserInfo(parmas) {
   const { id, password, nick, email, phoneNumber } = parmas;
