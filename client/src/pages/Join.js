@@ -20,7 +20,7 @@ function Join() {
 
   const signUp = async () => {
     await axios({
-      url: "http://localhost:5000/join",
+      url: "http://http://52.196.233.251:5000/join",
       method: "post",
       data: joinInfo,
     }).then(({ data }) => {

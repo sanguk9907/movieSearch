@@ -18,7 +18,7 @@ function Delete() {
 
   const userDelete = async () => {
     await axios({
-      url: "http://localhost:5000/delete",
+      url: "http://52.196.233.251:5000/delete",
       method: "delete",
       data: userCheckInfo,
     }).then(({ data }) => {

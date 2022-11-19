@@ -36,7 +36,7 @@ function MobileMenu({ setShowMenu }) {
 
   const logOut = async () => {
     await axios({
-      url: "http://localhost:5000/logout",
+      url: "http://52.196.233.251:5000/logout",
       method: "get",
     });
   };
