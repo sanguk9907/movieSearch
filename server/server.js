@@ -53,7 +53,6 @@ const mysql = require("mysql2");
 const DB = mysql.createPoolCluster();
 
 DB.add("moviesearch", {
-  connectionLimit: 10,
   host: "52.196.233.251",
   user: "root",
   password: "Asas4545@@",
@@ -103,6 +102,8 @@ async function runDB(params) {
 
         resolve(data);
       });
+
+      connection.release();
     });
   });
 
