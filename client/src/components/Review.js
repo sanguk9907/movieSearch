@@ -16,7 +16,7 @@ function Review(movieId) {
 
   const writeReview = async () => {
     await axios({
-      url: "http://http://52.196.233.251:5000/review",
+      url: "http://52.196.233.251:5000/review",
       method: "post",
       data: review,
     })
@@ -32,7 +32,7 @@ function Review(movieId) {
 
   const getReview = async () => {
     await axios({
-      url: "http://http://52.196.233.251:5000/review",
+      url: "http://52.196.233.251:5000/review",
       method: "get",
       params: movieId,
     }).then(({ data }) => {
@@ -42,7 +42,7 @@ function Review(movieId) {
 
   const deleteReview = async () => {
     await axios({
-      url: "http://http://52.196.233.251:5000/review",
+      url: "http://52.196.233.251:5000/review",
       method: "delete",
       data: review,
     }).then(({ data }) => {

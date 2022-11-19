@@ -85,7 +85,7 @@ function MovieDetail({
   // 좋아요 버튼 클릭 함수 (좋아요 한 영화 아이디 DB저장,취소한 아이디 DB삭제)
   const liked = async () => {
     await axios({
-      url: "http:/http://52.196.233.251:5000/like",
+      url: "http://52.196.233.251:5000/like",
       method: "put",
       data: {
         clickedLike: clickedLike,
@@ -98,7 +98,7 @@ function MovieDetail({
   // 좋아요 상태
   const likeInit = async () => {
     await axios({
-      url: "http://http://52.196.233.251:5000/like",
+      url: "http://52.196.233.251:5000/like",
       method: "get",
       params: {
         movieID: movieId,

@@ -17,7 +17,7 @@ function ChangePassword() {
 
   const passwordChange = async () => {
     await axios({
-      url: "http://http://52.196.233.251:5000/changepassword",
+      url: "http://52.196.233.251:5000/changepassword",
       method: "post",
       data: newPassword,
     }).then(({ data }) => {

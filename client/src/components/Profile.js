@@ -26,7 +26,7 @@ function Profile() {
 
     form.append("file", file);
     await axios({
-      url: "http://http://52.196.233.251:5000/file",
+      url: "http://52.196.233.251:5000/file",
       method: "post",
       data: {
         file,
@@ -42,7 +42,7 @@ function Profile() {
   //사진 불러오기
   const loadProfileImage = async () => {
     await axios({
-      url: "http://http://52.196.233.251:5000/profileImage",
+      url: "http://52.196.233.251:5000/profileImage",
     }).then(({ data }) => {
       console.log(data);
 
@@ -52,7 +52,7 @@ function Profile() {
 
   const profile = async () => {
     await axios({
-      url: "http://http://52.196.233.251:5000/profile",
+      url: "http://52.196.233.251:5000/profile",
       method: "get",
       params: {
         id: loginUser.id,

@@ -22,7 +22,7 @@ function Login() {
 
   const login = async () => {
     await axios({
-      url: "http://http://52.196.233.251:5000/login",
+      url: "http://52.196.233.251:5000/login",
       method: "post",
       data: {
         id: loginInfo.id,
