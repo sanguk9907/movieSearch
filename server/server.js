@@ -15,8 +15,6 @@ const app = express();
 
 const fs = require("fs");
 const multer = require("multer");
-const path = require("path");
-const mime = require("mime");
 const session = require("express-session");
 
 const dir = "../client/public/img";
