@@ -122,12 +122,16 @@ function MovieDetail() {
         backgroundImage: backgroundImg,
       }}
     >
-      {/*바깥부분 누르면 나가지기*/}
       <div className="overlay"></div>
 
       <div className="detail-card" id="detail-card">
         {/*닫기버튼*/}
-        <Icon name="close" />
+        <Icon
+          name="close"
+          onClick={() => {
+            setMovieDetail(null);
+          }}
+        />
 
         <div className="movie-info">
           <div className="img-box">
@@ -224,8 +228,9 @@ function MovieDetail() {
                 <div
                   className="similar-card"
                   key={`similar-${index}`}
-                  onClick={() => {
-                    detailData(item.id, setMovieDetail);
+                  onClick={async () => {
+                    const items = await detailData([item.id]);
+                    setMovieDetail(items[0]);
                     movieProvider(item.id, setProviderData);
                     document.getElementById("detail-card").scroll({
                       top: 0,

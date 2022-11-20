@@ -152,30 +152,14 @@ function doRequest({ url, option }) {
       function (error, response, body) {
         const movies = JSON.parse(body);
         const { results } = movies;
-        resolve(results);
-        // const sendData = [];
-        // results.forEach((item) => {
-        //   sendData.push({
-        //     movieID: item.id,
-        //     posterImage: item.poster_path,
-        //     title: item.title,
-        //     background: item.backdrop_path,
-        //   });
-        // });
+
+        resolve(movies);
       }
     );
   });
 }
 
-/**
- Popular: "movie/popular", // 인기있는 (O)
- NowPlaying: "movie/now_playing", // 현재 상영중
- Trending: "trending/movie/week", // 이번주 인기 급상승
- TopRated: "movie/top_rated", // 최고의 평가
- Upcoming: "movie/upcoming", // 상영 예정
- */
-
-const 메인에서가져와야할API = [
+const main_api = [
   {
     category: "Popular",
     api: "movie/popular",
@@ -206,8 +190,8 @@ const 메인에서가져와야할API = [
 app.get("/main/movie", async function (req, res) {
   const result = {};
 
-  for (let _key in 메인에서가져와야할API) {
-    const { category, api } = 메인에서가져와야할API[_key];
+  for (let _key in main_api) {
+    const { category, api } = main_api[_key];
 
     // 배열로옴
     const item = await doRequest({
@@ -217,12 +201,11 @@ app.get("/main/movie", async function (req, res) {
         qs: { language: "ko" },
       },
     });
-
     result[category] = [];
 
     // API 값이 제대로 왔는지?
-    if (item.length > 0) {
-      item.forEach((value) => {
+    if (item.results.length > 0) {
+      item.results.forEach((value) => {
         result[category].push({
           movieID: value.id,
           posterImage: value.poster_path,
@@ -236,63 +219,43 @@ app.get("/main/movie", async function (req, res) {
   res.send(result);
 });
 
-app.get("/mainPageData", async function (req, res) {
-  const { category } = req.query;
+app.get("/movie/detail", async function (req, res) {
+  const { itemList } = req.query;
+  const result = [];
 
-  request(
-    {
-      uri: `https://api.themoviedb.org/3/${category}?api_key=${key}`,
-      method: "get",
-      qs: { language: "ko" },
-    },
-    function (error, response, body) {
-      const movies = JSON.parse(body);
-      const { results } = movies;
-      const sendData = [];
-      results.forEach((item) => {
-        sendData.push({
-          movieID: item.id,
-          posterImage: item.poster_path,
-          title: item.title,
-          background: item.backdrop_path,
-        });
+  if (!itemList) {
+    return;
+  } else {
+    for (let movieID of itemList) {
+      const items = await doRequest({
+        url: `https://api.themoviedb.org/3/movie/${movieID}?api_key=${key}`,
+        option: {
+          method: "get",
+          qs: {
+            append_to_response: "videos,similar,credits",
+            language: "ko",
+            region: "ko",
+          },
+        },
       });
-      res.send(sendData);
-    }
-  );
-});
-
-app.get("/Information", async function (req, res) {
-  const { movieId } = req.query;
-  request(
-    {
-      uri: `https://api.themoviedb.org/3/movie/${movieId}?api_key=${key}`,
-      method: "get",
-      qs: {
-        append_to_response: "videos,similar,credits",
-        language: "ko",
-        region: "ko",
-      },
-    },
-    function (error, response, body) {
-      const data = JSON.parse(body);
       const sendData = {
-        movieId: data.id,
-        movieTitle: data.title,
-        tagLine: data.tagline,
-        genres: data.genres,
-        overView: data.overview,
-        similar: data.similar,
-        average: data.vote_average.toFixed(1),
-        vote_count: data.vote_count,
-        release: data.release_date,
-        posterImage: data.poster_path,
-        background: data.backdrop_path,
-        videos: data.videos,
+        movieId: items.id,
+        movieTitle: items.title,
+        tagLine: items.tagline,
+        genres: items.genres,
+        overView: items.overview,
+        similar: items.similar,
+        average: items.vote_average,
+        vote_count: items.vote_count,
+        release: items.release_date,
+        posterImage: items.poster_path,
+        background: items.backdrop_path,
+        videos: items.videos,
       };
-      res.send(sendData);
+      result.push(sendData);
     }
-  );
+  }
+  res.send(result);
 });
 
 app.get("/providers", async function (req, res) {

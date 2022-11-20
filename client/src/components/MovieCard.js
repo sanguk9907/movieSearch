@@ -55,8 +55,9 @@ function MovieCard({ movie }) {
                 <div className="movie-card">
                   <div
                     className="img-box"
-                    onClick={() => {
-                      detailData(item.movieID, setMovieDetail);
+                    onClick={async () => {
+                      const items = await detailData([item.movieID]);
+                      setMovieDetail(items[0]);
                       movieProvider(item.movieID, setProviderData);
                     }}
                     style={{

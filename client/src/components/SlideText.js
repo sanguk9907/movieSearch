@@ -1,19 +1,13 @@
 import React from "react";
-import { detailData, movieProvider } from "../apis/fetchData";
+import { StoreContext } from "../App";
 
-function SlideText({ movieId, index, setShowDetail, setProviderData }) {
-  const [movieDetail, setMovieDetail] = React.useState({});
-
-  const { movieTitle, tagLine, overView, genres, average } = movieDetail;
-
-  React.useEffect(() => {
-    detailData(movieId, setMovieDetail);
-  }, []);
-
+function SlideText({ slideContent, index }) {
+  const { movieTitle, tagLine, overView, genres, average } = slideContent;
+  const { setMovieDetail, setProviderData } = React.useContext(StoreContext);
   return (
-    movieDetail && (
-      <div className={`slide-text-warp text-${index}`}>
-        <div className={`text-box text-${index}`}>
+    slideContent && (
+      <div className={`slide-text-warp`}>
+        <div className={`text-box`}>
           <div className="title">
             <h3>{movieTitle}</h3>
             {tagLine && <p className="tagline">{tagLine}</p>}
@@ -39,9 +33,9 @@ function SlideText({ movieId, index, setShowDetail, setProviderData }) {
 
           <span
             className="more"
-            onClick={() => {
-              setShowDetail(movieDetail);
-              movieProvider(movieDetail.movieId, setProviderData);
+            onClick={async () => {
+              console.log(slideContent);
+              setMovieDetail(slideContent);
             }}
           >
             자세히 보기

@@ -31,8 +31,9 @@ function SearchMovieCard({ movie }) {
             <div key={`movie-card-${index}`} className="movie-card">
               <div
                 className="img-box"
-                onClick={() => {
-                  detailData(item.id, setMovieDetail);
+                onClick={async () => {
+                  const items = await detailData([item.id]);
+                  setMovieDetail(items[0]);
                   movieProvider(item.id, setProviderData);
                 }}
                 style={{

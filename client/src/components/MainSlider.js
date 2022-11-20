@@ -5,16 +5,25 @@ import { Autoplay, Pagination } from "swiper";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css";
-import { fetchData } from "../apis/fetchData";
-import { requests } from "../apis";
+import { detailData } from "../apis/fetchData";
 import SlideText from "./SlideText";
-import MovieDetail from "./MovieDetail";
-import { StoreContext } from "../App";
 // 스와이퍼
 
 function MainSlider({ movie }) {
-  const [showDetail, setShowDetail] = React.useState(false);
-  const [providerData, setProviderData] = React.useState();
+  const [slideContent, setSlideContent] = React.useState([]);
+  const itemList = [];
+  movie.forEach((item, index) => {
+    if (index < 5) {
+      itemList.push(item.movieID);
+    }
+  });
+
+  React.useEffect(() => {
+    (async () => {
+      const data = await detailData(itemList);
+      setSlideContent(data);
+    })();
+  }, [movie]);
 
   return (
     <>
@@ -28,12 +37,8 @@ function MainSlider({ movie }) {
         modules={[Autoplay, Pagination]}
         className="mySwiper"
       >
-        {movie &&
-          movie.map((item, index) => {
-            if (index > 4) {
-              return;
-            }
-
+        {slideContent &&
+          slideContent.map((item, index) => {
             return (
               <SwiperSlide key={`slider-${index}`}>
                 <div className="slide-card">
@@ -44,25 +49,12 @@ function MainSlider({ movie }) {
                     }}
                   ></div>
 
-                  <SlideText
-                    movieId={item.movieID}
-                    index={index}
-                    setShowDetail={setShowDetail}
-                    setProviderData={setProviderData}
-                  />
+                  <SlideText slideContent={item} index={index} />
                 </div>
               </SwiperSlide>
             );
           })}
       </Swiper>
-      {showDetail && (
-        <MovieDetail
-          movieDetail={showDetail}
-          setMovieDetail={setShowDetail}
-          provider={providerData}
-          setProviderData={setProviderData}
-        />
-      )}
     </>
   );
 }
