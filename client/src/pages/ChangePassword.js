@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../apis/axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "semantic-ui-react";
@@ -17,7 +17,7 @@ function ChangePassword() {
 
   const passwordChange = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/changepassword",
+      url: "/changepassword",
       method: "post",
       data: newPassword,
     }).then(({ data }) => {

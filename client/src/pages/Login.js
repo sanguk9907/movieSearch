@@ -1,12 +1,12 @@
 import React from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../App";
 import { Button, Checkbox, Form } from "semantic-ui-react";
 import { Header, MobileHeader } from "../components";
+import axios from "../apis/axios";
+
 axios.defaults.withCredentials = true;
 function Login() {
-  axios.defaults.withCredentials = true;
   const { setLoginUser, loginUser, showMobileHeader } =
     React.useContext(StoreContext);
   const navigation = useNavigate();
@@ -22,7 +22,7 @@ function Login() {
 
   const login = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/login",
+      url: "/login",
       method: "post",
       data: {
         id: loginInfo.id,

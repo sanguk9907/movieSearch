@@ -3,7 +3,7 @@ import { Icon } from "semantic-ui-react";
 import SearchBox from "./SearchBox";
 import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../App";
-import axios from "axios";
+import axios from "../apis/axios";
 axios.defaults.withCredentials = true;
 function Header() {
   const navigation = useNavigate();
@@ -12,7 +12,7 @@ function Header() {
 
   const logOut = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/logout",
+      url: "/logout",
       method: "get",
     });
   };

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../apis/axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "semantic-ui-react";
@@ -36,7 +36,7 @@ function MobileMenu({ setShowMenu }) {
 
   const logOut = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/logout",
+      url: "/logout",
       method: "get",
     });
   };

@@ -1,12 +1,13 @@
 import React from "react";
-import axios from "axios";
+import axios from "../apis/axios";
 import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../App";
 import { Button, Form } from "semantic-ui-react";
 import { Header, MobileHeader } from "../components";
 
+axios.defaults.withCredentials = true;
+
 function Join() {
-  axios.defaults.withCredentials = true;
   const { setLoginUser, showMobileHeader } = React.useContext(StoreContext);
   const navigation = useNavigate();
   const [joinInfo, setJoinInfo] = React.useState({
@@ -20,7 +21,7 @@ function Join() {
 
   const signUp = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/join",
+      url: "/join",
       method: "post",
       data: joinInfo,
     }).then(({ data }) => {

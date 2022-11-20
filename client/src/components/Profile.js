@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../apis/axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "semantic-ui-react";
@@ -26,7 +26,7 @@ function Profile() {
 
     form.append("file", file);
     await axios({
-      url: "http://52.196.233.251:5000/file",
+      url: "/file",
       method: "post",
       data: {
         file,
@@ -42,7 +42,7 @@ function Profile() {
   //사진 불러오기
   const loadProfileImage = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/profileImage",
+      url: "/profileImage",
     }).then(({ data }) => {
       console.log(data);
 
@@ -52,7 +52,7 @@ function Profile() {
 
   const profile = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/profile",
+      url: "/profile",
       method: "get",
       params: {
         id: loginUser.id,

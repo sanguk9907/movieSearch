@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../apis/axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Icon, Input } from "semantic-ui-react";
@@ -18,7 +18,7 @@ function Delete() {
 
   const userDelete = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/delete",
+      url: "/delete",
       method: "delete",
       data: userCheckInfo,
     }).then(({ data }) => {

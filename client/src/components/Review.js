@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../apis/axios";
 import React from "react";
 import { Button, Form, Icon } from "semantic-ui-react";
 import { StoreContext } from "../App";
@@ -16,7 +16,7 @@ function Review(movieId) {
 
   const writeReview = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/review",
+      url: "/review",
       method: "post",
       data: review,
     })
@@ -32,7 +32,7 @@ function Review(movieId) {
 
   const getReview = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/review",
+      url: "/review",
       method: "get",
       params: movieId,
     }).then(({ data }) => {
@@ -42,7 +42,7 @@ function Review(movieId) {
 
   const deleteReview = async () => {
     await axios({
-      url: "http://52.196.233.251:5000/review",
+      url: "/review",
       method: "delete",
       data: review,
     }).then(({ data }) => {
