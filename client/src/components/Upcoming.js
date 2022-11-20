@@ -4,14 +4,7 @@ import { StoreContext } from "../App";
 import { fetchData } from "../apis/fetchData";
 import MovieCard from "./MovieCard";
 
-function Upcoming() {
-  const [movie, setMovie] = React.useState([]);
-  const { setLoading } = React.useContext(StoreContext);
-
-  React.useEffect(() => {
-    fetchData(requests.Upcoming, setMovie, setLoading);
-  }, []);
-
+function Upcoming({ movie }) {
   return (
     <>
       <div className="text-box">

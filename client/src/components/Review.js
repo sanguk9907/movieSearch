@@ -57,7 +57,7 @@ function Review(movieId) {
 
   React.useEffect(() => {
     getReview();
-  }, []);
+  }, [movieId]);
 
   return (
     <div className="review">

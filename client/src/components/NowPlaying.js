@@ -1,17 +1,7 @@
 import React from "react";
-import { requests } from "../apis";
-import { StoreContext } from "../App";
-import { fetchData } from "../apis/fetchData";
 import MovieCard from "./MovieCard";
 
-function NowPlaying() {
-  const [movie, setMovie] = React.useState([]);
-  const { setLoading } = React.useContext(StoreContext);
-
-  React.useEffect(() => {
-    fetchData(requests.NowPlaying, setMovie, setLoading);
-  }, []);
-
+function NowPlaying({ movie }) {
   return (
     <>
       <div className="text-box">

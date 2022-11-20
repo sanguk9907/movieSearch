@@ -7,14 +7,12 @@ import axios from "../apis/axios";
 import { useNavigate } from "react-router-dom";
 import Review from "./Review";
 axios.defaults.withCredentials = true;
-function MovieDetail({
-  movieDetail,
-  setMovieDetail,
-  provider,
-  setProviderData,
-}) {
+
+function MovieDetail() {
   const [clickedLike, setClickedLike] = React.useState(true);
-  const { loginUser } = React.useContext(StoreContext);
+  const { movieDetail, setMovieDetail, provider, setProviderData, loginUser } =
+    React.useContext(StoreContext);
+
   const navigation = useNavigate();
 
   const backgroundFixed = () => {
@@ -115,7 +113,6 @@ function MovieDetail({
   React.useEffect(() => {
     setProviderData(provider);
     likeInit();
-    backgroundFixed();
   }, []);
 
   return (
@@ -126,23 +123,11 @@ function MovieDetail({
       }}
     >
       {/*바깥부분 누르면 나가지기*/}
-      <div
-        className="overlay"
-        onClick={() => {
-          setMovieDetail(null);
-          backgroundUnFixed();
-        }}
-      ></div>
+      <div className="overlay"></div>
 
       <div className="detail-card" id="detail-card">
         {/*닫기버튼*/}
-        <Icon
-          name="close"
-          onClick={() => {
-            setMovieDetail(null);
-            backgroundUnFixed();
-          }}
-        />
+        <Icon name="close" />
 
         <div className="movie-info">
           <div className="img-box">

@@ -16,6 +16,14 @@ const fetchData = async (category, setMovie, setLoading) => {
     });
 };
 
+const getMovieApi = async () => {
+  return await instance.get(`/main/movie`).then((response) => {
+    console.log(response);
+
+    return response.data;
+  });
+};
+
 // 영화 id로 영화 상세정보 불러오기
 const detailData = async (movieId, setMovieDetail) => {
   await instance
@@ -49,4 +57,4 @@ const movieProvider = (movieId, setProviderData) => {
     });
 };
 
-export { fetchData, detailData, movieProvider };
+export { fetchData, detailData, movieProvider, getMovieApi };

@@ -5,6 +5,18 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useMediaQuery } from "react-responsive";
 
+HTMLElement.prototype.closestByClass = function (className) {
+  var target = this;
+
+  while (!target?.parentElement?.classList?.contains(className)) {
+    target = target?.parentElement || null;
+    if (target.parentElement === null) {
+      return false;
+    }
+  }
+  return target;
+};
+
 export const StoreContext = React.createContext();
 
 function App() {
@@ -22,6 +34,8 @@ function App() {
     userIntroduction: "",
   });
   const [loading, setLoading] = React.useState(true);
+  const [movieDetail, setMovieDetail] = React.useState();
+  const [providerData, setProviderData] = React.useState();
   const loadStyle = loading
     ? { overflow: "hidden", height: "100vh" }
     : { overflow: "hidden" };
@@ -76,6 +90,10 @@ function App() {
         setLoading: setLoading,
         loadStyle: loadStyle,
         showMobileHeader: showMobileHeader,
+        setMovieDetail: setMovieDetail,
+        setProviderData: setProviderData,
+        movieDetail: movieDetail,
+        providerData: providerData,
       }}
     >
       <AppIndex />

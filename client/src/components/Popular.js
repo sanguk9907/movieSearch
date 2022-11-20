@@ -1,17 +1,7 @@
 import React from "react";
 import MovieCard from "./MovieCard";
-import { requests } from "../apis";
-import { fetchData } from "../apis/fetchData";
-import { StoreContext } from "../App";
 
-function Popular() {
-  const [movie, setMovie] = React.useState([]);
-  const { loading, setLoading } = React.useContext(StoreContext);
-
-  React.useEffect(() => {
-    fetchData(requests.Popular, setMovie, setLoading);
-  }, []);
-
+function Popular({ movie }) {
   return (
     <>
       <div className="text-box">

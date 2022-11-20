@@ -141,8 +141,104 @@ function createUpdate(params) {
   return query;
 }
 
+function doRequest({ url, option }) {
+  return new Promise((resolve, reject) => {
+    request(
+      {
+        uri: url,
+        ...option,
+      },
+
+      function (error, response, body) {
+        const movies = JSON.parse(body);
+        const { results } = movies;
+        resolve(results);
+        // const sendData = [];
+        // results.forEach((item) => {
+        //   sendData.push({
+        //     movieID: item.id,
+        //     posterImage: item.poster_path,
+        //     title: item.title,
+        //     background: item.backdrop_path,
+        //   });
+        // });
+      }
+    );
+  });
+}
+
+/**
+ Popular: "movie/popular", // 인기있는 (O)
+ NowPlaying: "movie/now_playing", // 현재 상영중
+ Trending: "trending/movie/week", // 이번주 인기 급상승
+ TopRated: "movie/top_rated", // 최고의 평가
+ Upcoming: "movie/upcoming", // 상영 예정
+ */
+
+const 메인에서가져와야할API = [
+  {
+    category: "Popular",
+    api: "movie/popular",
+    label: "인기있는",
+  },
+  {
+    category: "NowPlaying",
+    api: "movie/now_playing",
+    label: "현재 상영중",
+  },
+  {
+    category: "Trending",
+    api: "trending/movie/week",
+    label: "이번주 인기 급상승",
+  },
+  {
+    category: "TopRated",
+    api: "movie/top_rated",
+    label: "최고의 평가",
+  },
+  {
+    category: "Upcoming",
+    api: "movie/upcoming",
+    label: "상영 예정",
+  },
+];
+
+app.get("/main/movie", async function (req, res) {
+  const result = {};
+
+  for (let _key in 메인에서가져와야할API) {
+    const { category, api } = 메인에서가져와야할API[_key];
+
+    // 배열로옴
+    const item = await doRequest({
+      url: `https://api.themoviedb.org/3/${api}?api_key=${key}`,
+      option: {
+        method: "get",
+        qs: { language: "ko" },
+      },
+    });
+
+    result[category] = [];
+
+    // API 값이 제대로 왔는지?
+    if (item.length > 0) {
+      item.forEach((value) => {
+        result[category].push({
+          movieID: value.id,
+          posterImage: value.poster_path,
+          title: value.title,
+          background: value.backdrop_path,
+        });
+      });
+    }
+  }
+
+  res.send(result);
+});
+
 app.get("/mainPageData", async function (req, res) {
   const { category } = req.query;
+
   request(
     {
       uri: `https://api.themoviedb.org/3/${category}?api_key=${key}`,

@@ -8,13 +8,32 @@ import "swiper/css";
 // 스와이퍼
 import MovieDetail from "./MovieDetail"; //영화 상세정보 모달
 import { detailData, movieProvider } from "../apis/fetchData";
+import { StoreContext } from "../App";
 
 SwiperCore.use([Navigation, Pagination]);
 
 function MovieCard({ movie }) {
   // 영화 상세정보를 담는 스테이트
-  const [movieDetail, setMovieDetail] = React.useState();
-  const [providerData, setProviderData] = React.useState();
+  const { setMovieDetail, setProviderData } = React.useContext(StoreContext);
+  // const [movieDetail, setMovieDetail] = React.useState();
+  // const [providerData, setProviderData] = React.useState();
+
+  function 바디클릭(event) {
+    const target = event.target;
+    const detail_card = target.closestByClass("detail-card");
+
+    if (!detail_card) {
+      setMovieDetail(null);
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener("click", 바디클릭);
+
+    return () => {
+      window.removeEventListener("click", 바디클릭);
+    };
+  }, []);
 
   return (
     <div className="movie-wrap">
@@ -53,15 +72,6 @@ function MovieCard({ movie }) {
             );
           })}
       </Swiper>
-
-      {movieDetail && (
-        <MovieDetail
-          movieDetail={movieDetail}
-          setMovieDetail={setMovieDetail}
-          provider={providerData}
-          setProviderData={setProviderData}
-        />
-      )}
     </div>
   );
 }

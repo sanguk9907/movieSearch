@@ -871,11 +871,17 @@ b {
 
 .detail-card .review form {
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
 }
 
-.detail-card .review .ui.input {
+.detail-card .review .reviewText {
   width: 100%;
-  min-height: 200px;
+}
+
+.detail-card .review .ui.button {
+  width: 80px;
 }
 
 .detail-card .review .review-box .review-content p span {
@@ -1167,12 +1173,14 @@ b {
 @media (max-width: 420px) {
   .detail-wrap > .detail-card > .movie-info > .img-box {
     width: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
   }
   .detail-wrap .detail-card {
     width: 100%;
     height: 100%;
     margin-top: 70px;
-    padding-bottom: 140px;
+    padding-bottom: 210px;
   }
   .detail-card .noHaveVideo {
     width: 60%;
