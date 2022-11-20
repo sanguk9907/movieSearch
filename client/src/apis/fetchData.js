@@ -1,5 +1,5 @@
 import React from "react";
-import { instance } from "./axios";
+import { instance } from ".";
 
 const fetchData = async (category, setMovie, setLoading) => {
   await instance
