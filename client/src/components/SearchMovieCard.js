@@ -1,13 +1,28 @@
 import React from "react";
 import { movieProvider } from "../apis/fetchData";
-import MovieDetail from "./MovieDetail";
 import { detailData } from "../apis/fetchData";
+import { StoreContext } from "../App";
 import notFoundImg from "../not-found.jpg";
 
 function SearchMovieCard({ movie }) {
-  const [movieDetail, setMovieDetail] = React.useState();
-  const [providerData, setProviderData] = React.useState();
+  const { setMovieDetail, setProviderData } = React.useContext(StoreContext);
 
+  function bodyClick(event) {
+    const target = event.target;
+    const detail_card = target.closestByClass("detail-card");
+
+    if (!detail_card) {
+      setMovieDetail(null);
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener("click", bodyClick);
+
+    return () => {
+      window.removeEventListener("click", bodyClick);
+    };
+  }, []);
   return (
     <div className="movie-wrap">
       {movie &&
@@ -30,14 +45,6 @@ function SearchMovieCard({ movie }) {
             </div>
           );
         })}
-      {movieDetail && (
-        <MovieDetail
-          movieDetail={movieDetail}
-          setMovieDetail={setMovieDetail}
-          provider={providerData}
-          setProviderData={setProviderData}
-        />
-      )}
     </div>
   );
 }

@@ -51,7 +51,7 @@ function Main() {
       {showMobileHeader ? <MobileHeader /> : <Header />}
       <MainSlider movie={movie.Popular} />
       <Popular movie={movie.Popular} />
-      <Upcoming movie={movie.Popular} />
+      <Upcoming movie={movie.Upcoming} />
       <Trending movie={movie.Trending} />
       <TopRated movie={movie.TopRated} />
       <NowPlaying movie={movie.NowPlaying} />

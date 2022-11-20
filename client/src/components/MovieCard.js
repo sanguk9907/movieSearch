@@ -6,7 +6,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css";
 // 스와이퍼
-import MovieDetail from "./MovieDetail"; //영화 상세정보 모달
 import { detailData, movieProvider } from "../apis/fetchData";
 import { StoreContext } from "../App";
 
@@ -15,10 +14,8 @@ SwiperCore.use([Navigation, Pagination]);
 function MovieCard({ movie }) {
   // 영화 상세정보를 담는 스테이트
   const { setMovieDetail, setProviderData } = React.useContext(StoreContext);
-  // const [movieDetail, setMovieDetail] = React.useState();
-  // const [providerData, setProviderData] = React.useState();
 
-  function 바디클릭(event) {
+  function bodyClick(event) {
     const target = event.target;
     const detail_card = target.closestByClass("detail-card");
 
@@ -28,10 +25,10 @@ function MovieCard({ movie }) {
   }
 
   React.useEffect(() => {
-    window.addEventListener("click", 바디클릭);
+    window.addEventListener("click", bodyClick);
 
     return () => {
-      window.removeEventListener("click", 바디클릭);
+      window.removeEventListener("click", bodyClick);
     };
   }, []);
 

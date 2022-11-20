@@ -1,9 +1,15 @@
 import React from "react";
-import { Header, SearchBody, Loading, MobileHeader } from "../components";
+import {
+  Header,
+  SearchBody,
+  Loading,
+  MobileHeader,
+  MovieDetail,
+} from "../components";
 import { StoreContext } from "../App";
 
 function SearchPage() {
-  const { search, loading, loadStyle, showMobileHeader } =
+  const { search, loading, loadStyle, showMobileHeader, movieDetail } =
     React.useContext(StoreContext);
 
   return (
@@ -29,6 +35,7 @@ function SearchPage() {
       >
         TOP
       </div>
+      {movieDetail && <MovieDetail />}
     </div>
   );
 }

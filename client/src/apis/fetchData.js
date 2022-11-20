@@ -1,20 +1,4 @@
-import React from "react";
 import { instance } from ".";
-
-const fetchData = async (category, setMovie, setLoading) => {
-  await instance
-    .get(`/mainPageData`, {
-      params: {
-        category: category,
-      },
-    })
-    .then(({ data }) => {
-      setMovie(data);
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
-    });
-};
 
 const getMovieApi = async () => {
   return await instance.get(`/main/movie`).then((response) => {
@@ -57,4 +41,4 @@ const movieProvider = (movieId, setProviderData) => {
     });
 };
 
-export { fetchData, detailData, movieProvider, getMovieApi };
+export { detailData, movieProvider, getMovieApi };
