@@ -151,7 +151,6 @@ function doRequest({ url, option }) {
 
       function (error, response, body) {
         const movies = JSON.parse(body);
-        const { results } = movies;
 
         resolve(movies);
       }
@@ -600,16 +599,13 @@ app.post("/review", async (req, res) => {
 });
 
 app.delete("/review", async (req, res) => {
-  const { user_seq, review_seq, movieID } = req.body;
-  if (!review_seq) {
-    return;
-  } else {
-    await runDB({
-      database: "moviesearch",
-      query: `delete from review where movieID = ${movieID} && user_seq =${user_seq} && seq = ${review_seq}`,
-    });
-    res.send("리뷰를 삭제했습니다.");
-  }
+  const { seq } = req.body;
+
+  await runDB({
+    database: "moviesearch",
+    query: `delete from review where seq = ${seq}`,
+  });
+  res.send("리뷰를 삭제했습니다.");
 });
 
 app.get("/profile", async (req, res) => {

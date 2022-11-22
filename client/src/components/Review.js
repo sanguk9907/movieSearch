@@ -36,24 +36,21 @@ function Review(movieId) {
       method: "get",
       params: movieId,
     }).then(({ data }) => {
+      console.log(data);
       setReviewList(data);
     });
   };
 
-  const deleteReview = async () => {
+  const deleteReview = async (seq) => {
     await axios({
       url: "/review",
       method: "delete",
-      data: review,
+      data: { seq: seq },
     }).then(({ data }) => {
       alert(data);
       getReview();
     });
   };
-
-  React.useEffect(() => {
-    deleteReview();
-  }, [review.review_seq]);
 
   React.useEffect(() => {
     getReview();
@@ -64,6 +61,7 @@ function Review(movieId) {
       <b>리뷰</b>
       <Form
         onSubmit={(e) => {
+          e.preventDefault();
           writeReview();
           document.querySelector(".reviewText > textarea").value = "";
         }}
@@ -97,9 +95,7 @@ function Review(movieId) {
                 {item.user_seq === loginUser.seq ? (
                   <Icon
                     onClick={() => {
-                      const cloneReview = { ...review };
-                      cloneReview.review_seq = item.seq;
-                      setReview(cloneReview);
+                      deleteReview(item.seq);
                     }}
                     style={{
                       position: "inherit",

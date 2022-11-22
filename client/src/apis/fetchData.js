@@ -15,25 +15,19 @@ const detailData = async (itemList) => {
       },
     })
     .then(({ data }) => {
-      // console.log(data);
       return data;
     });
 };
 
-const movieProvider = (movieId, setProviderData) => {
+const movieProvider = (movieId) => {
   instance
     .get(`/providers`, {
       params: {
         movieId: movieId,
-        language: "ko",
-        region: "ko",
       },
     })
     .then(({ data }) => {
-      const detailData =
-        data.results.KR && data.results.KR.flatrate && data.results.KR.flatrate;
-      setProviderData(detailData);
+      return data;
     });
 };
-
 export { detailData, movieProvider, getMovieApi };

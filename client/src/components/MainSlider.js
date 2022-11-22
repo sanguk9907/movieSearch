@@ -12,16 +12,18 @@ import SlideText from "./SlideText";
 function MainSlider({ movie }) {
   const [slideContent, setSlideContent] = React.useState([]);
   const itemList = [];
-  movie.forEach((item, index) => {
-    if (index < 5) {
-      itemList.push(item.movieID);
+  for (let key of movie) {
+    if (itemList.length >= 5) {
+      break;
     }
-  });
-
+    itemList.push(key.movieID);
+  }
   React.useEffect(() => {
     (async () => {
-      const data = await detailData(itemList);
-      setSlideContent(data);
+      if (movie.length !== 0) {
+        const data = await detailData(itemList);
+        setSlideContent(data);
+      }
     })();
   }, [movie]);
 
@@ -48,7 +50,6 @@ function MainSlider({ movie }) {
                       backgroundImage: `url("https://image.tmdb.org/t/p/original/${item.background}")`,
                     }}
                   ></div>
-
                   <SlideText slideContent={item} index={index} />
                 </div>
               </SwiperSlide>
