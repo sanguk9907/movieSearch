@@ -1,7 +1,6 @@
 import React from "react";
 import { StoreContext } from "../App";
 import {
-  Popular,
   Upcoming,
   Trending,
   TopRated,
@@ -11,6 +10,7 @@ import {
   Loading,
   MobileHeader,
   MovieDetail,
+  Netflix,
 } from "../components/";
 
 import { getMovieApi } from "../apis/fetchData";
@@ -44,13 +44,14 @@ function Main() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  {
+  }
   return (
     <div style={loadStyle} className="main-wrap">
       {loading && <Loading />}
       {showMobileHeader ? <MobileHeader /> : <Header />}
       <MainSlider movie={movie.Popular} />
-      <Popular movie={movie.Popular} />
+      <Netflix movie={movie.Netflix} />
       <Upcoming movie={movie.Upcoming} />
       <Trending movie={movie.Trending} />
       <TopRated movie={movie.TopRated} />

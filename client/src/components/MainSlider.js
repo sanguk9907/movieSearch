@@ -5,7 +5,7 @@ import { Autoplay, Pagination } from "swiper";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css";
-import { detailData } from "../apis/fetchData";
+import { getSlide } from "../apis/fetchData";
 import SlideText from "./SlideText";
 // 스와이퍼
 
@@ -21,7 +21,7 @@ function MainSlider({ movie }) {
   React.useEffect(() => {
     (async () => {
       if (movie.length !== 0) {
-        const data = await detailData(itemList);
+        const data = await getSlide(itemList);
         setSlideContent(data);
       }
     })();

@@ -1,11 +1,10 @@
 import React from "react";
-import { movieProvider } from "../apis/fetchData";
 import { detailData } from "../apis/fetchData";
 import { StoreContext } from "../App";
 import notFoundImg from "../not-found.jpg";
 
 function SearchMovieCard({ movie }) {
-  const { setMovieDetail, setProviderData } = React.useContext(StoreContext);
+  const { setMovieDetail } = React.useContext(StoreContext);
 
   function bodyClick(event) {
     const target = event.target;
@@ -32,9 +31,8 @@ function SearchMovieCard({ movie }) {
               <div
                 className="img-box"
                 onClick={async () => {
-                  const items = await detailData([item.id]);
+                  const items = await detailData(item.id);
                   setMovieDetail(items[0]);
-                  movieProvider(item.id, setProviderData);
                 }}
                 style={{
                   backgroundImage: !item.poster_path

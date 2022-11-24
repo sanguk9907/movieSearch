@@ -9,7 +9,7 @@ function Header() {
   const navigation = useNavigate();
   const { loginUser, setLoginUser } = React.useContext(StoreContext);
   const [clickedSearch, setClickedSearch] = React.useState(false);
-
+  console.log(loginUser);
   const logOut = async () => {
     await axios({
       url: "/logout",

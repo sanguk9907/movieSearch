@@ -6,14 +6,14 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css";
 // 스와이퍼
-import { detailData, movieProvider } from "../apis/fetchData";
+import { detailData } from "../apis/fetchData";
 import { StoreContext } from "../App";
 
 SwiperCore.use([Navigation, Pagination]);
 
 function MovieCard({ movie }) {
   // 영화 상세정보를 담는 스테이트
-  const { setMovieDetail, setProviderData } = React.useContext(StoreContext);
+  const { setMovieDetail } = React.useContext(StoreContext);
 
   function bodyClick(event) {
     const target = event.target;
@@ -56,9 +56,8 @@ function MovieCard({ movie }) {
                   <div
                     className="img-box"
                     onClick={async () => {
-                      const items = await detailData([item.movieID]);
-                      setMovieDetail(items[0]);
-                      movieProvider(item.movieID, setProviderData);
+                      const items = await detailData(item.movieID);
+                      setMovieDetail(items);
                     }}
                     style={{
                       backgroundImage: `url("https://image.tmdb.org/t/p/w500/${item.posterImage}")`,

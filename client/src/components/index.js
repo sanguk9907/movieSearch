@@ -1,6 +1,6 @@
 import MovieCard from "./MovieCard";
 import SearchBox from "./SearchBox";
-import Popular from "./Popular";
+import Netflix from "./Netflix";
 import Latsts from "./NowPlaying";
 import Trending from "./Trending";
 import TopRated from "./TopRated";
@@ -25,7 +25,7 @@ import MobileMenu from "./MobileMenu";
 export {
   MovieCard,
   SearchBox,
-  Popular,
+  Netflix,
   Latsts,
   Trending,
   TopRated,

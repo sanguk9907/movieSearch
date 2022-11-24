@@ -3,12 +3,12 @@ import React from "react";
 import { Button, Form, Icon } from "semantic-ui-react";
 import { StoreContext } from "../App";
 
-function Review(movieId) {
+function Review({ movieID, Reviews }) {
   const { loginUser } = React.useContext(StoreContext);
   const [review, setReview] = React.useState({
     user_seq: loginUser.seq,
     nick: loginUser.nick,
-    movieID: movieId.movieId,
+    movieID: movieID,
     content: "",
     review_seq: "",
   });
@@ -21,40 +21,31 @@ function Review(movieId) {
       data: review,
     })
       .then(({ data }) => {
+        setReviewList(data.reviewList);
         alert(data.message);
-
-        getReview();
       })
       .catch((err) => {
         console.log("에러 : ", err);
       });
   };
 
-  const getReview = async () => {
-    await axios({
-      url: "/review",
-      method: "get",
-      params: movieId,
-    }).then(({ data }) => {
-      console.log(data);
-      setReviewList(data);
-    });
-  };
-
   const deleteReview = async (seq) => {
     await axios({
       url: "/review",
       method: "delete",
-      data: { seq: seq },
+      data: {
+        seq: seq,
+        movieID: movieID,
+      },
     }).then(({ data }) => {
-      alert(data);
-      getReview();
+      setReviewList(data.reviewList);
+      alert(data.message);
     });
   };
 
   React.useEffect(() => {
-    getReview();
-  }, [movieId]);
+    setReviewList(Reviews);
+  }, [movieID]);
 
   return (
     <div className="review">

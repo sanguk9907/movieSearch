@@ -160,6 +160,11 @@ function doRequest({ url, option }) {
 
 const main_api = [
   {
+    category: "Netflix",
+    api: "/discover/movie",
+    label: "넷플릭스",
+  },
+  {
     category: "Popular",
     api: "movie/popular",
     label: "인기있는",
@@ -194,10 +199,20 @@ app.get("/main/movie", async function (req, res) {
 
     // 배열로옴
     const item = await doRequest({
-      url: `https://api.themoviedb.org/3/${api}?api_key=${key}`,
+      url:
+        category === "Netflix"
+          ? `https://api.themoviedb.org/3${api}?api_key=${key}`
+          : `https://api.themoviedb.org/3/${api}?api_key=${key}`,
       option: {
         method: "get",
-        qs: { language: "ko" },
+        qs:
+          category === "Netflix"
+            ? {
+                with_watch_providers: "8",
+                watch_region: "KR",
+                language: "ko",
+              }
+            : { language: "ko" },
       },
     });
     result[category] = [];
@@ -214,11 +229,10 @@ app.get("/main/movie", async function (req, res) {
       });
     }
   }
-
   res.send(result);
 });
 
-app.get("/movie/detail", async function (req, res) {
+app.get("/main/slide", async function (req, res) {
   const { itemList } = req.query;
   const result = [];
 
@@ -233,23 +247,20 @@ app.get("/movie/detail", async function (req, res) {
           qs: {
             append_to_response: "videos,similar,credits",
             language: "ko",
-            region: "ko",
+            region: "KR",
           },
         },
       });
+
       const sendData = {
         movieId: items.id,
         movieTitle: items.title,
         tagLine: items.tagline,
         genres: items.genres,
         overView: items.overview,
-        similar: items.similar,
         average: items.vote_average,
-        vote_count: items.vote_count,
         release: items.release_date,
-        posterImage: items.poster_path,
         background: items.backdrop_path,
-        videos: items.videos,
       };
       result.push(sendData);
     }
@@ -257,22 +268,66 @@ app.get("/movie/detail", async function (req, res) {
   res.send(result);
 });
 
-app.get("/providers", async function (req, res) {
-  const { movieId } = req.query;
-  request(
-    {
-      uri: `https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${key}`,
-      method: "get",
-      qs: {
-        language: "ko",
-        region: "ko",
+app.get("/movie/detail", async function (req, res) {
+  const { movieID } = req.query;
+  const { loginUser } = req.session;
+  const result = {};
+
+  if (movieID) {
+    const items = await doRequest({
+      url: `https://api.themoviedb.org/3/movie/${movieID}?api_key=${key}`,
+      option: {
+        method: "get",
+        qs: {
+          append_to_response: "videos,similar,credits",
+          language: "ko",
+          region: "KR",
+        },
       },
-    },
-    function (error, response, body) {
-      const data = JSON.parse(body);
-      res.send(data);
-    }
-  );
+    });
+    const provider = await doRequest({
+      url: `https://api.themoviedb.org/3/movie/${movieID}/watch/providers?api_key=${key}`,
+      option: {
+        method: "get",
+        qs: {
+          append_to_response: "videos,similar,credits",
+          language: "ko",
+          region: "KR",
+        },
+      },
+    });
+
+    const Review = await runDB({
+      database: "moviesearch",
+      query: `SELECT * FROM review WHERE movieID =${movieID}`,
+    });
+
+    const likeData = !loginUser
+      ? null
+      : await runDB({
+          database: "moviesearch",
+          query: `SELECT * FROM likes WHERE user_seq=${loginUser.seq} && movieID=${movieID}`,
+        });
+
+    result.movieId = items.id;
+    result.movieTitle = items.title;
+    result.tagLine = items.tagline;
+    result.genres = items.genres;
+    result.overView = items.overview;
+    result.similar = items.similar;
+    result.average = items.vote_average;
+    result.vote_count = items.vote_count;
+    result.release = items.release_date;
+    result.posterImage = items.poster_path;
+    result.background = items.backdrop_path;
+    result.videos = items.videos;
+    result.provider = !provider.results.KR
+      ? null
+      : provider.results.KR.flatrate;
+    result.Reviews = Review;
+    result.like = likeData;
+  }
+  res.send(result);
 });
 
 app.get("/search", async function (req, res) {
@@ -283,7 +338,7 @@ app.get("/search", async function (req, res) {
       method: "get",
       qs: {
         language: "ko",
-        region: "ko",
+        region: "KR",
         query: query,
         page: page,
       },
@@ -498,26 +553,12 @@ app.get("/logout", (req, res) => {
     res.clearCookie("connect.sid");
     res.redirect("/");
   });
+  res.send();
 });
 
-app.get("/like", async (req, res) => {
-  const { loginUser } = req.session;
-  const { movieID } = req.query;
-  if (!loginUser) {
-    res.send("");
-    return;
-  } else {
-    const likeData = await runDB({
-      database: "moviesearch",
-      query: `SELECT * FROM likes WHERE user_seq=${loginUser.seq} && movieID=${movieID}`,
-    });
-
-    res.send(likeData[0]);
-  }
-});
 app.put("/like", async (req, res) => {
   const { loginUser } = req.session;
-  const { clickedLike, movieID } = req.body;
+  const { clickedLike, movieID } = req.body.data;
   const resulte = {
     code: "fail",
     message: "좋아요 목록 업데이트에 실패했습니다.",
@@ -549,20 +590,13 @@ app.put("/like", async (req, res) => {
     (resulte.code = "success"),
       (resulte.message = "좋아요 목록에서 삭제되었습니다.");
   }
+
   res.send(resulte);
 });
 
-app.get("/review", async (req, res) => {
-  const { movieId } = req.query;
-  const callReview = await runDB({
-    database: "moviesearch",
-    query: `SELECT * FROM review WHERE movieID =${movieId}`,
-  });
-  res.send(callReview);
-});
-
 app.post("/review", async (req, res) => {
-  const { user_seq, content, nick, movieID } = req.body;
+  const data = req.body;
+  const { user_seq, content, nick, movieID } = data;
   const insertData = {
     user_seq: user_seq,
     content: content,
@@ -594,18 +628,30 @@ app.post("/review", async (req, res) => {
       database: "moviesearch",
       query: reviewInsert,
     });
+    const Review = await runDB({
+      database: "moviesearch",
+      query: `SELECT * FROM review WHERE movieID =${movieID}`,
+    });
+    resulte.reviewList = Review;
   }
   res.send(resulte);
 });
 
 app.delete("/review", async (req, res) => {
-  const { seq } = req.body;
-
+  const { seq, movieID } = req.body;
+  const resulte = {
+    message: "리뷰를 삭제했습니다.",
+  };
   await runDB({
     database: "moviesearch",
     query: `delete from review where seq = ${seq}`,
   });
-  res.send("리뷰를 삭제했습니다.");
+  const Review = await runDB({
+    database: "moviesearch",
+    query: `SELECT * FROM review WHERE movieID =${movieID}`,
+  });
+  resulte.reviewList = Review;
+  res.send(resulte);
 });
 
 app.get("/profile", async (req, res) => {
@@ -671,7 +717,6 @@ app.post("/file", upload.array("file"), async (req, res) => {
   });
 
   if (searchImage.length === 0) {
-    console.log("인서트 실행됨");
     const insertQuery = createInsert({
       table: "image",
       data: files,
@@ -682,7 +727,6 @@ app.post("/file", upload.array("file"), async (req, res) => {
       query: insertQuery,
     });
   } else {
-    console.log("업데이트 실행ㅇ됨");
     const updateQuery = createUpdate({
       table: "image",
       data: files,
@@ -698,7 +742,6 @@ app.post("/file", upload.array("file"), async (req, res) => {
     database: "moviesearch",
     query: `select * from image where user_seq = ${loginUser.seq}`,
   });
-  console.log(profileImage[0].filename);
   res.send(profileImage[0].filename);
 });
 
@@ -735,7 +778,6 @@ app.post("/changepassword", async (req, res) => {
     .toString("base64");
 
   for (let key in aa) {
-    console.log("바꾸기전" + dataSelect[0].password);
     if (password === newPassword) {
       (resulte.code = "fail"),
         (resulte.message =
@@ -785,7 +827,6 @@ app.post("/changepassword", async (req, res) => {
       database: "moviesearch",
       query: newpassword,
     });
-    console.log("바꾼" + dataSelect[0].password);
   }
 
   res.send(resulte);

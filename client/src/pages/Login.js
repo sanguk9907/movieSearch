@@ -30,7 +30,6 @@ function Login() {
       },
     })
       .then(({ data }) => {
-        console.log(data);
         if (data.code === "fail") {
           alert(data.message);
           return;

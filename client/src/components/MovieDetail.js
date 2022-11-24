@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
-import { detailData, movieProvider } from "../apis/fetchData";
+import { detailData, liked } from "../apis/fetchData";
 import notFoundImg from "../not-found.jpg";
 import { StoreContext } from "../App";
 import axios from "../apis/axios";
@@ -10,25 +10,9 @@ axios.defaults.withCredentials = true;
 
 function MovieDetail() {
   const [clickedLike, setClickedLike] = React.useState(true);
-  const { movieDetail, setMovieDetail, provider, setProviderData, loginUser } =
+  const { movieDetail, setMovieDetail, loginUser } =
     React.useContext(StoreContext);
-
   const navigation = useNavigate();
-
-  const backgroundFixed = () => {
-    document.body.style.cssText = `
-      position: fixed; 
-      top: -${window.scrollY}px;
-      overflow-y: scroll;
-      width: 100%;`;
-    return;
-  };
-
-  const backgroundUnFixed = () => {
-    const scrollY = document.body.style.top;
-    document.body.style.cssText = "";
-    window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
-  };
 
   const {
     movieTitle, // 제목
@@ -36,13 +20,14 @@ function MovieDetail() {
     genres, // 장르
     overView, // 줄거리
     similar, // 비슷한영화
-    average, // 평점
-    vote_count, // 평점 낸 인원 수
     movieId, // 영화 고유아이디
     release, // 개봉일자
     posterImage, // 포스터이미지
     background, // 배경이미지
     videos, // 영화 관련 유튜브 코드
+    provider,
+    like,
+    Reviews,
   } = movieDetail;
 
   // 포스터 url 없으면 못찾은 이미지 나오게
@@ -80,41 +65,16 @@ function MovieDetail() {
     }
   };
 
-  // 좋아요 버튼 클릭 함수 (좋아요 한 영화 아이디 DB저장,취소한 아이디 DB삭제)
-  const liked = async () => {
-    await axios({
-      url: "/like",
-      method: "put",
-      data: {
-        clickedLike: clickedLike,
-        movieID: movieId,
-      },
-    }).then(({ data }) => {
-      alert(data.message);
-    });
-  };
   // 좋아요 상태
-  const likeInit = async () => {
-    await axios({
-      url: "/like",
-      method: "get",
-      params: {
-        movieID: movieId,
-      },
-    }).then(({ data }) => {
-      if (data.movieID === movieId) {
-        setClickedLike(false);
-      } else {
-        setClickedLike(true);
-      }
-    });
+  const likeInit = () => {
+    like === null || like.length === 0
+      ? setClickedLike(true)
+      : setClickedLike(false);
   };
 
   React.useEffect(() => {
-    setProviderData(provider);
     likeInit();
   }, []);
-
   return (
     <div
       className="detail-wrap"
@@ -145,7 +105,7 @@ function MovieDetail() {
                   navigation("/login");
                   return;
                 }
-                liked();
+                liked(clickedLike, movieId);
                 setClickedLike(!clickedLike);
               }}
             />
@@ -229,9 +189,8 @@ function MovieDetail() {
                   className="similar-card"
                   key={`similar-${index}`}
                   onClick={async () => {
-                    const items = await detailData([item.id]);
+                    const items = await detailData(item.id);
                     setMovieDetail(items[0]);
-                    movieProvider(item.id, setProviderData);
                     document.getElementById("detail-card").scroll({
                       top: 0,
                       behavior: "smooth",
@@ -253,7 +212,7 @@ function MovieDetail() {
           </div>
         </div>
         {/* 리뷰 */}
-        <Review movieId={movieId} />
+        <Review movieID={movieId} Reviews={Reviews} />
       </div>
     </div>
   );

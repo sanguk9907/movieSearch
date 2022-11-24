@@ -1,9 +1,10 @@
 import axios from "../apis/axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Icon, Input } from "semantic-ui-react";
+import { Button, Form, Icon } from "semantic-ui-react";
 import { StoreContext } from "../App";
 import Unchange from "./Unchange";
+import { userDelete } from "../apis/fetchData";
 
 function Delete() {
   const Navigation = useNavigate();
@@ -15,27 +16,6 @@ function Delete() {
     password: "",
   });
   const [activeDeleteBtn, setActiveDeleteBtn] = React.useState(false);
-
-  const userDelete = async () => {
-    await axios({
-      url: "/delete",
-      method: "delete",
-      data: userCheckInfo,
-    }).then(({ data }) => {
-      alert(data.message);
-      localStorage.removeItem("loginUser");
-      sessionStorage.removeItem("loginUser");
-      const cloneUser = { ...loginUser };
-      cloneUser.seq = "";
-      cloneUser.id = "";
-      cloneUser.nick = "";
-      cloneUser.email = "";
-      cloneUser.phoneNumber = "";
-      cloneUser.userIntroduction = "";
-      setLoginUser(cloneUser);
-      Navigation("/");
-    });
-  };
 
   return (
     <Form>
@@ -78,8 +58,17 @@ function Delete() {
               <p>확인을 위해 비밀번호를 입력해주세요</p>
 
               <Button
-                onClick={() => {
-                  userDelete();
+                onClick={async () => {
+                  const deletecheck = await userDelete(userCheckInfo);
+                  if (deletecheck.code === "success") {
+                    setLoginUser({});
+                    localStorage.removeItem("loginUser");
+                    sessionStorage.removeItem("loginUser");
+                    alert(deletecheck.message);
+                    Navigation("/");
+                  } else {
+                    alert(deletecheck.message);
+                  }
                 }}
               >
                 탈퇴하기

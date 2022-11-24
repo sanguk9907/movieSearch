@@ -1,10 +1,12 @@
 import React from "react";
-import { movieProvider } from "../apis/fetchData";
+import { detailData } from "../apis/fetchData";
 import { StoreContext } from "../App";
 
-function SlideText({ slideContent, index }) {
-  const { movieTitle, tagLine, overView, genres, average } = slideContent;
-  const { setMovieDetail, setProviderData } = React.useContext(StoreContext);
+function SlideText({ slideContent }) {
+  const { movieId, movieTitle, tagLine, overView, genres, average } =
+    slideContent;
+  const { setMovieDetail } = React.useContext(StoreContext);
+
   return (
     <div className={`slide-text-warp`}>
       <div className={`text-box`}>
@@ -33,9 +35,9 @@ function SlideText({ slideContent, index }) {
 
         <span
           className="more"
-          onClick={() => {
-            setMovieDetail(slideContent);
-            movieProvider(slideContent.movieID, setProviderData);
+          onClick={async () => {
+            const items = await detailData(movieId);
+            setMovieDetail(items[0]);
           }}
         >
           자세히 보기
