@@ -37,7 +37,7 @@ function SlideText({ slideContent }) {
           className="more"
           onClick={async () => {
             const items = await detailData(movieId);
-            setMovieDetail(items[0]);
+            setMovieDetail(items);
           }}
         >
           자세히 보기

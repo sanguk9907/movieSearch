@@ -190,7 +190,7 @@ function MovieDetail() {
                   key={`similar-${index}`}
                   onClick={async () => {
                     const items = await detailData(item.id);
-                    setMovieDetail(items[0]);
+                    setMovieDetail(items);
                     document.getElementById("detail-card").scroll({
                       top: 0,
                       behavior: "smooth",

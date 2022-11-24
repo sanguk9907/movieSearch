@@ -32,7 +32,7 @@ function SearchMovieCard({ movie }) {
                 className="img-box"
                 onClick={async () => {
                   const items = await detailData(item.id);
-                  setMovieDetail(items[0]);
+                  setMovieDetail(items);
                 }}
                 style={{
                   backgroundImage: !item.poster_path
