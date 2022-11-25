@@ -35,7 +35,6 @@ function Main() {
       }
 
       setMovie(cloneMovie);
-      setLoading(false);
     })();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

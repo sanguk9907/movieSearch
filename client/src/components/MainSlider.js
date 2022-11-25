@@ -7,10 +7,12 @@ import "swiper/css/navigation";
 import "swiper/css";
 import { getSlide } from "../apis/fetchData";
 import SlideText from "./SlideText";
+import { StoreContext } from "../App";
 // 스와이퍼
 
 function MainSlider({ movie }) {
   const [slideContent, setSlideContent] = React.useState([]);
+  const { setLoading } = React.useContext(StoreContext);
   const itemList = [];
   for (let key of movie) {
     if (itemList.length >= 5) {
@@ -23,6 +25,7 @@ function MainSlider({ movie }) {
       if (movie.length !== 0) {
         const data = await getSlide(itemList);
         setSlideContent(data);
+        setLoading(false);
       }
     })();
   }, [movie]);

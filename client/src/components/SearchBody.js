@@ -27,6 +27,7 @@ function SearchBody() {
   };
 
   const searchMovie = () => {
+    setLoading(true);
     instance
       .get(`/search`, {
         params: {

@@ -12,7 +12,7 @@ SwiperCore.use([Navigation, Pagination]);
 
 function MainContent({ title, semiTitle, movie }) {
   // 영화 상세정보를 담는 스테이트
-  const { setMovieDetail, setLoading } = React.useContext(StoreContext);
+  const { setMovieDetail } = React.useContext(StoreContext);
 
   function bodyClick(event) {
     const target = event.target;
