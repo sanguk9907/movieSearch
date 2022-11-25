@@ -160,6 +160,12 @@ function doRequest({ url, option }) {
 
 const main_api = [
   {
+    category: "Popular",
+    api: "movie/popular",
+    label: "인기",
+    params: { language: "ko" },
+  },
+  {
     category: "Netflix",
     api: "discover/movie",
     params: { with_watch_providers: "8", watch_region: "KR", language: "ko" },
