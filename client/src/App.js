@@ -44,16 +44,17 @@ function App() {
   const navigation = useNavigate();
 
   const nonAccess = () => {
-    const nonAccessAddress = ["join", "login"];
+    const loninNonAccessAddress = ["join", "login"];
+    const DoNotLoninNonAccessAddress = ["profile"];
     const address = pathname.slice(1);
 
-    if (nonAccessAddress.includes(address) && loginUser.id !== "") {
+    if (loninNonAccessAddress.includes(address) && loginUser.id !== "") {
       navigation("/");
     }
-    // if ("profile".includes(address) && loginUser.id === "") {
-    //   console.log(loginUser.id);
-    //   navigation("/");
-    // }
+
+    if (DoNotLoninNonAccessAddress.includes(address) && loginUser.id === "") {
+      navigation("/");
+    }
   };
 
   const autoLogin = () => {

@@ -47,6 +47,7 @@ function Profile() {
       console.log(data);
 
       setProfileImage(`/img/${data}`);
+      navigation("/profile");
     });
   };
 

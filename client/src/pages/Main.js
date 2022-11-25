@@ -1,16 +1,12 @@
 import React from "react";
 import { StoreContext } from "../App";
 import {
-  Upcoming,
-  Trending,
-  TopRated,
-  NowPlaying,
   Header,
   MainSlider,
   Loading,
   MobileHeader,
   MovieDetail,
-  Netflix,
+  MainContent,
 } from "../components/";
 
 import { getMovieApi } from "../apis/fetchData";
@@ -51,11 +47,31 @@ function Main() {
       {loading && <Loading />}
       {showMobileHeader ? <MobileHeader /> : <Header />}
       <MainSlider movie={movie.Popular} />
-      <Netflix movie={movie.Netflix} />
-      <Upcoming movie={movie.Upcoming} />
-      <Trending movie={movie.Trending} />
-      <TopRated movie={movie.TopRated} />
-      <NowPlaying movie={movie.NowPlaying} />
+      <MainContent
+        title={"넷플릭스 인기"}
+        semiTitle={"Netflix"}
+        movie={movie.Netflix}
+      />
+      <MainContent
+        title={"디즈니플러스 인기"}
+        semiTitle={"Disney Plus"}
+        movie={movie.Disney_Plus}
+      />
+      <MainContent
+        title={"왓차 인기"}
+        semiTitle={"Watcha"}
+        movie={movie.Watcha}
+      />
+      <MainContent
+        title={"현재 상영중"}
+        semiTitle={"NowPlaying"}
+        movie={movie.NowPlaying}
+      />
+      <MainContent
+        title={"최고의 평가"}
+        semiTitle={"TopRated"}
+        movie={movie.TopRated}
+      />
       <div
         className="go-top-btn"
         onClick={() => {

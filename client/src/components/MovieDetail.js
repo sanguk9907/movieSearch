@@ -13,7 +13,6 @@ function MovieDetail() {
   const { movieDetail, setMovieDetail, loginUser } =
     React.useContext(StoreContext);
   const navigation = useNavigate();
-
   const {
     movieTitle, // 제목
     tagLine, // 테그
@@ -137,12 +136,11 @@ function MovieDetail() {
                 <p className="none">
                   OTT
                   <br />
-                  (넷플릭스, 디즈니plus, 왓챠, 웨이브의 정보만 제공됩니다.)
+                  (넷플릭스, 디즈니plus, 왓챠의 정보만 제공됩니다.)
                 </p>
               ) : (
                 provider.map((item, index) => {
                   if (
-                    item.provider_id !== 356 &&
                     item.provider_id !== 97 &&
                     item.provider_id !== 337 &&
                     item.provider_id !== 8

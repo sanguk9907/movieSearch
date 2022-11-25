@@ -61,9 +61,17 @@ function Delete() {
                 onClick={async () => {
                   const deletecheck = await userDelete(userCheckInfo);
                   if (deletecheck.code === "success") {
-                    setLoginUser({});
                     localStorage.removeItem("loginUser");
                     sessionStorage.removeItem("loginUser");
+                    const cloneLogin = { ...loginUser };
+                    cloneLogin.email = "";
+                    cloneLogin.id = "";
+                    cloneLogin.nick = "";
+                    cloneLogin.phoneNumber = "";
+                    cloneLogin.seq = "";
+                    cloneLogin.userIntroduction = "";
+                    setLoginUser(cloneLogin);
+
                     alert(deletecheck.message);
                     Navigation("/");
                   } else {

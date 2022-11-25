@@ -21,8 +21,11 @@ function Review({ movieID, Reviews }) {
       data: review,
     })
       .then(({ data }) => {
-        setReviewList(data.reviewList);
+        setReviewList(data.reviewList.reverse());
         alert(data.message);
+        const cloneReview = { ...review };
+        cloneReview.content = "";
+        setReview(cloneReview);
       })
       .catch((err) => {
         console.log("에러 : ", err);
@@ -38,13 +41,13 @@ function Review({ movieID, Reviews }) {
         movieID: movieID,
       },
     }).then(({ data }) => {
-      setReviewList(data.reviewList);
+      setReviewList(data.reviewList.reverse());
       alert(data.message);
     });
   };
 
   React.useEffect(() => {
-    setReviewList(Reviews);
+    setReviewList(Reviews.reverse());
   }, [movieID]);
 
   return (
@@ -73,12 +76,6 @@ function Review({ movieID, Reviews }) {
       </Form>
 
       <ul className="review-box">
-        <li className="review-content">
-          <p>아이디(혹은닉네임) : 리뷰 내용</p>
-        </li>
-        <li className="review-content">
-          <p>아이디(혹은닉네임) : 리뷰 내용</p>
-        </li>
         {reviewList &&
           reviewList.map((item, index) => {
             return (

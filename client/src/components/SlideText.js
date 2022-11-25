@@ -30,7 +30,7 @@ function SlideText({ slideContent }) {
 
         <p className="vote_average">
           평점 : &nbsp;
-          {average && average}
+          {average && Math.floor(average * 10) / 10}
         </p>
 
         <span

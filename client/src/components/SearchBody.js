@@ -40,9 +40,7 @@ function SearchBody() {
         setPageNumber(1);
         setMovie(response.data.results);
         setTotalPage(response.data.total_pages);
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000);
+        setLoading(false);
       });
   };
 
@@ -51,7 +49,6 @@ function SearchBody() {
   }, [pageNumber]);
 
   React.useEffect(() => {
-    setLoading(true);
     searchMovie();
     window.scroll({
       top: 0,

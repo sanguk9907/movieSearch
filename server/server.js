@@ -161,33 +161,33 @@ function doRequest({ url, option }) {
 const main_api = [
   {
     category: "Netflix",
-    api: "/discover/movie",
+    api: "discover/movie",
+    params: { with_watch_providers: "8", watch_region: "KR", language: "ko" },
     label: "넷플릭스",
   },
   {
-    category: "Popular",
-    api: "movie/popular",
-    label: "인기있는",
+    category: "Disney_Plus",
+    api: "discover/movie",
+    params: { with_watch_providers: "337", watch_region: "KR", language: "ko" },
+    label: "디즈니플러스",
+  },
+  {
+    category: "Watcha",
+    api: "discover/movie",
+    params: { with_watch_providers: "97", watch_region: "KR", language: "ko" },
+    label: "왓챠",
   },
   {
     category: "NowPlaying",
     api: "movie/now_playing",
     label: "현재 상영중",
-  },
-  {
-    category: "Trending",
-    api: "trending/movie/week",
-    label: "이번주 인기 급상승",
+    params: { language: "ko" },
   },
   {
     category: "TopRated",
     api: "movie/top_rated",
     label: "최고의 평가",
-  },
-  {
-    category: "Upcoming",
-    api: "movie/upcoming",
-    label: "상영 예정",
+    params: { language: "ko" },
   },
 ];
 
@@ -195,24 +195,14 @@ app.get("/main/movie", async function (req, res) {
   const result = {};
 
   for (let _key in main_api) {
-    const { category, api } = main_api[_key];
+    const { category, api, params } = main_api[_key];
 
     // 배열로옴
     const item = await doRequest({
-      url:
-        category === "Netflix"
-          ? `https://api.themoviedb.org/3${api}?api_key=${key}`
-          : `https://api.themoviedb.org/3/${api}?api_key=${key}`,
+      url: `https://api.themoviedb.org/3/${api}?api_key=${key}`,
       option: {
         method: "get",
-        qs:
-          category === "Netflix"
-            ? {
-                with_watch_providers: "8",
-                watch_region: "KR",
-                language: "ko",
-              }
-            : { language: "ko" },
+        qs: params,
       },
     });
     result[category] = [];
@@ -332,22 +322,20 @@ app.get("/movie/detail", async function (req, res) {
 
 app.get("/search", async function (req, res) {
   const { query, page } = req.query;
-  request(
-    {
-      uri: `https://api.themoviedb.org/3/search/movie?api_key=${key}`,
+  const data = await doRequest({
+    url: `https://api.themoviedb.org/3/search/movie?api_key=${key}`,
+    option: {
       method: "get",
       qs: {
         language: "ko",
         region: "KR",
         query: query,
         page: page,
+        include_adult: false,
       },
     },
-    function (error, response, body) {
-      const data = JSON.parse(body);
-      res.send(data);
-    }
-  );
+  });
+  res.send(data);
 });
 
 app.get("/join", (req, res) => {
@@ -746,13 +734,15 @@ app.post("/file", upload.array("file"), async (req, res) => {
 });
 
 app.get("/profileImage", async (req, res) => {
-  const { loginUser } = req.session;
-  const profileImage = await runDB({
-    database: "moviesearch",
-    query: `select * from image where user_seq = ${loginUser.seq}`,
-  });
-  const filename = profileImage.length === 0 ? "" : profileImage[0].filename;
-  res.send(filename);
+  if (req.session.loginUser) {
+    const { loginUser } = req.session;
+    const profileImage = await runDB({
+      database: "moviesearch",
+      query: `select * from image where user_seq = ${loginUser.seq}`,
+    });
+    const filename = profileImage.length === 0 ? "" : profileImage[0].filename;
+    res.send(filename);
+  }
 });
 
 app.post("/changepassword", async (req, res) => {

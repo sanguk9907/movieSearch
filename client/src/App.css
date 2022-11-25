@@ -746,6 +746,7 @@ b {
   border-radius: 100%;
   overflow: hidden;
   position: relative;
+  cursor: pointer;
 }
 .profile-image .img-box img {
   width: 100%;
