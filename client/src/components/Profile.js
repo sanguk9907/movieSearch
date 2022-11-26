@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Button, Form } from "semantic-ui-react";
 import { StoreContext } from "../App";
 import Unchange from "./Unchange";
-import default_Img from "../noun-user-829931.png";
-// import default_Imgs from "../not-found.jpg";
 axios.defaults.withCredentials = true;
 function Profile() {
   const { loginUser, setLoginUser } = React.useContext(StoreContext);
@@ -99,9 +97,6 @@ function Profile() {
                 console.log(e.target.src);
                 setBigImage(true);
               }}
-              // onError={(e) => {
-              //   e.target.src = default_Img;
-              // }}
             ></img>
           </div>
           <input
