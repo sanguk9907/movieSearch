@@ -14,6 +14,7 @@ import Profile from "./Profile";
 import Delete from "./Delete";
 import MobileHeader from "./MobileHeader";
 import MobileMenu from "./MobileMenu";
+import InputFileld from "./InputFileld";
 
 export {
   SearchBox,
@@ -32,4 +33,5 @@ export {
   Delete,
   MobileHeader,
   MobileMenu,
+  InputFileld,
 };
