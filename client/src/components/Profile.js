@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Button, Form } from "semantic-ui-react";
 import { StoreContext } from "../App";
 import Unchange from "./Unchange";
+import default_Img from "../noun-user-829931.png";
+// import default_Imgs from "../not-found.jpg";
 axios.defaults.withCredentials = true;
 function Profile() {
   const { loginUser, setLoginUser } = React.useContext(StoreContext);
@@ -23,21 +25,22 @@ function Profile() {
     const file_element = document.querySelector(".file");
     const file = file_element.files[0];
     const form = new FormData();
-
-    form.append("file", file);
-    await axios({
-      url: "/file",
-      method: "post",
-      data: {
-        file,
-      },
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).then(() => {
-      console.log("파일업로드");
-      loadProfileImage();
-    });
+    if (file) {
+      form.append("file", file);
+      await axios({
+        url: "/file",
+        method: "post",
+        data: {
+          file,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then(() => {
+        console.log("파일업로드");
+        loadProfileImage();
+      });
+    }
   };
   //사진 불러오기
   const loadProfileImage = async () => {
@@ -92,9 +95,13 @@ function Profile() {
             <img
               src={process.env.PUBLIC_URL + profileImage}
               alt="프로필이미지"
-              onClick={() => {
+              onClick={(e) => {
+                console.log(e.target.src);
                 setBigImage(true);
               }}
+              // onError={(e) => {
+              //   e.target.src = default_Img;
+              // }}
             ></img>
           </div>
           <input

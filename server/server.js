@@ -702,41 +702,43 @@ app.delete("/delete", async (req, res) => {
 });
 
 app.post("/file", upload.array("file"), async (req, res) => {
-  const { loginUser } = req.session;
-  const files = req?.files[0];
-  files.user_seq = loginUser.seq;
-  const searchImage = await runDB({
-    database: "moviesearch",
-    query: `select * from image where user_seq = ${loginUser.seq}`,
-  });
-
-  if (searchImage.length === 0) {
-    const insertQuery = createInsert({
-      table: "image",
-      data: files,
-    });
-
-    await runDB({
+  if (req.session.loginUser && req?.files[0]) {
+    const { loginUser } = req.session;
+    const files = req?.files[0];
+    files.user_seq = loginUser.seq;
+    const searchImage = await runDB({
       database: "moviesearch",
-      query: insertQuery,
-    });
-  } else {
-    const updateQuery = createUpdate({
-      table: "image",
-      data: files,
-      where: `user_seq = ${loginUser.seq}`,
+      query: `select * from image where user_seq = ${loginUser.seq}`,
     });
 
-    await runDB({
+    if (searchImage.length === 0) {
+      const insertQuery = createInsert({
+        table: "image",
+        data: files,
+      });
+
+      await runDB({
+        database: "moviesearch",
+        query: insertQuery,
+      });
+    } else {
+      const updateQuery = createUpdate({
+        table: "image",
+        data: files,
+        where: `user_seq = ${loginUser.seq}`,
+      });
+
+      await runDB({
+        database: "moviesearch",
+        query: updateQuery,
+      });
+    }
+    const profileImage = await runDB({
       database: "moviesearch",
-      query: updateQuery,
+      query: `select * from image where user_seq = ${loginUser.seq}`,
     });
+    res.send(profileImage[0].filename);
   }
-  const profileImage = await runDB({
-    database: "moviesearch",
-    query: `select * from image where user_seq = ${loginUser.seq}`,
-  });
-  res.send(profileImage[0].filename);
 });
 
 app.get("/profileImage", async (req, res) => {

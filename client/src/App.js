@@ -35,7 +35,6 @@ function App() {
   });
   const [loading, setLoading] = React.useState(true);
   const [movieDetail, setMovieDetail] = React.useState();
-  const [providerData] = React.useState();
   const loadStyle = loading
     ? { overflow: "hidden", height: "100vh" }
     : { overflow: "hidden" };
@@ -86,14 +85,12 @@ function App() {
         setSearch: setSearch,
         loginUser: loginUser,
         setLoginUser: setLoginUser,
-        autoLogin: autoLogin,
         loading: loading,
         setLoading: setLoading,
         loadStyle: loadStyle,
         showMobileHeader: showMobileHeader,
         setMovieDetail: setMovieDetail,
         movieDetail: movieDetail,
-        providerData: providerData,
       }}
     >
       <AppIndex />
