@@ -13,6 +13,8 @@ function Review({ movieID, Reviews }) {
     review_seq: "",
   });
   const [reviewList, setReviewList] = React.useState([]);
+  const date = new Date();
+  const time = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
   const writeReview = async () => {
     await axios({
@@ -95,10 +97,10 @@ function Review({ movieID, Reviews }) {
                 ) : (
                   ""
                 )}
-
-                <p>
-                  {item.nick} : {item.content}
-                </p>
+                <b>{item.nick}</b>
+                <p>{item.content}</p>
+                <br />
+                <p className="time">{time}</p>
               </li>
             );
           })}

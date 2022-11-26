@@ -816,13 +816,12 @@ ul {
   margin-top: 20px;
   word-break: break-all;
   position: relative;
-  padding-top: 30px;
 }
 
 .detail-card .review .review-box .review-content .icon {
   position: absolute;
   z-index: 100;
-  top: -25px;
+  top: 0px;
   right: -5px;
 }
 
@@ -843,6 +842,11 @@ ul {
 
 .detail-card .review .review-box .review-content p span {
   font-size: 12px;
+}
+
+.review-box .time {
+  font-size: 12px;
+  color: #d8d8d8;
 }
 
 .preovier-box {
