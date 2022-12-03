@@ -2,6 +2,7 @@ import axios from "../apis/axios";
 import React from "react";
 import { Button, Form, Icon } from "semantic-ui-react";
 import { StoreContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 function Review({ movieID, Reviews }) {
   const { loginUser } = React.useContext(StoreContext);
@@ -15,6 +16,7 @@ function Review({ movieID, Reviews }) {
   const [reviewList, setReviewList] = React.useState([]);
   const date = new Date();
   const time = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  const navigation = useNavigate();
 
   const writeReview = async () => {
     await axios({
@@ -65,6 +67,12 @@ function Review({ movieID, Reviews }) {
         <Form.TextArea
           className="reviewText"
           value={review.content}
+          onClick={() => {
+            if (!loginUser.seq) {
+              alert("로그인 후 이용해주세요");
+              navigation("/login");
+            }
+          }}
           onChange={(e) => {
             const cloneReview = { ...review };
             cloneReview.content = e.target.value;

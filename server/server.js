@@ -305,15 +305,13 @@ app.get("/movie/detail", async function (req, res) {
       query: `SELECT * FROM review WHERE movieID =${movieID}`,
     });
 
-    if (req.session.loginUser) {
-      const { loginUser } = req.session;
-      const likeData = !loginUser
-        ? null
-        : await runDB({
-            database: "moviesearch",
-            query: `SELECT * FROM likes WHERE user_seq=${loginUser.seq} && movieID=${movieID}`,
-          });
-    }
+    const { loginUser } = req.session;
+    const likeData = !loginUser
+      ? null
+      : await runDB({
+          database: "moviesearch",
+          query: `SELECT * FROM likes WHERE user_seq=${loginUser.seq} && movieID=${movieID}`,
+        });
 
     result.movieId = items.id;
     result.movieTitle = items.title;

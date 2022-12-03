@@ -182,7 +182,7 @@ ul {
 }
 
 .slide-text-warp {
-  width: 80%;
+  width: 100%;
   height: 100%;
   background: linear-gradient(to left, #000 50%, rgba(0, 0, 0, 0));
   position: absolute;
@@ -193,13 +193,13 @@ ul {
 }
 
 .slide-text-warp > .text-box {
-  width: 50%;
+  width: 40%;
   height: 100%;
   text-align: left;
   color: #fff;
   position: absolute;
   top: 50%;
-  right: 3%;
+  right: 0;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
@@ -235,7 +235,7 @@ ul {
 .main-wrap,
 .SearchPage-wrap {
   width: 100vw;
-  min-width: 380px;
+  min-width: 300px;
   min-height: 100vh;
   background-color: #181818;
   padding: 70px 0;
@@ -505,7 +505,7 @@ ul {
 .detail-wrap .detail-card {
   width: 80%;
   max-width: 1200px;
-  min-width: 420px;
+  min-width: 300px;
   height: 70%;
   background-color: #181818;
   position: absolute;
@@ -869,7 +869,7 @@ ul {
 .login-wrap {
   width: 100vw;
   height: 100vh;
-  min-width: 420px;
+  min-width: 300px;
   min-height: 100vh;
   background-color: #181818;
   display: flex;
@@ -908,6 +908,10 @@ ul {
 .login-form .field .check {
   margin-top: 5px;
   color: #fff;
+}
+
+.login-form .ui.checkbox {
+  margin-bottom: 5px;
 }
 
 .ui.checkbox label,
@@ -1065,8 +1069,7 @@ ul {
 }
 
 .change-password .form-wrap form {
-  width: 80%;
-  min-width: 300px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -1165,13 +1168,24 @@ ul {
     animation: none;
   }
 
-  .ui.form .field input {
+  .ui.form .field {
+    width: 100%;
+  }
+  .profile-wrap {
     width: auto;
+  }
+  .profile-wrap .ui.form {
+    width: 90%;
+    padding: 50px 0;
+    margin: 0 auto;
   }
   .profile-wrap .ui.form button {
     width: 100%;
   }
   .profile-wrap .big-profile-img img {
     width: 80%;
+  }
+  .delete-modal-bg .delete-modal {
+    width: 300px;
   }
 }
