@@ -27,24 +27,12 @@ const storage = multer.diskStorage({
 
   // 파일 이름 중복방지
   filename: function (req, file, cb) {
-<<<<<<< HEAD
     const originalname = file.originalname;
     const originArray = originalname.split(".");
     const dateTime = Date.now();
 
     let fileExt = originArray[originArray.length - 1];
     let resultFileName = `${dateTime}.${fileExt}`;
-    console.log(resultFileName);
-=======
-    const dateTime = Date.now();
-
-    const originalname = file.originalname;
-    const originArray = originalname.split(".");
-
-    let fileExt = originArray[originArray.length - 1];
-    let fileName = originArray.join(".").replace(fileExt, "");
-    let resultFileName = `${dateTime}_${fileName}${fileExt}`;
->>>>>>> a38084b556521f6446d5d3e5e69897702e8c3331
 
     cb(null, resultFileName);
   },
@@ -726,16 +714,9 @@ app.delete("/delete", async (req, res) => {
 });
 
 app.post("/file", upload.array("file"), async (req, res) => {
-<<<<<<< HEAD
   if (req.session.loginUser) {
     const { loginUser } = req.session;
     const files = req?.files[0];
-=======
-  if (req.session.loginUser && req?.files[0]) {
-    const { loginUser } = req.session;
-    const files = req?.files[0];
-
->>>>>>> a38084b556521f6446d5d3e5e69897702e8c3331
     files.user_seq = loginUser.seq;
     const searchImage = await runDB({
       database: "moviesearch",

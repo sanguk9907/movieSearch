@@ -43,21 +43,12 @@ function Profile() {
   const loadProfileImage = async () => {
     await axios({
       url: "/profileImage",
-<<<<<<< HEAD
     }).then(({ config, data }) => {
-=======
-    }).then(({ data, config }) => {
->>>>>>> a38084b556521f6446d5d3e5e69897702e8c3331
       const public_url =
         config.baseURL === "http://52.196.233.251:5000"
           ? `http://52.196.233.251/img/${data}`
           : `${process.env.PUBLIC_URL}/img/${data}`;
       setProfileImage(public_url);
-<<<<<<< HEAD
-
-      setProfileImage(`/img/${data}`);
-=======
->>>>>>> a38084b556521f6446d5d3e5e69897702e8c3331
       navigation("/profile");
     });
   };
@@ -101,10 +92,6 @@ function Profile() {
           <div className="img-box">
             <img
               src={profileImage}
-<<<<<<< HEAD
-=======
-              // src={`http://52.196.233.251/${profileImage}`}
->>>>>>> a38084b556521f6446d5d3e5e69897702e8c3331
               alt="프로필이미지"
               onClick={(e) => {
                 console.log(e.target.src);
