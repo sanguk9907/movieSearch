@@ -43,14 +43,19 @@ function Profile() {
   const loadProfileImage = async () => {
     await axios({
       url: "/profileImage",
-    }).then(({ config, data }) => {
-      const public_url =
-        config.baseURL === "http://52.196.233.251:5000"
-          ? `http://52.196.233.251/img/${data}`
-          : `${process.env.PUBLIC_URL}/img/${data}`;
-      setProfileImage(public_url);
-      navigation("/profile");
-    });
+    })
+      .then(({ config, data }) => {
+        console.log(config.baseURL, data);
+        const public_url =
+          config.baseURL === "http://52.196.233.251:5000"
+            ? `http://52.196.233.251/img/${data}`
+            : `${process.env.PUBLIC_URL}/img/${data}`;
+        setProfileImage(public_url);
+        navigation("/profile");
+      })
+      .catch((err) => {
+        console.log(`에러:${err}`);
+      });
   };
 
   const profile = async () => {

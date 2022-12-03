@@ -22,7 +22,7 @@ const dir = "../client/public/img";
 const storage = multer.diskStorage({
   // 파일 어디다가 저장할건지
   destination: function (req, file, cb) {
-    cb(null, "../client/public/img");
+    cb(null, "../client/build/img");
   },
 
   // 파일 이름 중복방지
