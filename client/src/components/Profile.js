@@ -43,8 +43,12 @@ function Profile() {
   const loadProfileImage = async () => {
     await axios({
       url: "/profileImage",
-    }).then(({ data }) => {
-      console.log(data);
+    }).then(({ config, data }) => {
+      const public_url =
+        config.baseURL === "http://52.196.233.251:5000"
+          ? `http://52.196.233.251/img/${data}`
+          : `${process.env.PUBLIC_URL}/img/${data}`;
+      setProfileImage(public_url);
 
       setProfileImage(`/img/${data}`);
       navigation("/profile");
@@ -90,7 +94,7 @@ function Profile() {
         <div className="profile-image">
           <div className="img-box">
             <img
-              src={process.env.PUBLIC_URL + profileImage}
+              src={profileImage}
               alt="프로필이미지"
               onClick={() => {
                 setBigImage(true);

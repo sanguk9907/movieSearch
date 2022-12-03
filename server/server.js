@@ -27,7 +27,15 @@ const storage = multer.diskStorage({
 
   // 파일 이름 중복방지
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + "_" + Date.now() + ".jpg");
+    const originalname = file.originalname;
+    const originArray = originalname.split(".");
+    const dateTime = Date.now();
+
+    let fileExt = originArray[originArray.length - 1];
+    let resultFileName = `${dateTime}.${fileExt}`;
+    console.log(resultFileName);
+
+    cb(null, resultFileName);
   },
 });
 const upload = multer({ storage });
@@ -266,7 +274,7 @@ app.get("/main/slide", async function (req, res) {
 
 app.get("/movie/detail", async function (req, res) {
   const { movieID } = req.query;
-  const { loginUser } = req.session;
+
   const result = {};
 
   if (movieID) {
@@ -298,12 +306,15 @@ app.get("/movie/detail", async function (req, res) {
       query: `SELECT * FROM review WHERE movieID =${movieID}`,
     });
 
-    const likeData = !loginUser
-      ? null
-      : await runDB({
-          database: "moviesearch",
-          query: `SELECT * FROM likes WHERE user_seq=${loginUser.seq} && movieID=${movieID}`,
-        });
+    if (req.session.loginUser) {
+      const { loginUser } = req.session;
+      const likeData = !loginUser
+        ? null
+        : await runDB({
+            database: "moviesearch",
+            query: `SELECT * FROM likes WHERE user_seq=${loginUser.seq} && movieID=${movieID}`,
+          });
+    }
 
     result.movieId = items.id;
     result.movieTitle = items.title;
@@ -551,41 +562,43 @@ app.get("/logout", (req, res) => {
 });
 
 app.put("/like", async (req, res) => {
-  const { loginUser } = req.session;
-  const { clickedLike, movieID } = req.body.data;
-  const resulte = {
-    code: "fail",
-    message: "좋아요 목록 업데이트에 실패했습니다.",
-  };
+  if (req.session.loginUser) {
+    const { loginUser } = req.session;
+    const { clickedLike, movieID } = req.body.data;
+    const resulte = {
+      code: "fail",
+      message: "좋아요 목록 업데이트에 실패했습니다.",
+    };
 
-  if (clickedLike) {
-    const insertQuery = createInsert({
-      table: "likes",
-      data: {
-        movieID: movieID,
-        user_seq: loginUser.seq,
-      },
-    });
+    if (clickedLike) {
+      const insertQuery = createInsert({
+        table: "likes",
+        data: {
+          movieID: movieID,
+          user_seq: loginUser.seq,
+        },
+      });
 
-    await runDB({
-      database: "moviesearch",
-      query: insertQuery,
-    });
+      await runDB({
+        database: "moviesearch",
+        query: insertQuery,
+      });
 
-    (resulte.code = "success"),
-      (resulte.message = "좋아요 목록에 추가되었습니다.");
+      (resulte.code = "success"),
+        (resulte.message = "좋아요 목록에 추가되었습니다.");
+    }
+
+    if (!clickedLike) {
+      await runDB({
+        database: "moviesearch",
+        query: `delete from likes where movieID =${movieID} && user_seq=${loginUser.seq}`,
+      });
+      (resulte.code = "success"),
+        (resulte.message = "좋아요 목록에서 삭제되었습니다.");
+    }
+
+    res.send(resulte);
   }
-
-  if (!clickedLike) {
-    await runDB({
-      database: "moviesearch",
-      query: `delete from likes where movieID =${movieID} && user_seq=${loginUser.seq}`,
-    });
-    (resulte.code = "success"),
-      (resulte.message = "좋아요 목록에서 삭제되었습니다.");
-  }
-
-  res.send(resulte);
 });
 
 app.post("/review", async (req, res) => {
@@ -702,41 +715,43 @@ app.delete("/delete", async (req, res) => {
 });
 
 app.post("/file", upload.array("file"), async (req, res) => {
-  const { loginUser } = req.session;
-  const files = req?.files[0];
-  files.user_seq = loginUser.seq;
-  const searchImage = await runDB({
-    database: "moviesearch",
-    query: `select * from image where user_seq = ${loginUser.seq}`,
-  });
-
-  if (searchImage.length === 0) {
-    const insertQuery = createInsert({
-      table: "image",
-      data: files,
-    });
-
-    await runDB({
+  if (req.session.loginUser) {
+    const { loginUser } = req.session;
+    const files = req?.files[0];
+    files.user_seq = loginUser.seq;
+    const searchImage = await runDB({
       database: "moviesearch",
-      query: insertQuery,
-    });
-  } else {
-    const updateQuery = createUpdate({
-      table: "image",
-      data: files,
-      where: `user_seq = ${loginUser.seq}`,
+      query: `select * from image where user_seq = ${loginUser.seq}`,
     });
 
-    await runDB({
+    if (searchImage.length === 0) {
+      const insertQuery = createInsert({
+        table: "image",
+        data: files,
+      });
+
+      await runDB({
+        database: "moviesearch",
+        query: insertQuery,
+      });
+    } else {
+      const updateQuery = createUpdate({
+        table: "image",
+        data: files,
+        where: `user_seq = ${loginUser.seq}`,
+      });
+
+      await runDB({
+        database: "moviesearch",
+        query: updateQuery,
+      });
+    }
+    const profileImage = await runDB({
       database: "moviesearch",
-      query: updateQuery,
+      query: `select * from image where user_seq = ${loginUser.seq}`,
     });
+    res.send(profileImage[0].filename);
   }
-  const profileImage = await runDB({
-    database: "moviesearch",
-    query: `select * from image where user_seq = ${loginUser.seq}`,
-  });
-  res.send(profileImage[0].filename);
 });
 
 app.get("/profileImage", async (req, res) => {
