@@ -55,20 +55,29 @@ function Join() {
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
   const PhoneReg = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 
-  const IDCheck = IDReg.test(id)
-    ? ""
-    : "아이디는 영문과 숫자만을 포함한 8글자 이상이어야합니다.";
-  const PWCheck = PWReg.test(pw)
-    ? ""
-    : "비밀번호는 영문과 숫자, 특수문자만을 포함한 8글자 이상이어야합니다.";
-  const EmailCheck = EmailReg.test(email)
-    ? ""
-    : "이메일 형식이 올바르지 않습니다.";
-  const PhoneCheck = PhoneReg.test(phoneNumber)
-    ? ""
-    : "휴대폰 번호 형식이 올바르지 않습니다.";
+  const IDCheck =
+    IDReg.test(id) || id === ""
+      ? ""
+      : "아이디는 영문과 숫자만을 포함한 8글자 이상이어야합니다.";
+  const PWCheck =
+    PWReg.test(pw) || pw === ""
+      ? ""
+      : "비밀번호는 영문과 숫자, 특수문자만을 포함한 8글자 이상이어야합니다.";
+  const EmailCheck =
+    EmailReg.test(email) || email === ""
+      ? ""
+      : "이메일 형식이 올바르지 않습니다.";
+  const PhoneCheck =
+    PhoneReg.test(phoneNumber) || phoneNumber === ""
+      ? ""
+      : "휴대폰 번호 형식이 올바르지 않습니다.";
   const disabled =
-    IDCheck && PWCheck && EmailCheck && PhoneCheck ? true : false;
+    IDReg.test(id) &&
+    PWReg.test(pw) &&
+    EmailReg.test(email) &&
+    PhoneReg.test(phoneNumber)
+      ? false
+      : true;
   return (
     <div className="join-wrap">
       {showMobileHeader ? <MobileHeader /> : <Header />}
@@ -164,9 +173,8 @@ function Join() {
               cloneJoin.confirmPw = e.target.value;
               setJoinInfo(cloneJoin);
             }}
-            value={pw}
+            value={confirmPw}
           />
-          <p className="check">{PWCheck}</p>
         </Form.Field>
         <Button disabled={disabled} type="submit">
           회원가입

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Form } from "semantic-ui-react";
 import { StoreContext } from "../App";
 import Unchange from "./Unchange";
+import userOnErrorImg from "../user.png";
 axios.defaults.withCredentials = true;
 function Profile() {
   const { loginUser, setLoginUser } = React.useContext(StoreContext);
@@ -45,7 +46,6 @@ function Profile() {
       url: "/profileImage",
     })
       .then(({ config, data }) => {
-        console.log(config.baseURL, data);
         const public_url =
           config.baseURL === "http://52.196.233.251:5000"
             ? `http://52.196.233.251/img/${data}`
@@ -102,12 +102,15 @@ function Profile() {
                 console.log(e.target.src);
                 setBigImage(true);
               }}
+              onError={(e) => {
+                e.target.src = userOnErrorImg;
+              }}
             ></img>
           </div>
           <input
             style={{
               width: "50%",
-              padding: "0",
+              padding: "10px 0",
               color: "#fff",
               backgroundColor: "inherit",
             }}
@@ -228,6 +231,9 @@ function Profile() {
         >
           <img
             src={process.env.PUBLIC_URL + profileImage}
+            onError={(e) => {
+              e.target.src = userOnErrorImg;
+            }}
             alt="프로필이미지"
           ></img>
         </div>
