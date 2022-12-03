@@ -27,7 +27,18 @@ const storage = multer.diskStorage({
 
   // 파일 이름 중복방지
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + "_" + Date.now() + ".jpg");
+    console.log(file.fieldname, file.mimetype, file.originalname);
+
+    const dateTime = Date.now();
+
+    const originalname = file.originalname;
+    const originArray = originalname.split(".");
+
+    let fileExt = originArray[originArray.length - 1];
+    let fileName = originArray.join(".").replace(fileExt, "");
+    let resultFileName = `${dateTime}_${fileName}${fileExt}`;
+
+    cb(null, resultFileName);
   },
 });
 const upload = multer({ storage });
@@ -754,80 +765,83 @@ app.get("/profileImage", async (req, res) => {
 });
 
 app.post("/changepassword", async (req, res) => {
-  const { loginUser } = req.session;
-  const { password, newPassword, newPasswordConfirm } = req.body;
-  const resulte = {
-    code: "success",
-    message: "비밀번호가 성공적으로 수정되었습니다.",
-  };
-  const aa = [1];
+  if (req.session.loginUser) {
+    const { loginUser } = req.session;
+    const { password, newPassword, newPasswordConfirm } = req.body;
+    const resulte = {
+      code: "success",
+      message: "비밀번호가 성공적으로 수정되었습니다.",
+    };
+    const aa = [1];
 
-  const PWReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
-  const PWCheck = PWReg.test(password);
-  const newPWCheck = PWReg.test(newPassword);
+    const PWReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+    const PWCheck = PWReg.test(password);
+    const newPWCheck = PWReg.test(newPassword);
 
-  const dataSelect = await runDB({
-    database: "moviesearch",
-    query: `SELECT * FROM users where seq = ${loginUser.seq}`,
-  });
+    const dataSelect = await runDB({
+      database: "moviesearch",
+      query: `SELECT * FROM users where seq = ${loginUser.seq}`,
+    });
 
-  const passKey = crypto
-    .pbkdf2Sync(password, dataSelect[0].salt, 100514, 64, "sha512")
-    .toString("base64");
+    const passKey = crypto
+      .pbkdf2Sync(password, dataSelect[0].salt, 100514, 64, "sha512")
+      .toString("base64");
 
-  for (let key in aa) {
-    if (password === newPassword) {
-      (resulte.code = "fail"),
-        (resulte.message =
-          "새로운 비밀번호는 현재 비밀번호와 다르게 만들어주세요");
-      break;
-    }
+    for (let key in aa) {
+      if (password === newPassword) {
+        (resulte.code = "fail"),
+          (resulte.message =
+            "새로운 비밀번호는 현재 비밀번호와 다르게 만들어주세요");
+        break;
+      }
 
-    if (!PWCheck || !newPWCheck) {
-      (resulte.code = "fail"),
-        (resulte.message =
-          "비밀번호는 영어와 숫자를 포함한 8글자 이상이어야 합니다");
-      break;
-    }
+      if (!PWCheck || !newPWCheck) {
+        (resulte.code = "fail"),
+          (resulte.message =
+            "비밀번호는 영어와 숫자를 포함한 8글자 이상이어야 합니다");
+        break;
+      }
 
-    if (passKey !== dataSelect[0].password) {
-      (resulte.code = "fail"),
-        (resulte.message = "현재 비밀번호가 틀립니다 다시 한 번 확인해주세요");
-      break;
-    }
+      if (passKey !== dataSelect[0].password) {
+        (resulte.code = "fail"),
+          (resulte.message =
+            "현재 비밀번호가 틀립니다 다시 한 번 확인해주세요");
+        break;
+      }
 
-    if (newPassword !== newPasswordConfirm) {
-      (resulte.code = "fail"),
-        (resulte.message = "새 비밀번호가 틀립니다 다시 한 번 확인해주세요");
-      break;
-    }
+      if (newPassword !== newPasswordConfirm) {
+        (resulte.code = "fail"),
+          (resulte.message = "새 비밀번호가 틀립니다 다시 한 번 확인해주세요");
+        break;
+      }
 
-    const createnewpassword = await new Promise((resolve) => {
-      crypto.randomBytes(64, (err, buf) => {
-        if (err) {
-          resulte.err = err;
-        }
-        const salt = buf.toString("base64");
-        crypto.pbkdf2(newPassword, salt, 100514, 64, "sha512", (err, key) => {
-          resolve({
-            password: key.toString("base64"),
-            salt: salt,
+      const createnewpassword = await new Promise((resolve) => {
+        crypto.randomBytes(64, (err, buf) => {
+          if (err) {
+            resulte.err = err;
+          }
+          const salt = buf.toString("base64");
+          crypto.pbkdf2(newPassword, salt, 100514, 64, "sha512", (err, key) => {
+            resolve({
+              password: key.toString("base64"),
+              salt: salt,
+            });
           });
         });
       });
-    });
-    const newpassword = createUpdate({
-      table: "users",
-      data: createnewpassword,
-      where: `seq = ${loginUser.seq}`,
-    });
-    await runDB({
-      database: "moviesearch",
-      query: newpassword,
-    });
-  }
+      const newpassword = createUpdate({
+        table: "users",
+        data: createnewpassword,
+        where: `seq = ${loginUser.seq}`,
+      });
+      await runDB({
+        database: "moviesearch",
+        query: newpassword,
+      });
+    }
 
-  res.send(resulte);
+    res.send(resulte);
+  }
 });
 
 app.listen(5000, function () {
