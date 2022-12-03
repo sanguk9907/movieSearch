@@ -27,8 +27,6 @@ const storage = multer.diskStorage({
 
   // 파일 이름 중복방지
   filename: function (req, file, cb) {
-    console.log(file.fieldname, file.mimetype, file.originalname);
-
     const dateTime = Date.now();
 
     const originalname = file.originalname;
@@ -716,6 +714,7 @@ app.post("/file", upload.array("file"), async (req, res) => {
   if (req.session.loginUser && req?.files[0]) {
     const { loginUser } = req.session;
     const files = req?.files[0];
+
     files.user_seq = loginUser.seq;
     const searchImage = await runDB({
       database: "moviesearch",
