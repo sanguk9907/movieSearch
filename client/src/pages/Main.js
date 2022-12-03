@@ -12,7 +12,7 @@ import {
 import { getMovieApi } from "../apis/fetchData";
 
 function Main() {
-  const { loading, setLoading, loadStyle, showMobileHeader, movieDetail } =
+  const { loading, loadStyle, showMobileHeader, movieDetail } =
     React.useContext(StoreContext);
 
   const [movie, setMovie] = React.useState({
@@ -39,8 +39,7 @@ function Main() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  {
-  }
+
   return (
     <div style={loadStyle} className="main-wrap">
       {loading && <Loading />}

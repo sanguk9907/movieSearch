@@ -1,92 +1,36 @@
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
 h1,
 h2,
 h3,
 h4,
 h5,
-h6,
 p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
+span,
 ul,
 li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
+div {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
-  font-family: "Pretendard-Regular";
+  font-family: "NanumSquareNeo-Variable";
   line-height: 1.5em;
+  letter-spacing: -1px;
+  font-weight: 300;
+}
+p {
+  font-weight: 100;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "GmarketSansMedium";
+  letter-spacing: 0.5px;
+  font-weight: 900;
+}
+b {
+  font-weight: 1000;
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -109,19 +53,22 @@ ol,
 ul {
   list-style: none;
 }
-b {
-  font-weight: bolder;
-}
 
 @font-face {
-  font-family: "Pretendard-Regular";
-  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+  font-family: "GmarketSansMedium";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
     format("woff");
-  font-weight: 400;
+  font-weight: normal;
   font-style: normal;
 }
 
-/* 노멀라이징(추가예정) */
+@font-face {
+  font-family: "NanumSquareNeo-Variable";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
 
 /* 헤더 시작 */
 
@@ -204,7 +151,7 @@ b {
 
 .header-wrap ul > li > p {
   font-size: 13px;
-  font-size: 100;
+  font-weight: bolder;
   margin-top: 10px;
 }
 
@@ -266,7 +213,6 @@ b {
 
 .slide-text-warp > .text-box > .title > .tagline {
   font-size: 14px;
-  font-weight: 100;
 }
 
 .slide-text-warp > .text-box > .more {
@@ -302,14 +248,6 @@ b {
 
 .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
   background-color: #b73e3e !important;
-}
-
-.main-wrap h2 {
-  font-size: 36px;
-  font-weight: bolder;
-  color: #fff;
-  text-align: center;
-  padding: 50px 0;
 }
 
 /* ============검색창 시작============== */
@@ -410,12 +348,14 @@ b {
 
 .main-wrap > .text-box h3 {
   font-size: 36px;
-  margin-bottom: 0;
 }
 
 .main-wrap > .text-box p {
+  font-family: "GmarketSansMedium";
   font-size: 20px;
   margin-bottom: 10px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
 }
 
 .movie-card {
@@ -431,8 +371,19 @@ b {
   width: 100%;
   padding-bottom: 140%;
   margin-bottom: 10px;
-  background-size: cover;
+  background-size: 100%;
   background-position: center;
+  transition: 0.2s;
+}
+
+.movie-card .img-box:hover {
+  background-size: 110%;
+}
+
+.movie-card:hover > p {
+  transition: 0.2s;
+  letter-spacing: 0;
+  font-weight: 1000;
 }
 
 /* ============무비카드 끝============ */
@@ -635,6 +586,11 @@ b {
   display: flex;
 }
 
+.profile-wrap h3 {
+  font-family: "NanumSquareNeo-Variable";
+  font-weight: 500;
+}
+
 .profile-wrap form {
   width: 100%;
   background-color: #181818;
@@ -671,7 +627,8 @@ b {
   max-width: 500px;
 }
 
-.profile-wrap form p {
+.profile-image p,
+.field p {
   font-size: 12px;
   font-weight: lighter;
   color: #ccc;
@@ -860,13 +817,12 @@ b {
   margin-top: 20px;
   word-break: break-all;
   position: relative;
-  padding-top: 30px;
 }
 
 .detail-card .review .review-box .review-content .icon {
   position: absolute;
   z-index: 100;
-  top: -25px;
+  top: 0px;
   right: -5px;
 }
 
@@ -887,6 +843,11 @@ b {
 
 .detail-card .review .review-box .review-content p span {
   font-size: 12px;
+}
+
+.review-box .time {
+  font-size: 12px;
+  color: #d8d8d8;
 }
 
 .preovier-box {
@@ -933,13 +894,20 @@ b {
   border-radius: 10px;
 }
 
-.ui.form .field input {
+.ui.form .field {
   width: 300px;
 }
+
 .join-form .ui.form .field > label,
 .login-form .ui.form .field > label {
   color: #fff;
   font-weight: 300;
+}
+
+.join-form .field .check,
+.login-form .field .check {
+  margin-top: 5px;
+  color: #fff;
 }
 
 .ui.checkbox label,
@@ -978,8 +946,9 @@ b {
   text-align: center;
   background-color: #fff;
   color: #b73e3e;
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: 1000;
+  font-size: 12px;
+  letter-spacing: 0.5px;
   border-radius: 50%;
   cursor: pointer;
   position: fixed;
@@ -1122,10 +1091,6 @@ b {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     word-break: keep-all;
-  }
-
-  .slide-text-warp div {
-    font-size: 0.9rem;
   }
   .searchBody-warp .person-card {
     width: 48%;

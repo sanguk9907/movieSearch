@@ -23,34 +23,41 @@ function Profile() {
     const file_element = document.querySelector(".file");
     const file = file_element.files[0];
     const form = new FormData();
-
-    form.append("file", file);
-    await axios({
-      url: "/file",
-      method: "post",
-      data: {
-        file,
-      },
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).then(() => {
-      console.log("파일업로드");
-      loadProfileImage();
-    });
+    if (file) {
+      form.append("file", file);
+      await axios({
+        url: "/file",
+        method: "post",
+        data: {
+          file,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then(() => {
+        loadProfileImage();
+      });
+    }
   };
   //사진 불러오기
   const loadProfileImage = async () => {
     await axios({
       url: "/profileImage",
+<<<<<<< HEAD
     }).then(({ config, data }) => {
+=======
+    }).then(({ data, config }) => {
+>>>>>>> a38084b556521f6446d5d3e5e69897702e8c3331
       const public_url =
         config.baseURL === "http://52.196.233.251:5000"
           ? `http://52.196.233.251/img/${data}`
           : `${process.env.PUBLIC_URL}/img/${data}`;
       setProfileImage(public_url);
+<<<<<<< HEAD
 
       setProfileImage(`/img/${data}`);
+=======
+>>>>>>> a38084b556521f6446d5d3e5e69897702e8c3331
       navigation("/profile");
     });
   };
@@ -65,7 +72,6 @@ function Profile() {
         userIntroduction: updateUser.userIntroduction,
       },
     }).then(({ data }) => {
-      console.log(data);
       const cloneLogin = { ...loginUser };
       cloneLogin.nick = data.nick;
       cloneLogin.userIntroduction = data.userIntroduction;
@@ -95,8 +101,13 @@ function Profile() {
           <div className="img-box">
             <img
               src={profileImage}
+<<<<<<< HEAD
+=======
+              // src={`http://52.196.233.251/${profileImage}`}
+>>>>>>> a38084b556521f6446d5d3e5e69897702e8c3331
               alt="프로필이미지"
-              onClick={() => {
+              onClick={(e) => {
+                console.log(e.target.src);
                 setBigImage(true);
               }}
             ></img>
