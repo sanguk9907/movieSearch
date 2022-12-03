@@ -35,7 +35,6 @@ function Profile() {
           "Content-Type": "multipart/form-data",
         },
       }).then(() => {
-        console.log("파일업로드");
         loadProfileImage();
       });
     }
@@ -44,10 +43,13 @@ function Profile() {
   const loadProfileImage = async () => {
     await axios({
       url: "/profileImage",
-    }).then(({ data }) => {
-      console.log(data);
-
-      setProfileImage(`/img/${data}`);
+    }).then(({ data, config }) => {
+      const PUBLIC_URL =
+        config.baseURL === "http://52.196.233.251:5000"
+          ? "http://52.196.233.251"
+          : process.env.PUBLIC_URL;
+      setProfileImage(`${PUBLIC_URL}/img/${data}`);
+      console.log(PUBLIC_URL);
       navigation("/profile");
     });
   };
@@ -91,7 +93,7 @@ function Profile() {
         <div className="profile-image">
           <div className="img-box">
             <img
-              src={process.env.PUBLIC_URL + profileImage}
+              src={profileImage}
               alt="프로필이미지"
               onClick={(e) => {
                 console.log(e.target.src);
