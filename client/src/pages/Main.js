@@ -12,7 +12,7 @@ import {
 import { getMovieApi } from "../apis/fetchData";
 
 function Main() {
-  const { loading, loadStyle, showMobileHeader, movieDetail } =
+  const { loading, setLoading, loadStyle, showMobileHeader, movieDetail } =
     React.useContext(StoreContext);
 
   const [movie, setMovie] = React.useState({
@@ -35,6 +35,7 @@ function Main() {
       }
 
       setMovie(cloneMovie);
+      setLoading(false);
     })();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

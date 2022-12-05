@@ -215,6 +215,17 @@ ul {
   font-size: 14px;
 }
 
+.slide-text-warp .overview {
+  width: 80%;
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  word-break: keep-all;
+}
+
 .slide-text-warp > .text-box > .more {
   width: 100px;
   text-align: center;
@@ -598,7 +609,12 @@ ul {
 }
 
 .profile-wrap .ui.form .field {
+  width: 100%;
+  max-width: 500px;
   margin: 25px 0;
+}
+.profile-wrap .ui.form textarea {
+  resize: none;
 }
 .profile-wrap .big-profile-img {
   width: 100vw;
@@ -833,7 +849,7 @@ ul {
   align-items: end;
 }
 
-.detail-card .review .reviewText {
+.detail-card .review .ui.form .field {
   width: 100%;
 }
 
@@ -848,6 +864,10 @@ ul {
 .review-box .time {
   font-size: 12px;
   color: #d8d8d8;
+}
+
+.ui.form > .reviewText > textarea {
+  resize: none;
 }
 
 .preovier-box {
@@ -1087,13 +1107,7 @@ ul {
 
 @media (max-width: 1200px) {
   .slide-text-warp .overview {
-    overflow: hidden;
-    white-space: normal;
-    text-overflow: ellipsis;
-    display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    word-break: keep-all;
   }
   .searchBody-warp .person-card {
     width: 48%;
@@ -1127,9 +1141,6 @@ ul {
     padding: 0;
   }
 
-  .searchBody-warp .person-card {
-    width: 100%;
-  }
   .detail-card .noHaveVideo {
     width: 40%;
     padding-bottom: 53%;
