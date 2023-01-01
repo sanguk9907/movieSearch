@@ -36,8 +36,8 @@ React / Node.js / Mysql
 
 ### Join & Login
 
-Mysql을 활용하여 데이터베이스를 만들어 사용하였고,<br/>
-정규표현식을 사용해 정확한 회원 정보를 받을 수 있도록 하였습니다.
+crypto모듈과 express-session을 사용해 안전하게 회원가입과 로그인을 할 수 있게 하였고<br/>
+정규식을 사용해 정확한 회원 정보를 받을 수 있도록 하였습니다.
 
 ### Profile
 
